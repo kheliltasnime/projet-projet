@@ -1,8 +1,8 @@
-import { Component, HostListener,ElementRef,Directive } from '@angular/core';
+import { Component, ViewChild,HostListener,ElementRef,Directive } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Employee } from 'src/app/private/model/employee';
 import { EmployeeService } from 'src/app/private/services/employee.service';
-
+import { NgForm } from '@angular/forms';
 @Component({
   selector: 'app-details-employee',
   templateUrl: './details-employee.component.html',
@@ -10,18 +10,26 @@ import { EmployeeService } from 'src/app/private/services/employee.service';
 })
 export class DetailsEmployeeComponent {
 
-  employee : Employee ={firstName: '',lastName:'',phoneNumber:0,address:'',email:'',account_type:'',department:'',job:'',state:'' };
+  employee : Employee ={firstName: '',lastName:'',phoneNumber:0,address:'',email:'',account_type:'Employee',department:'null',job:'',state:'' };
   departments: string[] = ['web','mobile'];
-  account_type: string[]=['Employee','Technician','Admin'];
+  account_types: string[]=['Employee','Technician','Admin'];
   states: string[] = ['Enabled', 'Disabled'];
   employeeId: string |null = null;
+  @ViewChild('employeeForm') employeeForm!: NgForm;
+  accountTypeInvalid: boolean = true;
+  departmentInvalid: boolean = true;
+  stateInvalid:boolean=true;
+  saveDisabled: boolean = true;
+  jobInvalid: boolean = true;
 
+jobs: string[] = ['developper','HR'];
   constructor(
     private employeeService: EmployeeService ,
     private route: ActivatedRoute,
     private router: Router,
-    private el: ElementRef
-      ){}
+    private el: ElementRef,
+    
+      ){ }
   
 
       @HostListener('input', ['$event']) onInputChange(event: any) {
@@ -69,4 +77,13 @@ export class DetailsEmployeeComponent {
   goBack(): void {
     this.router.navigate(['employee']);
   }
+
+
+  checkFormValidity() {
+    this.accountTypeInvalid = this.employeeForm.controls['account_type'].invalid && this.employeeForm.controls['account_type'].touched;
+    this.departmentInvalid = this.employeeForm.controls['department'].invalid && this.employeeForm.controls['department'].touched;
+    // Activer ou désactiver le bouton "Save" en fonction de la validité du formulaire
+    this.saveDisabled = this.employeeForm.invalid || this.accountTypeInvalid || this.departmentInvalid;
+  }
+
 }

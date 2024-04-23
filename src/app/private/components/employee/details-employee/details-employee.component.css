@@ -131,3 +131,6 @@ label.required::after {
   color: red; /* Change color as needed */
   margin-left: 2px; /* Adjust spacing as needed */
 }
+.border-error {
+  border: 2px solid red;
+}
