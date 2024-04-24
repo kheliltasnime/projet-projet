@@ -23,5 +23,11 @@ export class EquipmentsComponent {
     });
   }
 
+  selectedEquipment!: Equipments ;
+
+  selectEquipment(Equipments : any ) {
+    this.selectedEquipment = Equipments;
+  }
+  
 
 }

@@ -8,6 +8,7 @@ import { NgForm } from '@angular/forms';
   templateUrl: './details-employee.component.html',
   styleUrls: ['./details-employee.component.css']
 })
+
 export class DetailsEmployeeComponent {
 
   employee : Employee ={firstName: '',lastName:'',phoneNumber:0,address:'',email:'',account_type:'Employee',department:'null',job:'',state:'' };
@@ -23,6 +24,7 @@ export class DetailsEmployeeComponent {
   jobInvalid: boolean = true;
 
 jobs: string[] = ['developper','HR'];
+
   constructor(
     private employeeService: EmployeeService ,
     private route: ActivatedRoute,

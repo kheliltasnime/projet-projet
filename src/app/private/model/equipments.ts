@@ -12,4 +12,5 @@ export interface Equipments{
     updatedAt? : Date;
     category: string; // Ajouter la propriété category
   subcategory: string; // Ajouter la propriété subcategory
+  state:string;
 }

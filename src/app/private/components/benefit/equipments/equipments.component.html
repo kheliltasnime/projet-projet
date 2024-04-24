@@ -3,11 +3,25 @@
     <div class="table-wrapper">
       <div class="table-title">
         <div class="row">
-          <div class="col-sm-6">
+          <div class="col-sm-8">
             <h2>List of Equipments</h2>
+          </div>
+            
+          
+          
+          
+          <div class="col-sm-4">
+            <a
+              href="#addEquipmentModal"
+              [routerLink]="'/equipment/new'"
+              class="btn btn-success"
+              data-toggle="modal"
+              ><i class="material-icons">&#xE147;</i> <span>Add New</span></a
+            >
           </div>
         </div>
       </div>
+      
       <div class="table-responsive">
       <table class="table table-bordered table-hover">
         <thead>
@@ -20,6 +34,8 @@
             <th>Quantity</th>
             <th>Price</th>
             <th>Maintenance Status</th>
+            <th>Action</th> <!-- Add Action column header -->
+            <th>State</th> <!-- Add State column header -->
           </tr>
         </thead>
         <tbody>
@@ -32,6 +48,24 @@
             <td>{{equipments.quantity}}</td>
             <td>{{equipments.price}}</td>
             <td>{{equipments.maintenance_status}}</td>
+            <td>
+              <a href="#editEquipmentModal" [routerLink]="'/equipments/'+ equipments.id" class="edit" data-toggle="edit"
+                ><i class="material-icons" data-toggle="tooltip" title="Edit"
+                  >&#xE254;</i
+                ></a
+              >
+
+             
+            </td>
+            <td><!-- State column -->
+              <span [style.color]="equipments.state === 'Enabled' ? 'green' : 'red'">
+                {{ equipments.state }}
+              </span>
+            </td>
+          
+            
+           
+            
           </tr>
         </tbody>
       </table>

@@ -4,6 +4,7 @@
       <div class="modal-header">
         <h4 class="modal-title">{{employee.id ? "Edit" : "Add"}} Employee</h4>
       </div>
+      
       <div class="modal-body">
         <div class="row">
           <div class="col">
@@ -64,7 +65,6 @@
           <div class="col">
             <label>Department <span>*</span></label>
             <select id="department" [(ngModel)]="employee.department" name="department" required (ngModelChange)="checkFormValidity()">
-              [class.border-error]="departmentInvalid && employeeForm.controls['department'].touched">
               <option value="" enabled selected>Select Department</option>
               <option *ngFor="let department of departments" [value]="department">{{ department }}</option>
             </select>
