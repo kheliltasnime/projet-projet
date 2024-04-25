@@ -11,6 +11,7 @@ import { BenefitComponent } from './private/components/benefit/benefit.component
 import { RoomsComponent } from './private/components/benefit/rooms/rooms.component';
 import { EquipmentsComponent } from './private/components/benefit/equipments/equipments.component';
 import { ReservationComponent } from './private/components/reservation/reservation.component';
+import { EditRoomComponent } from './private/components/benefit/rooms/edit/edit-room/edit-room.component';
 
 const routes: Routes = [
   {
@@ -57,6 +58,10 @@ const routes: Routes = [
   {
     path: 'reservation',
     component: ReservationComponent,
+  },
+  {
+    path: 'tas',
+    component: EditRoomComponent,
   },
   
 ];

@@ -1,6 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Rooms } from 'src/app/private/model/rooms';
 import { RoomsService } from 'src/app/private/services/rooms.service';
+import { EditRoomComponent } from './edit/edit-room/edit-room.component';
+import { PopupComponent } from '../../popup/popup.component';
+import { MasterService } from 'src/app/private/services/master.service';
+import { Customer } from 'src/app/private/model/Customer';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-rooms',
@@ -8,10 +16,16 @@ import { RoomsService } from 'src/app/private/services/rooms.service';
   styleUrls: ['./rooms.component.css']
 })
 export class RoomsComponent {
+
   roomsList: Rooms[] =[];
-  constructor(
-    private roomsService: RoomsService,
+  dataSource:any;
+
+ 
+
+  constructor(private service: MasterService,
+    private roomsService: RoomsService,private dialog:MatDialog
   ){}
+
   ngOnInit(): void {
     this.displayRooms();
   }
@@ -22,6 +36,16 @@ export class RoomsComponent {
       console.log(res);
     });
   }
+
+
+
+
+
+
+
+
+
+
 
 
 }

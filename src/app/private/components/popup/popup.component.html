@@ -1,0 +1,45 @@
+<div class="modal-dialog">
+  <div class="modal-content">
+    <form class="custom-modal" #equipmentForm="ngForm" >
+      <div class="modal-header">
+        <h4 class="modal-title">{{selectedEquipment.id ? "Edit" : "Add"}} Equipment</h4>
+      </div>
+      
+      <div class="modal-body">
+        <div class="row">
+          <div class="col">
+            <mat-form-field>
+              <mat-label>State</mat-label>
+              <input matInput [(ngModel)]="selectedEquipment.state" name="state">
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field>
+              <mat-label>Quantity</mat-label>
+              <input type="number" matInput [(ngModel)]="selectedEquipment.quantity" name="quantity">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <mat-form-field>
+              <mat-label>Price</mat-label>
+              <input type="number" matInput [(ngModel)]="selectedEquipment.price" name="price">
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field>
+              <mat-label>Maintenance Status</mat-label>
+              <input type="text" matInput [(ngModel)]="selectedEquipment.maintenance_status" name="maintenance_status">
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+     <!--   <button type="button" class="btn btn-secondary" (click)="goBack()">Back</button>-->
+        <button type="submit" class="btn btn-success" [disabled]="equipmentForm.invalid">Save</button>
+      </div>
+    </form>
+  </div>
+</div>

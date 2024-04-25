@@ -22,10 +22,12 @@ import { CdkMenuModule } from '@angular/cdk/menu';
 import { EquipmentsComponent } from './private/components/benefit/equipments/equipments.component';
 import { RoomsComponent } from './private/components/benefit/rooms/rooms.component';
 import { ReservationComponent } from './private/components/reservation/reservation.component';
-
-import {MatSlideToggleModule} from  '@angular/material/slide-toggle' ;
-
-
+import {MatSlideToggleModule} from  '@angular/material/slide-toggle';
+import { EditRoomComponent } from './private/components/benefit/rooms/edit/edit-room/edit-room.component' ;
+import { MatCardModule } from '@angular/material/card';
+import { PopupComponent } from './private/components/popup/popup.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,13 +38,14 @@ import {MatSlideToggleModule} from  '@angular/material/slide-toggle' ;
     DashboardComponent,
     ChartsComponent,
     CalendarComponent,
-   
+    PopupComponent,
     HistoryComponent,
     BenefitComponent,
     HeaderComponent,
     EquipmentsComponent,
     RoomsComponent,
     ReservationComponent,
+    EditRoomComponent,
     
   ],
   imports: [
@@ -50,12 +53,16 @@ import {MatSlideToggleModule} from  '@angular/material/slide-toggle' ;
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
+    ReactiveFormsModule,
     FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     OverlayModule,
+    MatCardModule,
     MatDialogModule,
+    MatInputModule,
     MatSlideToggleModule,
+    MatIconModule,
     CdkMenuModule
     
   ],

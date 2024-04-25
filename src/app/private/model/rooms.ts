@@ -7,4 +7,5 @@ export interface Rooms{
     capacity? :number;
     createdAt? : Date;
     updatedAt? : Date;
+    state:string;
 }
