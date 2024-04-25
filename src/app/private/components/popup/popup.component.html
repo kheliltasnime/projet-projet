@@ -1,16 +1,16 @@
 <div class="modal-dialog">
   <div class="modal-content">
-    <form class="custom-modal" #equipmentForm="ngForm" >
+    <form class="custom-modal" #equipmentForm="ngForm" (ngSubmit)="saveEquipment()">
       <div class="modal-header">
-        <h4 class="modal-title">{{selectedEquipment.id ? "Edit" : "Add"}} Equipment</h4>
+        <h4 class="modal-title">Edit Equipment</h4>
       </div>
       
-      <div class="modal-body">
+      <div class="modal-body" *ngIf="selectedEquipment">
         <div class="row">
           <div class="col">
             <mat-form-field>
               <mat-label>State</mat-label>
-              <input matInput [(ngModel)]="selectedEquipment.state" name="state">
+              <input type="text" matInput [(ngModel)]="selectedEquipment.state" name="state">
             </mat-form-field>
           </div>
           <div class="col">
@@ -37,7 +37,7 @@
       </div>
 
       <div class="modal-footer">
-     <!--   <button type="button" class="btn btn-secondary" (click)="goBack()">Back</button>-->
+        <button type="button" class="btn btn-secondary" (click)="goBack()">Back</button>
         <button type="submit" class="btn btn-success" [disabled]="equipmentForm.invalid">Save</button>
       </div>
     </form>

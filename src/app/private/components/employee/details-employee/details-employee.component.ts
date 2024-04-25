@@ -41,12 +41,16 @@ jobs: string[] = ['developper','HR'];
           event.stopPropagation();
         }
       }
-  ngOnInit(): void {
-    this.employeeId = this.route.snapshot.paramMap.get('id');
-    if (this.employeeId != null && this.employeeId != 'new')
-      this.displayEmployee(Number(this.employeeId));
-    console.log(this.employeeId);
-  }
+      ngOnInit(): void {
+        this.route.paramMap.subscribe(params => {
+            this.employeeId = params.get('id');
+            if (this.employeeId != null && this.employeeId != 'new') {
+                this.displayEmployee(Number(this.employeeId));
+            }
+            console.log(this.employeeId);
+        });
+    }
+    
 
   displayEmployee(id : number){
     this.employeeService.getEmployeeById(id).subscribe((res) =>

@@ -31,4 +31,13 @@ export class EquipmentsService {
       )
     );
   }
+  
+  addEquipment(equipments : Equipments) {
+    return this.httpclient.post(this.baseUrl + '/equipments',equipments);
+  }
+  
+  editEquipment(id: number,equipments:Equipments){
+    return this.httpclient.put(this.baseUrl + '/employee/' + id, equipments);
+  }
+  
 }

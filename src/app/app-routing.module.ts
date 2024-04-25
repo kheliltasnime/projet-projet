@@ -12,6 +12,7 @@ import { RoomsComponent } from './private/components/benefit/rooms/rooms.compone
 import { EquipmentsComponent } from './private/components/benefit/equipments/equipments.component';
 import { ReservationComponent } from './private/components/reservation/reservation.component';
 import { EditRoomComponent } from './private/components/benefit/rooms/edit/edit-room/edit-room.component';
+import { PopupComponent } from './private/components/popup/popup.component';
 
 const routes: Routes = [
   {
@@ -63,6 +64,15 @@ const routes: Routes = [
     path: 'tas',
     component: EditRoomComponent,
   },
+  {
+    path: 'equipments',
+    component: EquipmentsComponent,
+  },
+  {
+    path: 'equipments/:id',
+    component: PopupComponent,
+  },
+
   
 ];
 

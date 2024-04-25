@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component ,OnInit} from '@angular/core';
 import { Equipments } from 'src/app/private/model/equipments';
 import { EquipmentsService } from 'src/app/private/services/equipments.service';
 import { PopupComponent } from '../../popup/popup.component';
@@ -8,8 +8,9 @@ import { MatDialog } from '@angular/material/dialog';
   templateUrl: './equipments.component.html',
   styleUrls: ['./equipments.component.css']
 })
-export class EquipmentsComponent {
+export class EquipmentsComponent implements OnInit {
   equipmentsList: Equipments[] =[];
+  selectedEquipment: Equipments | undefined;
   constructor(
     private equipmentsService: EquipmentsService,private dialog:MatDialog
   ){}
@@ -24,25 +25,31 @@ export class EquipmentsComponent {
     });
   }
 
-  selectedEquipment!: Equipments ;
+ 
 
   selectEquipment(Equipments : any ) {
     this.selectedEquipment = Equipments;
   }
   
 
+  addCustomer(equipmentId: number | null | undefined) {
+    if (equipmentId !== null && equipmentId !== undefined) {
+      this.openPopup(equipmentId);
+    } else {
+      console.error('No equipment selected or ID is undefined');
+    }
+  }
   
-Openpopup(component:any) {
-  var _popup = this.dialog.open(component, {
-    width: '40%',
-    enterAnimationDuration: '1000ms',
-    exitAnimationDuration: '1000ms',
-    
-  });
   
-}
+  
+  openPopup(equipmentId: number) {
+    const dialogRef = this.dialog.open(PopupComponent, {
+      data: { equipmentId: equipmentId }
+    });
 
-addcustomer(){
-  this.Openpopup( PopupComponent);
-}
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+  
 }

@@ -48,9 +48,8 @@
             <td>{{equipments.price}}</td>
             <td>{{equipments.maintenance_status}}</td>
             <td>
-              <!-- Bouton "Edit" dans la colonne "Action" -->
               <mat-card-header>
-                <button mat-raised-button color="primary" (click)="addcustomer()">Edit</button>
+                <button mat-raised-button color="primary" (click)="addCustomer(equipments?.id)">Edit</button>
               </mat-card-header>
             </td>
             

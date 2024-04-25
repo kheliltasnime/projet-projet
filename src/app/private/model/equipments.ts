@@ -1,5 +1,5 @@
 export interface Equipments{
-    id? : number;
+    id? : number |null;
     name? : string;
     type? : string;
     manufactuer? : string;
@@ -10,7 +10,7 @@ export interface Equipments{
     maintenance_status? :string;
     createdAt? : Date;
     updatedAt? : Date;
-    category: string; // Ajouter la propriété category
-  subcategory: string; // Ajouter la propriété subcategory
-  state:string;
+    category?: string; // Ajouter la propriété category
+  subcategory?: string; // Ajouter la propriété subcategory
+  state?:string;
 }
