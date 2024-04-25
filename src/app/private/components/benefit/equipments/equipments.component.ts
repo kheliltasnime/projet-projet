@@ -49,7 +49,9 @@ export class EquipmentsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
+      this.displayEquipments();
     });
+   
   }
   
 }

@@ -37,7 +37,7 @@ export class EquipmentsService {
   }
   
   editEquipment(id: number,equipments:Equipments){
-    return this.httpclient.put(this.baseUrl + '/employee/' + id, equipments);
+    return this.httpclient.put(this.baseUrl + '/equipments/' + id, equipments);
   }
   
 }

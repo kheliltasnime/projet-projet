@@ -11,7 +11,21 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 })
 export class PopupComponent implements OnInit {
 
-  selectedEquipment!: Equipments;
+  selectedEquipment: Equipments = {
+    id: 0, // ou une autre valeur par défaut appropriée
+    quantity: 0,
+    price: 0,
+    name: '',
+    type: '',
+    manufactuer: '', // Notez la correction de l'orthographe de "manufacturer"
+    model: '',
+    maintenance_status: '',
+    state: '',
+    category: '',
+    subcategory: '',
+    benefit_id:7
+  };
+  
   equipmentId!: number;
  
 
@@ -23,6 +37,7 @@ export class PopupComponent implements OnInit {
     private equipmentsService: EquipmentsService,
     private el: ElementRef,
     private router: Router,
+    private fb: FormBuilder, 
     private dialogRef: MatDialogRef<PopupComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
@@ -43,6 +58,7 @@ export class PopupComponent implements OnInit {
       this.displayEquipments(this.equipmentId);
     }
   }
+  
 
   displayEquipments(id: number) {
     this.equipmentsService.getEquipmentsById(id).subscribe((res) => {
@@ -59,27 +75,47 @@ export class PopupComponent implements OnInit {
     this.router.navigate(['benefit/equipments']);
     console.log("Going back..."); // Exemple: affichage d'un message dans la console
   }
+
   saveEquipment() {
-    console.log("Selected Equipment ID:", this.selectedEquipment?.id); // Ajout de l'instruction de débogage
-    
-    if (this.selectedEquipment?.id) {
-        this.updateEquipment(this.selectedEquipment?.id);
-    } else {
-        console.error("Cannot save equipment without ID. Please ensure equipment ID is set.");
-    }
+    this.equipmentsService.getEquipmentsById(this.equipmentId).subscribe(
+      originalEquipment => {
+        // Effectuez la mise à jour de l'équipement uniquement si des champs ont été modifiés
+        if (originalEquipment.state !== this.selectedEquipment.state ||
+            originalEquipment.quantity !== this.selectedEquipment.quantity ||
+            originalEquipment.price !== this.selectedEquipment.price ||
+            originalEquipment.maintenance_status !== this.selectedEquipment.maintenance_status) {
+  
+          // Envoyez une requête au backend pour mettre à jour l'équipement
+          this.equipmentsService.editEquipment(this.equipmentId, this.selectedEquipment).subscribe(
+            editEquipment => {
+              // L'équipement est mis à jour avec succès dans la base de données
+              console.log('Equipment updated successfully:', editEquipment);
+              // Vous pouvez également réinitialiser le formulaire ou effectuer d'autres actions nécessaires
+            },
+            error => {
+              // Gérez les erreurs de mise à jour de l'équipement
+              console.error('Error updating equipment:', error);
+            }
+          );
+        } else {
+          // Aucun champ modifié, ne faites rien ou affichez un message à l'utilisateur
+          console.log('No fields were modified.');
+        }
+      },
+      error => {
+        // Gérez les erreurs de récupération de l'équipement d'origine
+        console.error('Error getting original equipment:', error);
+      }
+      
+
+    );
+    this.dialogRef.close();
     this.router.navigate(['benefit/equipments']);
-}
-
- 
-
-  updateEquipment (id: number){
-    this.equipmentsService
-    .editEquipment(id, this.selectedEquipment)
-    .subscribe((res) => {
-      console.log(res);
-      this.router.navigate(['/equipments']);
-    });
+    console.log("Going back..."); // Exemple: affichage d'un message dans la console
   }
+  
+  
+
 
  
   addEquipment() {

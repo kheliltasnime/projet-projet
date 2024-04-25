@@ -13,4 +13,5 @@ export interface Equipments{
     category?: string; // Ajouter la propriété category
   subcategory?: string; // Ajouter la propriété subcategory
   state?:string;
+  benefit_id?:number | null;
 }
