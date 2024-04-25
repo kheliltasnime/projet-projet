@@ -7,5 +7,8 @@ export interface Rooms{
     capacity? :number;
     createdAt? : Date;
     updatedAt? : Date;
-    state:string;
+    category?: string; // Ajouter la propriété category
+  subcategory?: string; // Ajouter la propriété subcategory
+  state?:string;
+  benefit_id?:number | null;
 }

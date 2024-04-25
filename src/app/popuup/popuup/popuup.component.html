@@ -1,0 +1,46 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+      <form class="custom-modal" #roomForm="ngForm" (ngSubmit)="saveRoom()">
+        <div class="modal-header">
+          <h4 class="modal-title">Edit Room</h4>
+        </div>
+        
+        <div class="modal-body" *ngIf="selectedRomm">
+          <div class="row">
+            <div class="col">
+              <mat-form-field>
+                <mat-label>State</mat-label>
+                <input type="text" matInput [(ngModel)]="selectedRomm.state" name="state">
+              </mat-form-field>
+            </div>
+            <div class="col">
+              <mat-form-field>
+                <mat-label>Capacity</mat-label>
+                <input type="number" matInput [(ngModel)]="selectedRomm.capacity" name="capacity">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <mat-form-field>
+                <mat-label>Location</mat-label>
+                <input type="number" matInput [(ngModel)]="selectedRomm.location" name="price">
+              </mat-form-field>
+            </div>
+            <div class="col">
+              <mat-form-field>
+                <mat-label>Maintenance Status</mat-label>
+                <input type="text" matInput [(ngModel)]="selectedRomm.maintenance_status" name="maintenance_status">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+  
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="goBack()">Back</button>
+          <button type="submit" class="btn btn-success" [disabled]="roomForm.invalid">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  

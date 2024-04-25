@@ -16,4 +16,7 @@ export class RoomsService {
   getRoomsById(id : number){
     return this.httpclient.get<Rooms>(this.baseUrl + '/rooms/' +id );
   }
+  editRoom(id: number,rooms:Rooms){
+    return this.httpclient.put(this.baseUrl + '/rooms/' + id, rooms);
+  }
 }

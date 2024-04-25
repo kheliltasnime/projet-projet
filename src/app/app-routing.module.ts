@@ -72,6 +72,14 @@ const routes: Routes = [
     path: 'equipments/:id',
     component: PopupComponent,
   },
+  {
+    path: 'rooms',
+    component: EquipmentsComponent,
+  },
+  {
+    path: 'rooms/:id',
+    component: PopupComponent,
+  },
 
   
 ];

@@ -28,6 +28,7 @@ import { MatCardModule } from '@angular/material/card';
 import { PopupComponent } from './private/components/popup/popup.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { PopuupComponent } from './popuup/popuup/popuup.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,6 +47,7 @@ import { MatInputModule } from '@angular/material/input';
     RoomsComponent,
     ReservationComponent,
     EditRoomComponent,
+    PopuupComponent,
     
   ],
   imports: [
