@@ -6,6 +6,7 @@ import { Equipments } from '../../model/equipments';
 import { Rooms } from '../../model/rooms';
 import { Reservation } from '../../model/reservation';
 import { ReservationService } from '../../services/reservation.service';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-reservation',
   templateUrl: './reservation.component.html',
@@ -21,7 +22,7 @@ export class ReservationComponent {
   isButtonEnabled: boolean = false;
   selectedCategory: string = '';
   subcategories: string[] = [];
-  filteredEquipments: Equipments[] = [];
+  
   selectedSubcategory: string = '';
 
 
@@ -40,29 +41,29 @@ export class ReservationComponent {
     this.displayEquipments();
     this.displayRooms();
     this.getEquipmentTypes();
-    this.loadReservations();
+    this.getRoomsTypes();
+   // this.loadReservations();
 
   }
+  
   getEquipmentTypes() {
     this.equipmentsService.getEquipmentTypes().subscribe((res) => {
-      this.equipmentTypes = res;
-      this.result = res; // Stocker les types d'équipement dans une variable temporaire
-      this.subcategories = res; // Mettre à jour les sous-catégories avec les types d'équipement
-  
-      console.log(res);
+        this.equipmentTypes = res;
+        this.subcategories = res; // Mettre à jour les sous-catégories avec les types d'équipement
+        console.log(res);
+
     });
-  }
+}
   
   getRoomsTypes() {
     this.roomsService.getRoomsTypes().subscribe((res) => {
       this.roomsTypes = res;
-      this.result = res; // Stocker les types d'équipement dans une variable temporaire
+      
       this.subcategories = res; // Mettre à jour les sous-catégories avec les types d'équipement
   
       console.log(res); // Log the retrieved room types to verify data
     });
   }
-
 
 
 
@@ -80,7 +81,7 @@ export class ReservationComponent {
       console.log(res);
     });
   }
-
+/*
   selectedEquipment!: Equipments ;
 
   selectEquipment(equipments : any ) {
@@ -116,6 +117,7 @@ export class ReservationComponent {
     // You can compare with the reservations array using some logic
     return true; // Placeholder return value
   }
+  */
   result: any;
 
   onCategoryChange(event: any) {
@@ -150,23 +152,39 @@ export class ReservationComponent {
     }
   }
   
-  
-  
-  // Add the search function to your component class
-searchEquipments() {
-  const selectedCategory = this.selectedCategory;
-  const selectedSubcategory = this.selectedSubcategory;
+  filteredEquipmentsList: any[] = []; // Déclaration de la propriété filteredEquipmentsList comme un tableau vide
 
-  if (selectedCategory === 'category1') {
-    // Filter equipments based on selected subcategory
-    this.filteredEquipments = this.equipmentsList.filter(equipment => equipment.type === selectedSubcategory);
-  } else if (selectedCategory === 'category2') {
-    // Handle filtering for rooms (if needed)
-    // Example: this.filteredRooms = this.roomsList.filter(room => room.type === selectedSubcategory);
+  filteredRoomsList: any[] = []; // Déclaration de la propriété filteredRoomsList comme un tableau vide
+  search() {
+    // Réinitialiser les listes des équipements et des chambres
+    this.filteredEquipmentsList = [];
+    this.filteredRoomsList = [];
+
+    // Récupérez la valeur de la catégorie sélectionnée
+    const selectedCategory = (document.getElementById('category') as HTMLSelectElement).value;
+
+    // Affiche tous les équipements si la catégorie sélectionnée est 'category1' (Equipments)
+    if (selectedCategory === 'category1') {
+      // Réinitialiser la liste des chambres
+      this.roomsList = [];
+      // Afficher les équipements
+      this.displayEquipments();
+      // Mettre à jour la liste des équipements à afficher
+      this.filteredEquipmentsList = this.equipmentsList;
+    } else if (selectedCategory === 'category2') {
+      // Réinitialiser la liste des équipements
+      this.equipmentsList = [];
+      // Afficher les chambres
+      this.displayRooms();
+      // Mettre à jour la liste des chambres à afficher
+      this.filteredRoomsList = this.roomsList;
+    } else {
+      // Afficher à la fois les équipements et les chambres si une autre catégorie est sélectionnée
+      this.displayEquipments();
+      this.displayRooms();
+    }
   }
-}
-
-
+  
 
 
 
