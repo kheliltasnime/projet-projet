@@ -1,5 +1,6 @@
 export interface Equipments{
     id? : number |null;
+    checked?: boolean;
     name? : string;
     type? : string;
     manufactuer? : string;

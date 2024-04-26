@@ -1,7 +1,80 @@
-<h1>Calendar</h1>
-<div class="card">
-    <div class="card-head">slxfvg osfji - Dashboard</div>
-    <div class="card-body">
-        lgvnfdsgn snfopsnfgv sfdvj,dsgjvolws ksgvj,ffsowgvol sldfvgj,nwsoldsj,f fodshf oisfjdoisdfos soifdjoishfgdosdh shfgdidsgfi dsghishg sgujnfhxighxdf sgdofvhsfdgvfds b dgvsnofdgv nhdsfvgsgjs fogvkjjnfgvjxf n 
+<div id="calendar-container" >
+    <div id="cal-buttons">
+        <div class="btn-group" id="cal-date-nav-buttons" role="group" aria-label="Basic example">
+            <button 
+               id="previous" 
+               mwlCalendarPreviousView [(viewDate)]="viewDate" 
+               [view]="view"
+               class="btn btn-secondary"
+               [class.active]="activeButton === 'previous'"
+            >Previous</button>
+            <button 
+               id="today" 
+               mwlCalendarToday [(viewDate)]="viewDate"  
+               class="btn btn-secondary"
+               [class.active]="activeButton === 'previous'"
+            >Today</button>
+            <button 
+               id="next" 
+               mwlCalendarNextView [(viewDate)]="viewDate" 
+               [view]="view"  
+               class="btn btn-secondary"
+               [class.active]="activeButton === 'previous'"
+            >Next</button>
+        </div>
+        <div id="cal-date-field">{{ viewDate| calendarDate:(view + 'ViewTitle') : 'en'}}</div>
+        <div class="btn-group" id="cal-view-nav-buttons" role="group" aria-label="Basic example">
+            <button 
+                id="month"
+                (click)="setView(CalendarView.Month)" 
+                class="btn btn-secondary"
+                [class.active]="view === CalendarView.Month"
+            >Month</button>
+            <button 
+                id="week" 
+                (click)="setView(CalendarView.Week)" 
+                class="btn btn-secondary"
+                [class.active]="view === CalendarView.Week"
+            >Week</button>
+            <button 
+                id="day" 
+                (click)="setView(CalendarView.Day)" 
+                class="btn btn-secondary"
+                [class.active]="view === CalendarView.Month"
+            >Day</button>
+        </div>
     </div>
+    <span [ngSwitch]="view">
+        <mwl-calendar-month-view 
+           *ngSwitchCase="CalendarView.Month" 
+           [viewDate]="viewDate" 
+           [events]="events"
+           [activeDayIsOpen]="activeDayIsOpen"
+           (dayClicked)="dayClicked($event.day)"
+           (eventClicked)="eventClicked($event)"
+           (eventTimesChanged)="eventTimesChanged($event)"
+           [refresh]="refresh"
+        ></mwl-calendar-month-view>
+        <mwl-calendar-week-view 
+           *ngSwitchCase="CalendarView.Week" 
+           [viewDate]="viewDate" 
+           [events]="events"
+           [dayStartHour]="8"
+           [dayEndHour]="18"
+           (eventClicked)="eventClicked($event)"
+           (eventTimesChanged)="eventTimesChanged($event)"
+           [refresh]="refresh"
+           ></mwl-calendar-week-view>
+        <mwl-calendar-day-view 
+           *ngSwitchCase="CalendarView.Day" 
+           [viewDate]="viewDate" 
+           [events]="events"
+           [dayStartHour]="8"
+           [dayEndHour]="18"
+           (eventClicked)="eventClicked($event)"
+           (eventTimesChanged)="eventTimesChanged($event)"
+           [refresh]="refresh"
+           ></mwl-calendar-day-view>
+    </span>
+    
 </div>

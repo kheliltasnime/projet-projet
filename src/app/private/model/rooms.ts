@@ -11,4 +11,5 @@ export interface Rooms{
   subcategory?: string; // Ajouter la propriété subcategory
   state?:string;
   benefit_id?:number | null;
+  checked?: boolean;
 }

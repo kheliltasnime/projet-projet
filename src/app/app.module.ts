@@ -29,6 +29,18 @@ import { PopupComponent } from './private/components/popup/popup.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { PopuupComponent } from './popuup/popuup/popuup.component';
+import { CalendarDateFormatter, CalendarModule, CalendarNativeDateFormatter, DateAdapter, DateFormatterParams } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+
+class CustomDateFormatter extends CalendarNativeDateFormatter{
+  public override dayViewHour({ date,locale}: DateFormatterParams) : string{
+    return new Intl.DateTimeFormat(locale, {hour: 'numeric', minute: 'numeric'}).format(date);
+  }
+
+  public override weekViewHour({ date,locale}: DateFormatterParams) : string{
+    return new Intl.DateTimeFormat(locale, {hour: 'numeric', minute: 'numeric'}).format(date);
+  }
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -64,11 +76,16 @@ import { PopuupComponent } from './popuup/popuup/popuup.component';
     MatDialogModule,
     MatInputModule,
     MatSlideToggleModule,
+    CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
     MatIconModule,
-    CdkMenuModule
+    CdkMenuModule,
+    BrowserAnimationsModule,
+    CdkMenuModule,
     
   ],
-  providers: [],
+  providers: [
+    {provide: CalendarDateFormatter, useClass: CustomDateFormatter}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
