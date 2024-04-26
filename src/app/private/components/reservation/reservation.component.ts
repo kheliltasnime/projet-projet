@@ -14,7 +14,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class ReservationComponent {
   
-  equipmentsList: Equipments[] =[];
+equipmentsList: Equipments[] =[];
   roomsList: Rooms[] =[];
   equipmentTypes: string[] = [];
   roomsTypes: string[] = [];
@@ -25,7 +25,8 @@ export class ReservationComponent {
   
   selectedSubcategory: string = '';
 
-
+  filteredEquipmentsList: Equipments[] = [];
+  filteredRoomsList: Rooms[] = [];
   updateButtonState() {
     this.isButtonEnabled = this.equipmentsList.some(equipment => equipment.checked) || this.roomsList.some(room => room.checked);
   }
@@ -49,7 +50,7 @@ export class ReservationComponent {
   getEquipmentTypes() {
     this.equipmentsService.getEquipmentTypes().subscribe((res) => {
         this.equipmentTypes = res;
-        this.subcategories = res; // Mettre à jour les sous-catégories avec les types d'équipement
+        this.subcategories = res;
         console.log(res);
 
     });
@@ -70,14 +71,16 @@ export class ReservationComponent {
 
   displayEquipments() {
     this.equipmentsService.getAllEquipments().subscribe((res) => {
-      this.equipmentsList = res;
+    //  this.equipmentsList = res;
+      this.filteredEquipmentsList = res;
       console.log(res);
     });
   }
 
   displayRooms() {
     this.roomsService.getAllRooms().subscribe((res) => {
-      this.roomsList = res;
+    //  this.roomsList = res;
+      this.filteredRoomsList = res;
       console.log(res);
     });
   }
@@ -141,51 +144,63 @@ export class ReservationComponent {
   
   
   onSubcategoryChange(event: any) {
-    const selectedSubcategory = event.target.value;
+    this.selectedSubcategory = event.target.value;
     const selectedCategory = this.selectedCategory;
+    
     if (this.selectedCategory === 'category1') {
       // Effectuer la recherche d'équipements basée sur la sous-catégorie sélectionnée
       // Vous pouvez utiliser la variable selectedSubcategory ici pour effectuer la recherche
+      
     } else if (this.selectedCategory === 'category2') {
       // Effectuer la recherche de chambres basée sur la sous-catégorie sélectionnée
       // Vous pouvez utiliser la variable selectedSubcategory ici pour effectuer la recherche
     }
+    
   }
   
-  filteredEquipmentsList: any[] = []; // Déclaration de la propriété filteredEquipmentsList comme un tableau vide
-
-  filteredRoomsList: any[] = []; // Déclaration de la propriété filteredRoomsList comme un tableau vide
+// Déclaration de la propriété filteredRoomsList comme un tableau vide
   search() {
     // Réinitialiser les listes des équipements et des chambres
     this.filteredEquipmentsList = [];
     this.filteredRoomsList = [];
-
-    // Récupérez la valeur de la catégorie sélectionnée
+  
+    // Récupérez la valeur de la catégorie et de la sous-catégorie sélectionnées
     const selectedCategory = (document.getElementById('category') as HTMLSelectElement).value;
+    const selectedSubcategory = (document.getElementById('subcategory') as HTMLSelectElement).value;
+  
+     // Affichez les valeurs récupérées dans la console
+  console.log('Selected Category:', selectedCategory);
+  console.log('Selected Subcategory:', selectedSubcategory);
 
-    // Affiche tous les équipements si la catégorie sélectionnée est 'category1' (Equipments)
-    if (selectedCategory === 'category1') {
-      // Réinitialiser la liste des chambres
-      this.roomsList = [];
-      // Afficher les équipements
-      this.displayEquipments();
-      // Mettre à jour la liste des équipements à afficher
-      this.filteredEquipmentsList = this.equipmentsList;
-    } else if (selectedCategory === 'category2') {
-      // Réinitialiser la liste des équipements
-      this.equipmentsList = [];
-      // Afficher les chambres
-      this.displayRooms();
-      // Mettre à jour la liste des chambres à afficher
-      this.filteredRoomsList = this.roomsList;
-    } else {
-      // Afficher à la fois les équipements et les chambres si une autre catégorie est sélectionnée
-      this.displayEquipments();
-      this.displayRooms();
-    }
+    if (selectedCategory === 'category1') { // 'category1' devrait correspondre à 'Equipments'
+      this.equipmentsService.getAllEquipments().subscribe(equipments => {
+        if (selectedSubcategory) {
+          // Filtrer uniquement si une sous-catégorie est sélectionnée
+          this.filteredEquipmentsList = equipments.filter(equipment => equipment.type === selectedSubcategory);
+        } else {
+          // Si aucune sous-catégorie n'est sélectionnée, afficher tous les équipements
+          this.filteredEquipmentsList = equipments;
+        }
+      });
+    
+      console.log('filteredEquipmentsList :', this.filteredEquipmentsList);  } 
+    else if (selectedCategory === 'category2') { // 'category2' devrait correspondre à 'Rooms'
+      this.roomsService.getAllRooms().subscribe(rooms => {
+        if (selectedSubcategory) {
+          // Filtrer uniquement si une sous-catégorie est sélectionnée
+          this.filteredRoomsList = rooms.filter(room => room.type === selectedSubcategory);
+        } else {
+          // Si aucune sous-catégorie n'est sélectionnée, afficher toutes les chambres
+          this.filteredRoomsList = rooms;
+        }
+      });
+      console.log('filteredRoomsList :', this.filteredRoomsList);  }
+      else {
+        this.displayEquipments();
+        this.displayRooms();
+      }
   }
   
-
 
 
 
