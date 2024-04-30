@@ -132,6 +132,21 @@ equipmentsList: Equipments[] =[];
           
           
           console.log('Matching Reservations with IDs:', matchingReservationsWithIds);
+           // Récupérer et filtrer les équipements
+           this.equipmentsService.getAllEquipments().subscribe(equipments => {
+            const availableEquipments = equipments.filter(equipment =>
+                !matchingReservationsWithIds.some(res => res.equipmentsId === equipment.id)
+            );
+            console.log('Available Equipments:', availableEquipments);
+        });
+
+        // Récupérer et filtrer les chambres
+        this.roomsService.getAllRooms().subscribe(rooms => {
+            const availableRooms = rooms.filter(room =>
+                !matchingReservationsWithIds.some(res => res.roomsId === room.id)
+            );
+            console.log('Available Rooms:', availableRooms);
+        });
           
         },
         error: (error) => {
