@@ -1,8 +1,8 @@
 export interface Reservation{
     id? : number;
     name? : string;
-    equipmentId? : number;
-    roomId? : number;
+    equipmentsId? : number;
+    roomsId? : number;
     category? : string;
     subCategory? : string;
     departDate? : string;

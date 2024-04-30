@@ -37,7 +37,8 @@ equipmentsList: Equipments[] =[];
   selectedDate: string='';
   selectedDepartureTime: string = '';
   selectedReturnTime: string = '';
-  departureDatesList:string []=[];
+  departureDatesList: { date: string; departureHour: string; returnHour: string; }[] = [];
+
 
   updateButtonState() {
     this.isButtonEnabled = this.equipmentsList.some(equipment => equipment.checked) || this.roomsList.some(room => room.checked);
@@ -105,17 +106,33 @@ equipmentsList: Equipments[] =[];
 
             // Extraire les dates de départ de la liste des réservations
             this.departureDatesList = this.extractDepartureDates(reservations);
-            console.log('Departure Dates List:', this.departureDatesList);
+            console.log('Departure Dates,Departure time and return time List:', this.departureDatesList);
 
             // Continuer le traitement des dates de départ extraites...
-             // Filtrer les réservations dont la date de départ correspond à selectedDate
-             const matchingReservations: Reservation[] = reservations.filter(reservation => {
-              // Vérifier si la date de départ de la réservation correspond à selectedDate
-              return reservation.departDate === selectedDate;
-          });
+            // Filtrer les réservations dont la date de départ correspond à selectedDate
+            const matchingReservations: Reservation[] = reservations.filter(reservation => {
+                // Vérifier si la date de départ de la réservation correspond à selectedDate
+                return reservation.departDate === selectedDate &&
+                       reservation.departHour === this.selectedDepartureTime &&
+                       reservation.returnHour === this.selectedReturnTime;
+            });
 
-          // Afficher les réservations dont la date de départ correspond à selectedDate
-          console.log('Matching Reservations:', matchingReservations);
+            // Afficher les réservations dont la date de départ correspond à selectedDate et aux heures sélectionnées
+            console.log('Matching Reservations:', matchingReservations);
+            const matchingReservationsWithIds: {
+              roomsId?: number | undefined;
+              equipmentsId?: number | undefined;
+          }[] = matchingReservations.map(reservation => {
+              return {
+                  roomsId: reservation.roomsId,
+                  equipmentsId: reservation.equipmentsId
+              };
+          });
+          
+          
+          
+          console.log('Matching Reservations with IDs:', matchingReservationsWithIds);
+          
         },
         error: (error) => {
             console.error('Erreur lors de la récupération des réservations:', error);
@@ -123,21 +140,26 @@ equipmentsList: Equipments[] =[];
     });
 }
 
-extractDepartureDates(reservations: Reservation[]): string[] {
+extractDepartureDates(reservations: Reservation[]): { date: string, departureHour: string, returnHour: string }[] {
 
 
-    // Parcourir toutes les réservations
-    reservations.forEach(reservation => {
-        // Vérifier si la date de départ est définie et non null
-        if (reservation.departDate) {
-            // Ajouter la date de départ au tableau
-            this.departureDatesList.push(reservation.departDate);
-        }
-    });
-
-    // Retourner le tableau de dates de départ extraites
-    return this.departureDatesList;
+  // Parcourir toutes les réservations
+  reservations.forEach(reservation => {
+      // Vérifier si la date de départ est définie et non null
+      if (reservation.departDate && reservation.departHour && reservation.returnHour) {
+          // Ajouter la date de départ au tableau
+          this.departureDatesList.push({
+              date: reservation.departDate,
+              departureHour: reservation.departHour,
+              returnHour: reservation.returnHour
+          });
+      }
+  });
+console.log("listaaa:",this.departureDatesList);
+  // Retourner le tableau de dates de départ avec heures de départ et de retour
+  return this.departureDatesList;
 }
+
 
 
 
