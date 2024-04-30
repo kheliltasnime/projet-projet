@@ -9,7 +9,8 @@ import { ReservationService } from '../../services/reservation.service';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Injectable } from '@angular/core';
-
+import { OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-reservation',
   templateUrl: './reservation.component.html',
@@ -33,7 +34,8 @@ equipmentsList: Equipments[] =[];
   filteredEquipmentsList: Equipments[] = [];
   filteredRoomsList: Rooms[] = [];
 
-
+  availableEquipments:Equipments[]=[];
+  availableRooms:Rooms[]=[];
   selectedDate: string='';
   selectedDepartureTime: string = '';
   selectedReturnTime: string = '';
@@ -55,8 +57,9 @@ equipmentsList: Equipments[] =[];
 
   ngOnInit(): void {
     console.log('ouiiiiiiii');
-    this.displayEquipments();
-    this.displayRooms();
+  //  this.displayEquipments();
+    //this.displayRooms();
+    this.loadAvailableEquipmentsAndRooms();
     this.getEquipmentTypes();
     this.getRoomsTypes();
     this.route.queryParams.subscribe((params: Params) => {
@@ -70,31 +73,47 @@ equipmentsList: Equipments[] =[];
     console.log('Selected return time:', this.selectedReturnTime);
   
       if (this.selectedDate) {
-        console.log('yess');
-  
+        
         // Si la date de départ est définie, charger les réservations correspondantes
         this.loadReservationsByDepartureDate(this.selectedDate);
       //  this.loadAllReservations();
-        console.log('yess');
-      }
-    });
-  }/*
-  loadAllReservations(): void {
-    this.reservationService.getAllReservations().subscribe({
-      next: (reservations: Reservation[]) => {
-        console.log('Réservations récupérées:', reservations);
-        this.reservations = reservations;
-      },
-      error: (error) => {
-        console.error('Erreur lors de la récupération des réservations:', error);
+       
       }
     });
   }
-  */
+  private equipmentsSubscription: Subscription | undefined;
+  private roomsSubscription: Subscription | undefined;
+  ngOnDestroy(): void {
+    // Désabonnez-vous des abonnements pour éviter les fuites de mémoire
+    if (this.equipmentsSubscription) {
+      this.equipmentsSubscription.unsubscribe();
+    }
+    if (this.roomsSubscription) {
+      this.roomsSubscription.unsubscribe();
+    }
+  }
+ 
+  loadAvailableEquipmentsAndRooms(): void {
+    this.reservationService.getAllReservations().subscribe(reservations => {
+      const reservedEquipmentsIds = reservations.map(res => res.equipmentsId);
+      const reservedRoomsIds = reservations.map(res => res.roomsId);
+
+      this.equipmentsService.getAllEquipments().subscribe(allEquipments => {
+        this.availableEquipments = allEquipments.filter(equip => equip.id !== null && equip.id !== undefined && !reservedEquipmentsIds.includes(equip.id));
+        this.filteredEquipmentsList = this.availableEquipments; // Display only available equipments
+      });
+      
+      this.roomsService.getAllRooms().subscribe(allRooms => {
+        this.availableRooms = allRooms.filter(room => !reservedRoomsIds.includes(room.id));
+        this.filteredRoomsList = this.availableRooms; // Display only available rooms
+      });
+    });
+  }
   loadReservationsByDepartureDate(selectedDate: string): void {
     // Initialiser la liste des réservations
     let reservations: Reservation[] = [];
-
+    this.availableEquipments = [];
+    this.availableRooms = [];
     // Récupérer toutes les réservations
     this.reservationService.getAllReservations().subscribe({
         next: (res) => {
@@ -116,7 +135,7 @@ equipmentsList: Equipments[] =[];
                        reservation.departHour === this.selectedDepartureTime &&
                        reservation.returnHour === this.selectedReturnTime;
             });
-
+          
             // Afficher les réservations dont la date de départ correspond à selectedDate et aux heures sélectionnées
             console.log('Matching Reservations:', matchingReservations);
             const matchingReservationsWithIds: {
@@ -134,18 +153,18 @@ equipmentsList: Equipments[] =[];
           console.log('Matching Reservations with IDs:', matchingReservationsWithIds);
            // Récupérer et filtrer les équipements
            this.equipmentsService.getAllEquipments().subscribe(equipments => {
-            const availableEquipments = equipments.filter(equipment =>
+            this.availableEquipments = equipments.filter(equipment =>
                 !matchingReservationsWithIds.some(res => res.equipmentsId === equipment.id)
             );
-            console.log('Available Equipments:', availableEquipments);
+            console.log('Available Equipments:', this.availableEquipments);
         });
 
         // Récupérer et filtrer les chambres
         this.roomsService.getAllRooms().subscribe(rooms => {
-            const availableRooms = rooms.filter(room =>
+            this.availableRooms = rooms.filter(room =>
                 !matchingReservationsWithIds.some(res => res.roomsId === room.id)
             );
-            console.log('Available Rooms:', availableRooms);
+            console.log('Available Rooms:', this.availableRooms);
         });
           
         },
