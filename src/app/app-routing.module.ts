@@ -13,16 +13,14 @@ import { EquipmentsComponent } from './private/components/benefit/equipments/equ
 import { ReservationComponent } from './private/components/reservation/reservation.component';
 import { EditRoomComponent } from './private/components/benefit/rooms/edit/edit-room/edit-room.component';
 import { PopupComponent } from './private/components/popup/popup.component';
+import { PopiComponent } from './popi/popi/popi.component';
 
 const routes: Routes = [
   {
     path: 'employee',
     component: EmployeeComponent,
   },
-  {
-    path: 'employee/:id',
-    component:DetailsEmployeeComponent
-  },
+ 
   {
     path: 'dashboard',
     component: DashboardComponent,
@@ -79,6 +77,10 @@ const routes: Routes = [
   {
     path: 'rooms/:id',
     component: PopupComponent,
+  },
+  {
+    path: 'employee/:id',
+    component: PopiComponent,
   },
 
   

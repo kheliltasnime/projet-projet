@@ -31,6 +31,11 @@ import { MatInputModule } from '@angular/material/input';
 import { PopuupComponent } from './popuup/popuup/popuup.component';
 import { CalendarDateFormatter, CalendarModule, CalendarNativeDateFormatter, DateAdapter, DateFormatterParams } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { PopiComponent } from './popi/popi/popi.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { Injectable } from '@angular/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 class CustomDateFormatter extends CalendarNativeDateFormatter{
   public override dayViewHour({ date,locale}: DateFormatterParams) : string{
@@ -60,7 +65,8 @@ class CustomDateFormatter extends CalendarNativeDateFormatter{
     ReservationComponent,
     EditRoomComponent,
     PopuupComponent,
-    
+    PopiComponent,
+   
   ],
   imports: [
     BrowserModule,
@@ -81,6 +87,17 @@ class CustomDateFormatter extends CalendarNativeDateFormatter{
     CdkMenuModule,
     BrowserAnimationsModule,
     CdkMenuModule,
+    MatTableModule,
+    BrowserAnimationsModule,
+    MatIconModule,
+    MatCheckboxModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatDatepickerModule,
+    CdkMenuModule,
+    OverlayModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
     
   ],
   providers: [

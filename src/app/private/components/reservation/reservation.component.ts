@@ -7,6 +7,9 @@ import { Rooms } from '../../model/rooms';
 import { Reservation } from '../../model/reservation';
 import { ReservationService } from '../../services/reservation.service';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Injectable } from '@angular/core';
+
 @Component({
   selector: 'app-reservation',
   templateUrl: './reservation.component.html',
@@ -18,7 +21,9 @@ equipmentsList: Equipments[] =[];
   roomsList: Rooms[] =[];
   equipmentTypes: string[] = [];
   roomsTypes: string[] = [];
+
   reservations: Reservation[] = [];
+  
   isButtonEnabled: boolean = false;
   selectedCategory: string = '';
   subcategories: string[] = [];
@@ -27,6 +32,13 @@ equipmentsList: Equipments[] =[];
 
   filteredEquipmentsList: Equipments[] = [];
   filteredRoomsList: Rooms[] = [];
+
+
+  selectedDate: string='';
+  selectedDepartureTime: string = '';
+  selectedReturnTime: string = '';
+  departureDatesList:string []=[];
+
   updateButtonState() {
     this.isButtonEnabled = this.equipmentsList.some(equipment => equipment.checked) || this.roomsList.some(room => room.checked);
   }
@@ -35,17 +47,103 @@ equipmentsList: Equipments[] =[];
   constructor(
     private equipmentsService: EquipmentsService,
     private roomsService : RoomsService,
+    private router : Router,
     private reservationService : ReservationService,
+    private route: ActivatedRoute
   ){}
 
   ngOnInit(): void {
+    console.log('ouiiiiiiii');
     this.displayEquipments();
     this.displayRooms();
     this.getEquipmentTypes();
     this.getRoomsTypes();
-   // this.loadReservations();
-
+    this.route.queryParams.subscribe((params: Params) => {
+      this.selectedDate = params['date'];
+      
+      this.selectedDepartureTime = params['departureTime'];
+      this.selectedReturnTime = params['returnTime'];
+      
+    console.log('Selected date:', this.selectedDate);
+    console.log('Selected departure time:', this.selectedDepartureTime);
+    console.log('Selected return time:', this.selectedReturnTime);
+  
+      if (this.selectedDate) {
+        console.log('yess');
+  
+        // Si la date de départ est définie, charger les réservations correspondantes
+        this.loadReservationsByDepartureDate(this.selectedDate);
+      //  this.loadAllReservations();
+        console.log('yess');
+      }
+    });
+  }/*
+  loadAllReservations(): void {
+    this.reservationService.getAllReservations().subscribe({
+      next: (reservations: Reservation[]) => {
+        console.log('Réservations récupérées:', reservations);
+        this.reservations = reservations;
+      },
+      error: (error) => {
+        console.error('Erreur lors de la récupération des réservations:', error);
+      }
+    });
   }
+  */
+  loadReservationsByDepartureDate(selectedDate: string): void {
+    // Initialiser la liste des réservations
+    let reservations: Reservation[] = [];
+
+    // Récupérer toutes les réservations
+    this.reservationService.getAllReservations().subscribe({
+        next: (res) => {
+            // Remplir la liste des réservations
+            reservations = res;
+
+            // Afficher les réservations récupérées
+            console.log('Reservations:', reservations);
+
+            // Extraire les dates de départ de la liste des réservations
+            this.departureDatesList = this.extractDepartureDates(reservations);
+            console.log('Departure Dates List:', this.departureDatesList);
+
+            // Continuer le traitement des dates de départ extraites...
+             // Filtrer les réservations dont la date de départ correspond à selectedDate
+             const matchingReservations: Reservation[] = reservations.filter(reservation => {
+              // Vérifier si la date de départ de la réservation correspond à selectedDate
+              return reservation.departDate === selectedDate;
+          });
+
+          // Afficher les réservations dont la date de départ correspond à selectedDate
+          console.log('Matching Reservations:', matchingReservations);
+        },
+        error: (error) => {
+            console.error('Erreur lors de la récupération des réservations:', error);
+        }
+    });
+}
+
+extractDepartureDates(reservations: Reservation[]): string[] {
+
+
+    // Parcourir toutes les réservations
+    reservations.forEach(reservation => {
+        // Vérifier si la date de départ est définie et non null
+        if (reservation.departDate) {
+            // Ajouter la date de départ au tableau
+            this.departureDatesList.push(reservation.departDate);
+        }
+    });
+
+    // Retourner le tableau de dates de départ extraites
+    return this.departureDatesList;
+}
+
+
+
+
+  
+  
   
   getEquipmentTypes() {
     this.equipmentsService.getEquipmentTypes().subscribe((res) => {

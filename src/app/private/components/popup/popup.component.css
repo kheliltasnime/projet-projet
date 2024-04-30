@@ -1,41 +1,86 @@
-mat-card {
-    margin: 2%;
-    text-align: left;
-  }
-  
-  .mat-mdc-form-field {
-    background-color: white;
-    width: 98%;
-    margin: 1%;
-  }
-  
-  .mat-50 {
-    width: 48%;
-    margin: 1%;
-  }
-  
-  button {
-    margin: 2px;
-  }
-  
-  .custom-modal {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-  }
-  
-  .custom-modal mat-label {
-    color: white; /* Définir la couleur du texte des labels */
-  }
-  
-  .mat-form-field {
-    background-color: white; /* Définissez la couleur de fond sur blanc */
-  }
-  
-  .mat-input-element {
-    color: black; /* Définissez la couleur du texte des champs de saisie sur noir */
-  }
-  .custom-modal .mat-form-field {
-    background-color: #ffffff; /* Blanc */
-  }
-  
+.mat-card {
+  margin: 10px; /* Augmente la marge des cartes */
+  text-align: center; /* Centre le texte à l'intérieur des cartes */
+}
+
+.mat-mdc-form-field {
+  background-color: #f0f0f0; /* Change la couleur de fond des champs de formulaire */
+  width: 100%; /* Ajuste la largeur des champs de formulaire à 100% */
+  margin: 10px; /* Augmente la marge des champs de formulaire */
+}
+
+.mat-50 {
+  width: 50%; /* Ajuste la largeur des éléments avec la classe "mat-50" à 50% */
+  margin: 5px; /* Réduit la marge des éléments avec la classe "mat-50" */
+}
+
+button {
+  margin: 5px; /* Réduit la marge des boutons */
+}
+
+.custom-modal {
+  background-color: #e6e6e6; /* Change la couleur de fond des modales */
+  padding: 30px; /* Augmente le padding des modales */
+  border-radius: 20px; /* Augmente le rayon des bords des modales */
+}
+
+.custom-modal mat-label {
+  color: #333333; /* Change la couleur du texte des labels à l'intérieur des modales */
+}
+
+.mat-form-field {
+  background-color: #f0f0f0; /* Change la couleur de fond des champs de formulaire */
+}
+
+.mat-input-element {
+  color: #333333; /* Change la couleur du texte des champs de saisie */
+}
+
+.custom-modal .mat-form-field {
+  background-color: #f0f0f0; /* Change la couleur de fond des champs de formulaire à l'intérieur des modales */
+}
+
+.modal-dialog {
+  max-width: 800px; /* Augmente la largeur maximale des dialogues modaux */
+}
+
+.modal-content {
+  border-radius: 20px; /* Augmente le rayon des bords du contenu modal */
+}
+
+.modal-title {
+  font-weight: bold;
+  font-size: x-large; /* Augmente la taille de la police du titre modal */
+}
+
+.modal-body {
+  padding: 30px; /* Augmente le padding du corps modal */
+}
+
+.modal-footer {
+  border-top: 2px solid #cccccc; /* Ajoute une bordure en haut du pied de page modal */
+}
+
+.close {
+  color: #333333; /* Change la couleur du bouton de fermeture */
+  font-size: 1.8rem; /* Augmente la taille de la police du bouton de fermeture */
+}
+
+.modal-content .btn-primary {
+  background-color: #4caf50; /* Change la couleur de fond du bouton primaire */
+  border-color: #388e3c; /* Change la couleur de la bordure du bouton primaire */
+}
+
+
+
+/* Style for the secondary button */
+.modal-content .btn-secondary {
+background-color: #6c757d; /* Change the background color of the secondary button */
+border-color: #6c757d; /* Change the border color of the secondary button */
+color: #ffffff; /* Change the text color of the secondary button */
+}
+
+/* Hover effect for buttons */
+.modal-content .btn:hover {
+opacity: 0.8; /* Reduce opacity on hover */
+}

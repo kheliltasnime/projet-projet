@@ -1,0 +1,41 @@
+mat-card {
+    margin: 2%;
+    text-align: left;
+  }
+  
+  .mat-mdc-form-field {
+    background-color: white;
+    width: 98%;
+    margin: 1%;
+  }
+  
+  .mat-50 {
+    width: 48%;
+    margin: 1%;
+  }
+  
+  button {
+    margin: 2px;
+  }
+  
+  .custom-modal {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  .custom-modal mat-label {
+    color: white; /* Définir la couleur du texte des labels */
+  }
+  
+  .mat-form-field {
+    background-color: white; /* Définissez la couleur de fond sur blanc */
+  }
+  
+  .mat-input-element {
+    color: black; /* Définissez la couleur du texte des champs de saisie sur noir */
+  }
+  .custom-modal .mat-form-field {
+    background-color: #ffffff; /* Blanc */
+  }
+  
