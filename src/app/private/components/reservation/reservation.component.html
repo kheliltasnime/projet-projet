@@ -110,7 +110,7 @@
     </div>
     </div>
     <div class="button-container">
-      <button class="btn btn-success blue-button" [ngClass]="{'btn-disabled': !isButtonEnabled, 'btn-enabled': isButtonEnabled}" >Submit</button>
+      <button class="btn btn-success blue-button" [ngClass]="{'btn-disabled': !isButtonEnabled, 'btn-enabled': isButtonEnabled}" (click)="onSubmit()" >Submit</button>
     </div>
     
 </div>

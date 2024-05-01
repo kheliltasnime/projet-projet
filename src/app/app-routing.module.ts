@@ -14,6 +14,7 @@ import { ReservationComponent } from './private/components/reservation/reservati
 import { EditRoomComponent } from './private/components/benefit/rooms/edit/edit-room/edit-room.component';
 import { PopupComponent } from './private/components/popup/popup.component';
 import { PopiComponent } from './popi/popi/popi.component';
+import { ListreservComponent } from './private/components/reservation/listreserv/listreserv.component';
 
 const routes: Routes = [
   {
@@ -82,7 +83,10 @@ const routes: Routes = [
     path: 'employee/:id',
     component: PopiComponent,
   },
-
+  {
+    path: 'reservation/list',
+    component: ListreservComponent,
+  },
   
 ];
 

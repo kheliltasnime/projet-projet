@@ -87,16 +87,25 @@ equipmentsList: Equipments[] =[];
     
   }
   onCheckboxChange(event: any, item: any) {
+    console.log('Checkbox état:', event.checked ? 'coché' : 'non coché');
     if (event.checked) {
-      // Si la case est cochée, ajoutez l'élément à la liste
-      this.checkedItems.push({ id: item.id, category: item.category });
+      this.reservationService.checkedItems.push(item);
     } else {
-      // Si la case est décochée, retirez l'élément de la liste
-      this.checkedItems = this.checkedItems.filter(e => e.id !== item.id);
+      // Supprimez l'élément de la liste si la case est décochée
+      const index = this.reservationService.checkedItems.indexOf(item);
+      if (index !== -1) {
+        this.reservationService.checkedItems.splice(index, 1);
+      }
     }
-    console.log('Éléments cochés:', this.checkedItems);
   }
-  
+
+  onSubmit() {
+    // Redirigez l'utilisateur vers la page de liste
+    this.router.navigateByUrl('reservation/list');
+  }
+
+
+
   initializeDefaultLists(): void {
     this.filteredEquipmentsList = this.availableEquipments;
     this.filteredRoomsList = this.availableRooms;

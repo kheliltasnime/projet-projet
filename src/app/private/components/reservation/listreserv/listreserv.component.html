@@ -1,0 +1,19 @@
+<div class="container">
+    <h2>Liste des éléments sélectionnés</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Catégorie</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of reservationService.checkedItems">
+          <td>{{ item.name }}</td>
+          <td>{{ item.category }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- Bouton pour valider la réservation -->
+    <button class="btn btn-success" (click)="validateReservation()">Validate Your Reservation</button>
+  </div>

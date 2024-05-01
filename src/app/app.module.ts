@@ -37,7 +37,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Injectable } from '@angular/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { DetailsModalComponent } from './private/components/benefit/equipments/details-modal/details-modal.component';
-
+import { ListreservComponent } from './private/components/reservation/listreserv/listreserv.component';
+import { ReservationService } from './private/services/reservation.service';
 class CustomDateFormatter extends CalendarNativeDateFormatter{
   public override dayViewHour({ date,locale}: DateFormatterParams) : string{
     return new Intl.DateTimeFormat(locale, {hour: 'numeric', minute: 'numeric'}).format(date);
@@ -68,6 +69,7 @@ class CustomDateFormatter extends CalendarNativeDateFormatter{
     PopuupComponent,
     PopiComponent,
     DetailsModalComponent,
+    ListreservComponent,
    
   ],
   imports: [
@@ -103,7 +105,7 @@ class CustomDateFormatter extends CalendarNativeDateFormatter{
     
   ],
   providers: [
-    {provide: CalendarDateFormatter, useClass: CustomDateFormatter}
+    {provide: CalendarDateFormatter, useClass: CustomDateFormatter},ReservationService
   ],
   bootstrap: [AppComponent]
 })

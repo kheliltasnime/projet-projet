@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 
 export class ReservationService {
-
+  checkedItems: any[] = [];
  
   baseUrl = 'http://localhost:8083/api/arsii';
 
