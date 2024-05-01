@@ -9,6 +9,12 @@
   color: white; /* Couleur du texte */
   /* Autres styles personnalisés si nécessaire */
 }
+/* Appliquer une couleur de fond personnalisée à la case à cocher */
+.mat-checkbox-inner-container {
+    background-color: #0e0d0d;
+    
+  }
+
 
 </style>
 
@@ -76,6 +82,7 @@
 
             <td>{{equipments.maintenance_status}}</td>
             <td>
+              <mat-checkbox [(ngModel)]="equipments.checked">Label de la case à cocher</mat-checkbox>
               <button class="btn btn-primary" (click)="openDetailsModal(equipments)">Check Details</button>
             </td>
             
@@ -88,7 +95,10 @@
 
             <td>{{rooms.maintenance_status}}</td>
             <td>
+              <mat-checkbox [(ngModel)]="rooms.checked">Label de la case à cocher</mat-checkbox>
+
               <button class="btn btn-primary" (click)="openDetailsModal(rooms)">Check Details</button>
+              
             </td>
             
           </tr>

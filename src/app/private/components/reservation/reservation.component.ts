@@ -40,7 +40,7 @@ equipmentsList: Equipments[] =[];
   selectedDepartureTime: string = '';
   selectedReturnTime: string = '';
   departureDatesList:{ equipmentsId: number | undefined; roomsId: number | undefined }[] = [];
-
+ 
   equipmentsId:number=0;
   roomsId:number=0;
   updateButtonState() {
