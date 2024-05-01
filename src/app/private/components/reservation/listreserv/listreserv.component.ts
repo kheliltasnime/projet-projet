@@ -26,9 +26,10 @@ export class ListreservComponent {
     const returnTime = item.selectedReturnTime;
 
     // Vérifier si l'élément possède les propriétés nécessaires
-    if ('category' in item && 'selectedDate' in item && 'selectedDepartureTime' in item && 'selectedReturnTime' in item && 'id' in item) {
+    if ('category' in item &&'type' in item && 'selectedDate' in item && 'selectedDepartureTime' in item && 'selectedReturnTime' in item && 'id' in item) {
       const category = item.category;
       const id = item.id;
+      const subcategory=item.type;
 
       // Maintenant, vous avez toutes les informations nécessaires pour chaque élément
       // Faites ce que vous devez faire avec ces informations, comme les envoyer à un service ou les traiter directement ici
@@ -36,6 +37,7 @@ export class ListreservComponent {
       console.log('Departure Time:', departureTime);
       console.log('Return Time:', returnTime);
       console.log('Category:', category);
+      console.log('Subcategory:', subcategory);
       console.log('ID:', id);
 
       // Continuez à exécuter votre logique de validation ou d'autres opérations ici
@@ -53,7 +55,8 @@ addReservationFromCheckedItems() {
       departDate: item.selectedDate,
       departHour: item.selectedDepartureTime,
       returnHour: item.selectedReturnTime,
-      category: item.category
+      category: item.category,
+      subCategory:item.type
     };
 
     // Vérifiez si la catégorie est "Equipments" ou "Rooms"

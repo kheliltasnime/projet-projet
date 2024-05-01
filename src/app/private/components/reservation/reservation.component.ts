@@ -188,12 +188,6 @@ extractDepartureDates(reservations: Reservation[]): { equipmentsId: number | und
   return this.departureDatesList;
 }
 
-
-
-
-
-  
-  
   
   getEquipmentTypes() {
     this.equipmentsService.getEquipmentTypes().subscribe((res) => {
