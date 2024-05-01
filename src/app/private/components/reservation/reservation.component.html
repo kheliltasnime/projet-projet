@@ -62,6 +62,8 @@
             <th>Name</th>
             <th>Category</th>
             <th>Subcategory</th>
+            <th>State</th>
+            <th>Maintenance Status</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -70,6 +72,9 @@
             <td>{{equipments.name }}</td>
             <td>Equipments</td>
             <td>{{equipments.type}}</td>
+            <td [ngStyle]="{ 'color': equipments.state === 'Enabled' ? 'green' : 'red' }">{{ equipments.state }}</td>
+
+            <td>{{equipments.maintenance_status}}</td>
             <td>
               <mat-checkbox class="example-margin" (change)="updateButtonState()" [(ngModel)]="equipments.checked"> Add</mat-checkbox>            
             </td>
@@ -78,6 +83,9 @@
             <td>{{rooms.name }}</td>
             <td>Rooms</td>
             <td>{{rooms.type}}</td>
+            <td [ngStyle]="{ 'color': rooms.state === 'Enabled' ? 'green' : 'red' }">{{ rooms.state }}</td>
+
+            <td>{{rooms.maintenance_status}}</td>
             <td>
              <mat-checkbox class="example-margin"(change)="updateButtonState()" [(ngModel)]="rooms.checked"> Add</mat-checkbox>
             </td>

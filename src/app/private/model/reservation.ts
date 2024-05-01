@@ -3,6 +3,8 @@ export interface Reservation{
     name? : string;
     equipmentsId? : number;
     roomsId? : number;
+    state?:string;
+    maintenance_status?:string;
     category? : string;
     subCategory? : string;
     departDate? : string;
