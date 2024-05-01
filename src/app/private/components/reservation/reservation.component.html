@@ -82,7 +82,9 @@
 
             <td>{{equipments.maintenance_status}}</td>
             <td>
-              <mat-checkbox [(ngModel)]="equipments.checked">Label de la case à cocher</mat-checkbox>
+              <mat-checkbox [(ngModel)]="equipments.checked" (change)="onCheckboxChange($event, equipments)"></mat-checkbox>
+
+
               <button class="btn btn-primary" (click)="openDetailsModal(equipments)">Check Details</button>
             </td>
             
@@ -95,7 +97,8 @@
 
             <td>{{rooms.maintenance_status}}</td>
             <td>
-              <mat-checkbox [(ngModel)]="rooms.checked">Label de la case à cocher</mat-checkbox>
+              <mat-checkbox [(ngModel)]="rooms.checked" (change)="onCheckboxChange($event, rooms)"></mat-checkbox>
+
 
               <button class="btn btn-primary" (click)="openDetailsModal(rooms)">Check Details</button>
               

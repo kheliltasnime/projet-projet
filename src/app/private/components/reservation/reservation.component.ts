@@ -31,6 +31,11 @@ equipmentsList: Equipments[] =[];
   
   selectedSubcategory: string = '';
 
+
+  equipments: any = { checked: false }; // Initialisation à false
+  checkedItems: any[] = [];
+
+
   filteredEquipmentsList: Equipments[] = [];
   filteredRoomsList: Rooms[] = [];
 
@@ -74,14 +79,22 @@ equipmentsList: Equipments[] =[];
     console.log('Selected return time:', this.selectedReturnTime);
   
       if (this.selectedDate) {
-        
         // Si la date de départ est définie, charger les réservations correspondantes
         this.loadReservationsByDepartureDate(this.selectedDate);
-        
-   
-       
+    
       }
     });
+    
+  }
+  onCheckboxChange(event: any, item: any) {
+    if (event.checked) {
+      // Si la case est cochée, ajoutez l'élément à la liste
+      this.checkedItems.push({ id: item.id, category: item.category });
+    } else {
+      // Si la case est décochée, retirez l'élément de la liste
+      this.checkedItems = this.checkedItems.filter(e => e.id !== item.id);
+    }
+    console.log('Éléments cochés:', this.checkedItems);
   }
   
   initializeDefaultLists(): void {
