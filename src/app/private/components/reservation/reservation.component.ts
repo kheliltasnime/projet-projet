@@ -9,7 +9,8 @@ import { ReservationService } from '../../services/reservation.service';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Injectable } from '@angular/core';
-
+import { MatDialog } from '@angular/material/dialog';
+import { DetailsModalComponent } from '../benefit/equipments/details-modal/details-modal.component';
 @Component({
   selector: 'app-reservation',
   templateUrl: './reservation.component.html',
@@ -47,7 +48,7 @@ equipmentsList: Equipments[] =[];
   }
 
   title = 'myangularproject';
-  constructor(
+  constructor(public dialog: MatDialog,
     private equipmentsService: EquipmentsService,
     private roomsService : RoomsService,
     private router : Router,
@@ -315,7 +316,19 @@ extractDepartureDates(reservations: Reservation[]): { equipmentsId: number | und
   }
   
 
-
+  openDetailsModal(item: any) {
+    const category = item.category; 
+    const dialogRef = this.dialog.open(DetailsModalComponent, {
+      width: '250px',
+      data: { item: item,itemcategory:category }
+    });
+  console.log('item',item);
+  console.log('item categogry',category);
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+  
 
 
 

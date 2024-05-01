@@ -36,6 +36,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Injectable } from '@angular/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { DetailsModalComponent } from './private/components/benefit/equipments/details-modal/details-modal.component';
 
 class CustomDateFormatter extends CalendarNativeDateFormatter{
   public override dayViewHour({ date,locale}: DateFormatterParams) : string{
@@ -66,6 +67,7 @@ class CustomDateFormatter extends CalendarNativeDateFormatter{
     EditRoomComponent,
     PopuupComponent,
     PopiComponent,
+    DetailsModalComponent,
    
   ],
   imports: [

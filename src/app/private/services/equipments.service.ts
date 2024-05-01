@@ -33,6 +33,7 @@ export class EquipmentsService {
   }
   
   addEquipment(equipments : Equipments) {
+    
     return this.httpclient.post(this.baseUrl + '/equipments',equipments);
   }
   
