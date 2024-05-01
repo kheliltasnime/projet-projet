@@ -77,6 +77,13 @@ export class CalendarComponent {viewDate: Date = new Date();
     });
   }
 
+  ngOnInit(): void {
+    this.reservationForm = this.fb.group({
+      departureDate: ['', Validators.required],
+      departureTime: ['', Validators.required],
+      returnTime: ['', Validators.required]
+    });
+  }
   setView(view : CalendarView) {
     this.view = view;
   }

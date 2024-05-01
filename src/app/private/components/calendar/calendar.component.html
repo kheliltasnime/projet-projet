@@ -114,7 +114,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" (click)="navigateAndSave()" >choose Benefits</button>
+        <button type="button" class="btn btn-primary" (click)="navigateAndSave()"[disabled]="!reservationForm.valid" >choose Benefits</button>
       </div>
     </div>
   </div>
