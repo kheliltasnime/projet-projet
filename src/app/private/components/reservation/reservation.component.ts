@@ -9,8 +9,7 @@ import { ReservationService } from '../../services/reservation.service';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Injectable } from '@angular/core';
-import { OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+
 @Component({
   selector: 'app-reservation',
   templateUrl: './reservation.component.html',
@@ -39,9 +38,10 @@ equipmentsList: Equipments[] =[];
   selectedDate: string='';
   selectedDepartureTime: string = '';
   selectedReturnTime: string = '';
-  departureDatesList: { date: string; departureHour: string; returnHour: string; }[] = [];
+  departureDatesList:{ equipmentsId: number | undefined; roomsId: number | undefined }[] = [];
 
-
+  equipmentsId:number=0;
+  roomsId:number=0;
   updateButtonState() {
     this.isButtonEnabled = this.equipmentsList.some(equipment => equipment.checked) || this.roomsList.some(room => room.checked);
   }
@@ -57,9 +57,9 @@ equipmentsList: Equipments[] =[];
 
   ngOnInit(): void {
     console.log('ouiiiiiiii');
-  //  this.displayEquipments();
-    //this.displayRooms();
-    this.loadAvailableEquipmentsAndRooms();
+  this.displayEquipments();
+    this.displayRooms();
+   
     this.getEquipmentTypes();
     this.getRoomsTypes();
     this.route.queryParams.subscribe((params: Params) => {
@@ -81,116 +81,68 @@ equipmentsList: Equipments[] =[];
       }
     });
   }
-  private equipmentsSubscription: Subscription | undefined;
-  private roomsSubscription: Subscription | undefined;
-  ngOnDestroy(): void {
-    // Désabonnez-vous des abonnements pour éviter les fuites de mémoire
-    if (this.equipmentsSubscription) {
-      this.equipmentsSubscription.unsubscribe();
-    }
-    if (this.roomsSubscription) {
-      this.roomsSubscription.unsubscribe();
-    }
-  }
+  
  
-  loadAvailableEquipmentsAndRooms(): void {
-    this.reservationService.getAllReservations().subscribe(reservations => {
-      const reservedEquipmentsIds = reservations.map(res => res.equipmentsId);
-      const reservedRoomsIds = reservations.map(res => res.roomsId);
-
-      this.equipmentsService.getAllEquipments().subscribe(allEquipments => {
-        this.availableEquipments = allEquipments.filter(equip => equip.id !== null && equip.id !== undefined && !reservedEquipmentsIds.includes(equip.id));
-        this.filteredEquipmentsList = this.availableEquipments; // Display only available equipments
-      });
-      
-      this.roomsService.getAllRooms().subscribe(allRooms => {
-        this.availableRooms = allRooms.filter(room => !reservedRoomsIds.includes(room.id));
-        this.filteredRoomsList = this.availableRooms; // Display only available rooms
-      });
-    });
-  }
   loadReservationsByDepartureDate(selectedDate: string): void {
     // Initialiser la liste des réservations
-    let reservations: Reservation[] = [];
+   // let reservations: Reservation[] = [];
     this.availableEquipments = [];
     this.availableRooms = [];
-    // Récupérer toutes les réservations
+  
+    // Récupércoer toutes les réservations
     this.reservationService.getAllReservations().subscribe({
         next: (res) => {
-            // Remplir la liste des réservations
-            reservations = res;
+            // Remplir la liste des réservations avec les réservations pour la date sélectionnée
+            this.reservations = res.filter(reservation => reservation.departDate === selectedDate);
 
-            // Afficher les réservations récupérées
-            console.log('Reservations:', reservations);
+            // Afficher les réservations récupérées dans la console
+            console.log('*Reservations for selected date:*', this.reservations);
 
-            // Extraire les dates de départ de la liste des réservations
-            this.departureDatesList = this.extractDepartureDates(reservations);
-            console.log('Departure Dates,Departure time and return time List:', this.departureDatesList);
+            // Extraire les dates de départ, heures de départ, heures de retour, équipementsId et roomsId de la liste des réservations
+            this.departureDatesList = this.extractDepartureDates(this.reservations);
+            console.log('in this date : Equipment Id, Room Id List:', this.departureDatesList);
 
-            // Continuer le traitement des dates de départ extraites...
-            // Filtrer les réservations dont la date de départ correspond à selectedDate
-            const matchingReservations: Reservation[] = reservations.filter(reservation => {
-                // Vérifier si la date de départ de la réservation correspond à selectedDate
-                return reservation.departDate === selectedDate &&
-                       reservation.departHour === this.selectedDepartureTime &&
-                       reservation.returnHour === this.selectedReturnTime;
+           
+            
+            // Récupérer et filtrer les équipements disponibles
+            this.equipmentsService.getAllEquipments().subscribe(equipments => {
+                this.availableEquipments = equipments.filter(equipment =>
+                    !this.departureDatesList.some(res => res.equipmentsId === equipment.id)
+                );
+                console.log('Available Equipments:', this.availableEquipments);
             });
-          
-            // Afficher les réservations dont la date de départ correspond à selectedDate et aux heures sélectionnées
-            console.log('Matching Reservations:', matchingReservations);
-            const matchingReservationsWithIds: {
-              roomsId?: number | undefined;
-              equipmentsId?: number | undefined;
-          }[] = matchingReservations.map(reservation => {
-              return {
-                  roomsId: reservation.roomsId,
-                  equipmentsId: reservation.equipmentsId
-              };
-          });
-          
-          
-          
-          console.log('Matching Reservations with IDs:', matchingReservationsWithIds);
-           // Récupérer et filtrer les équipements
-           this.equipmentsService.getAllEquipments().subscribe(equipments => {
-            this.availableEquipments = equipments.filter(equipment =>
-                !matchingReservationsWithIds.some(res => res.equipmentsId === equipment.id)
-            );
-            console.log('Available Equipments:', this.availableEquipments);
-        });
 
-        // Récupérer et filtrer les chambres
-        this.roomsService.getAllRooms().subscribe(rooms => {
-            this.availableRooms = rooms.filter(room =>
-                !matchingReservationsWithIds.some(res => res.roomsId === room.id)
-            );
-            console.log('Available Rooms:', this.availableRooms);
-        });
-          
+            // Récupérer et filtrer les chambres disponibles
+            this.roomsService.getAllRooms().subscribe(rooms => {
+                this.availableRooms = rooms.filter(room =>
+                    !this.departureDatesList.some(res => res.roomsId === room.id)
+                );
+                console.log('Available Rooms:', this.availableRooms);
+            });
+            
         },
         error: (error) => {
             console.error('Erreur lors de la récupération des réservations:', error);
         }
     });
 }
-
-extractDepartureDates(reservations: Reservation[]): { date: string, departureHour: string, returnHour: string }[] {
-
+extractDepartureDates(reservations: Reservation[]): { equipmentsId: number | undefined; roomsId: number | undefined }[] {
+   this.departureDatesList;//{ equipmentsId: ; roomsId: number | undefined }[] = [];
 
   // Parcourir toutes les réservations
   reservations.forEach(reservation => {
-      // Vérifier si la date de départ est définie et non null
-      if (reservation.departDate && reservation.departHour && reservation.returnHour) {
-          // Ajouter la date de départ au tableau
-          this.departureDatesList.push({
-              date: reservation.departDate,
-              departureHour: reservation.departHour,
-              returnHour: reservation.returnHour
-          });
-      }
+    // Vérifier si les identifiants d'équipements et de chambres sont définis et non null
+    if (reservation.equipmentsId !== undefined && reservation.roomsId !== undefined) {
+      // Ajouter les identifiants d'équipements et de chambres au tableau
+      this.departureDatesList.push({
+        equipmentsId: reservation.equipmentsId,
+        roomsId: reservation.roomsId
+      });
+    }
   });
-console.log("listaaa:",this.departureDatesList);
-  // Retourner le tableau de dates de départ avec heures de départ et de retour
+
+  console.log("equi id et room id :", this.departureDatesList);
+  // Retourner le tableau de dates de départ avec les identifiants d'équipements et de chambres
   return this.departureDatesList;
 }
 
