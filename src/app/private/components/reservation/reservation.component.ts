@@ -57,8 +57,8 @@ equipmentsList: Equipments[] =[];
 
   ngOnInit(): void {
     console.log('ouiiiiiiii');
-  this.displayEquipments();
-    this.displayRooms();
+  //this.displayEquipments();
+   // this.displayRooms();
    
     this.getEquipmentTypes();
     this.getRoomsTypes();
@@ -76,13 +76,17 @@ equipmentsList: Equipments[] =[];
         
         // Si la date de départ est définie, charger les réservations correspondantes
         this.loadReservationsByDepartureDate(this.selectedDate);
-      //  this.loadAllReservations();
+        
+   
        
       }
     });
   }
   
- 
+  initializeDefaultLists(): void {
+    this.filteredEquipmentsList = this.availableEquipments;
+    this.filteredRoomsList = this.availableRooms;
+  }
   loadReservationsByDepartureDate(selectedDate: string): void {
     // Initialiser la liste des réservations
    // let reservations: Reservation[] = [];
@@ -110,6 +114,8 @@ equipmentsList: Equipments[] =[];
                     !this.departureDatesList.some(res => res.equipmentsId === equipment.id)
                 );
                 console.log('Available Equipments:', this.availableEquipments);
+                this.initializeDefaultLists();
+                
             });
 
             // Récupérer et filtrer les chambres disponibles
@@ -118,8 +124,9 @@ equipmentsList: Equipments[] =[];
                     !this.departureDatesList.some(res => res.roomsId === room.id)
                 );
                 console.log('Available Rooms:', this.availableRooms);
+                this.initializeDefaultLists();
             });
-            
+            //ici on appelle la table equipment pour les id dans availbaleequipments et on stocke les details dans filterequipments
         },
         error: (error) => {
             console.error('Erreur lors de la récupération des réservations:', error);
