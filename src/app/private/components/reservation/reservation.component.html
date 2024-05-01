@@ -1,9 +1,6 @@
 <style>
-  .card {
-    width: 1200px !important;
-    margin-top: -30px;
-    margin-left: -220px;
-  }
+
+
   .blue-button {
   background-color: rgb(0, 47, 255);
   color: white; /* Couleur du texte */
@@ -82,7 +79,7 @@
 
             <td>{{equipments.maintenance_status}}</td>
             <td>
-              <mat-checkbox [(ngModel)]="equipments.checked" (change)="onCheckboxChange($event, equipments)"></mat-checkbox>
+              <mat-checkbox [(ngModel)]="equipments.checked" (change)="onCheckboxChange($event, equipments, selectedDate, selectedDepartureTime, selectedReturnTime)"></mat-checkbox>
 
 
               <button class="btn btn-primary" (click)="openDetailsModal(equipments)">Check Details</button>
@@ -97,7 +94,7 @@
 
             <td>{{rooms.maintenance_status}}</td>
             <td>
-              <mat-checkbox [(ngModel)]="rooms.checked" (change)="onCheckboxChange($event, rooms)"></mat-checkbox>
+              <mat-checkbox [(ngModel)]="rooms.checked" (change)="onCheckboxChange($event, rooms,selectedDate, selectedDepartureTime, selectedReturnTime)"></mat-checkbox>
 
 
               <button class="btn btn-primary" (click)="openDetailsModal(rooms)">Check Details</button>

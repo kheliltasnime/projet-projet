@@ -86,18 +86,30 @@ equipmentsList: Equipments[] =[];
     });
     
   }
-  onCheckboxChange(event: any, item: any) {
+  onCheckboxChange(event: any, item: any, selectedDate: string, selectedDepartureTime: string, selectedReturnTime: string) {
     console.log('Checkbox état:', event.checked ? 'coché' : 'non coché');
+  
     if (event.checked) {
-      this.reservationService.checkedItems.push(item);
+      // Créer un nouvel objet contenant toutes les données nécessaires
+      const newItem = {
+        ...item,
+        selectedDate: selectedDate,
+        selectedDepartureTime: selectedDepartureTime,
+        selectedReturnTime: selectedReturnTime
+      };
+      console.log('checkedItems ye tas ',newItem);
+      this.reservationService.checkedItems.push(newItem);
     } else {
-      // Supprimez l'élément de la liste si la case est décochée
-      const index = this.reservationService.checkedItems.indexOf(item);
+      // Supprimer l'élément de la liste si la case est décochée
+      const index = this.reservationService.checkedItems.findIndex(x => 
+        x.id === item.id);  // Assurez-vous que chaque 'item' a un identifiant unique ou modifiez la condition pour correspondre à votre cas d'usage.
       if (index !== -1) {
         this.reservationService.checkedItems.splice(index, 1);
       }
     }
+   
   }
+  
 
   onSubmit() {
     // Redirigez l'utilisateur vers la page de liste
