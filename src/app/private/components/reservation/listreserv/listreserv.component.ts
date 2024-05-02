@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReservationService } from 'src/app/private/services/reservation.service';
+import { Injectable } from '@angular/core';
+import { CheckedItemsServiceService } from 'src/app/private/services/checked-items-service.service';
 import { Reservation } from 'src/app/private/model/reservation';
 @Component({
   selector: 'app-listreserv',
@@ -8,11 +10,14 @@ import { Reservation } from 'src/app/private/model/reservation';
   styleUrls: ['./listreserv.component.css']
 })
 export class ListreservComponent {
-
-  constructor(public reservationService: ReservationService) {}
+  
+  constructor(public reservationService: ReservationService,
+    private router: Router,
+    private checkedItemsService: CheckedItemsServiceService ) {}
 
   ngOnInit() {
-    console.log('Checked Items:', this.reservationService.checkedItems);
+    
+   
   }
   
  // Méthode appelée lors du clic sur le bouton de validation
@@ -46,9 +51,6 @@ export class ListreservComponent {
   this.addReservationFromCheckedItems();
 }
 
-
-
-
 addReservationFromCheckedItems() {
   for (const item of this.reservationService.checkedItems) {
     const reservation: Reservation = {
@@ -76,13 +78,23 @@ addReservationFromCheckedItems() {
       }
     );
   }
+   
 }
 
+showSuccessMessage() {
+  alert('Reservation added successfully');
+}
 
+goBack() {
+  // Ajoutez ici le code pour revenir en arrière, par exemple :
+  // Redirection vers une autre page ou une autre fonctionnalité
+ // Sauvegarder les éléments cochés avant de retourner à la page précédente
 
+ // Sauvegarder les éléments cochés avant de retourner à la page précédente
 
-
-
+ // Naviguer vers la page de réservation
+  this.router.navigate(['/reservation']); // Remplacez '/previous-page' par le chemin de la page précédente
+}
 
 
 

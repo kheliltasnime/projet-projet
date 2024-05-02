@@ -80,7 +80,7 @@ equipmentsList: Equipments[] =[];
   
       if (this.selectedDate) {
         // Si la date de départ est définie, charger les réservations correspondantes
-        this.loadReservationsByDepartureDate(this.selectedDate);
+        this.loadReservationsByDepartureDate(this.selectedDate,this.selectedDepartureTime,this.selectedReturnTime);
     
       }
     });
@@ -122,7 +122,7 @@ equipmentsList: Equipments[] =[];
     this.filteredEquipmentsList = this.availableEquipments;
     this.filteredRoomsList = this.availableRooms;
   }
-  loadReservationsByDepartureDate(selectedDate: string): void {
+  loadReservationsByDepartureDate(selectedDate: string,selectedDepartureTime: string, selectedReturnTime: string): void {
     // Initialiser la liste des réservations
    // let reservations: Reservation[] = [];
     this.availableEquipments = [];
@@ -132,14 +132,17 @@ equipmentsList: Equipments[] =[];
     this.reservationService.getAllReservations().subscribe({
         next: (res) => {
             // Remplir la liste des réservations avec les réservations pour la date sélectionnée
-            this.reservations = res.filter(reservation => reservation.departDate === selectedDate);
+            this.reservations = res.filter(reservation =>   reservation.departDate === selectedDate && 
+              reservation.departHour === selectedDepartureTime && 
+              reservation.returnHour === selectedReturnTime
+          );
 
             // Afficher les réservations récupérées dans la console
             console.log('*Reservations for selected date:*', this.reservations);
 
             // Extraire les dates de départ, heures de départ, heures de retour, équipementsId et roomsId de la liste des réservations
             this.departureDatesList = this.extractDepartureDates(this.reservations);
-            console.log('in this date : Equipment Id, Room Id List:', this.departureDatesList);
+            console.log('in this date  and time : Equipment Id, Room Id List:', this.departureDatesList);
 
            
             
