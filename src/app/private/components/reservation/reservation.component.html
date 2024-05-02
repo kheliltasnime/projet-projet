@@ -1,19 +1,38 @@
 <style>
-
-
-  .blue-button {
-  background-color: rgb(0, 47, 255);
-  color: white; /* Couleur du texte */
-  /* Autres styles personnalisés si nécessaire */
-}
-/* Appliquer une couleur de fond personnalisée à la case à cocher */
-.mat-checkbox-inner-container {
-    background-color: #0e0d0d;
-    
+  .custom-scrollbar {
+    overflow-y: auto; /* Vertical scrolling */
+    overflow-x: auto; /* Horizontal scrolling */
+    height: 400px; /* Or any other height */
   }
 
+  /* Style for the scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px; /* Vertical scrollbar width */
+    height: 10px; /* Horizontal scrollbar height */
+  }
 
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Track color */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #888; /* Handle color */
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Handle color on hover */
+  }
+
+  /* Existing styles */
+  .blue-button {
+    background-color: rgb(0, 47, 255);
+    color: white;
+  }
+  .mat-checkbox-inner-container {
+    background-color: #0e0d0d;
+  }
 </style>
+
 
 
 <div class="container mt-3" style="width: 2500px;">
@@ -58,7 +77,7 @@
 
 <div class="container">
   <div class="table-responsive">
-      <div class="table-responsive">
+    <div class="table-responsive custom-scrollbar">
       <table class="table table-bordered table-hover">
         <thead>
           <tr>
@@ -106,7 +125,8 @@
         </tbody>
       </table>
     </div>
-    </div>
+  </div>
+    <div class="button-container">
     <div class="button-container">
       <button class="btn btn-success blue-button" [ngClass]="{'btn-disabled': !isButtonEnabled, 'btn-enabled': isButtonEnabled}" (click)="onSubmit()" >Submit</button>
     </div>
