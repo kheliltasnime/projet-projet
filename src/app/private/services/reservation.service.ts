@@ -2,18 +2,46 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Reservation } from '../model/reservation';
 import { Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import { Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
 
 export class ReservationService {
   checkedItems: any[] = [];
- 
+  reservationState: any[] = [];
   baseUrl = 'http://localhost:8083/api/arsii';
+  private addMoreClickedSubject = new Subject<void>();
+
+  private reservationStateSubject = new BehaviorSubject<any[]>([]);
+
 
   constructor(private httpclient: HttpClient) { }
 
-  
+
+  sendAddMoreClicked(): void {
+    console.log("Send add more clicked");
+    this.addMoreClickedSubject.next();
+  }
+
+  // Observable pour écouter le message "Add more clicked"
+  getAddMoreClicked(): Observable<void> {
+    console.log("add more  ");
+    return this.addMoreClickedSubject.asObservable();
+  }
+ 
+
+  getReservationState(): Observable<any[]> {
+    return this.reservationStateSubject.asObservable();
+  }
+
+storeReservationState(state: any[]): void {
+  this.reservationStateSubject.next(state);
+}
+
+
+
   getAllReservations(){
     return this.httpclient.get<Reservation[]>(this.baseUrl+'/reservation');
   }

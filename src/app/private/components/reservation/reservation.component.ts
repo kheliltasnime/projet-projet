@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { BenefitComponent } from '../benefit/benefit.component';
 import { EquipmentsService } from '../../services/equipments.service';
 import { RoomsService } from '../../services/rooms.service';
@@ -8,6 +8,9 @@ import { Reservation } from '../../model/reservation';
 import { ReservationService } from '../../services/reservation.service';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
+
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DetailsModalComponent } from '../benefit/equipments/details-modal/details-modal.component';
@@ -17,7 +20,8 @@ import { DetailsModalComponent } from '../benefit/equipments/details-modal/detai
   styleUrls: ['./reservation.component.css']
 })
 export class ReservationComponent {
-  
+
+
 equipmentsList: Equipments[] =[];
   roomsList: Rooms[] =[];
   equipmentTypes: string[] = [];
@@ -39,13 +43,15 @@ equipmentsList: Equipments[] =[];
   filteredEquipmentsList: Equipments[] = [];
   filteredRoomsList: Rooms[] = [];
 
+
+
   availableEquipments:Equipments[]=[];
   availableRooms:Rooms[]=[];
   selectedDate: string='';
   selectedDepartureTime: string = '';
   selectedReturnTime: string = '';
   departureDatesList:{ equipmentsId: number | undefined; roomsId: number | undefined }[] = [];
- 
+  private addMoreClickedSubscription: Subscription = new Subscription();
   equipmentsId:number=0;
   roomsId:number=0;
   updateButtonState() {
@@ -58,14 +64,43 @@ equipmentsList: Equipments[] =[];
     private roomsService : RoomsService,
     private router : Router,
     private reservationService : ReservationService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    
   ){}
 
+  reservationState: any[] = [];
   ngOnInit(): void {
     console.log('ouiiiiiiii');
+   
   //this.displayEquipments();
    // this.displayRooms();
+ 
+console.log(this.filteredEquipmentsList);
+console.log(this.filteredRoomsList);
+this.reservationService.getReservationState().subscribe((data: any[]) => {
+  if (data && data.length > 0) {
+    // Mettez à jour la variable locale avec les données de l'état de réservation
+    this.reservationState = data;
+
+    // bdl filtredrromslist
+    if (data[0].filteredEquipmentsList && data[0].filteredRoomsList) {
+      this.filteredEquipmentsList = data[0].filteredEquipmentsList;
+      this.filteredRoomsList = data[0].filteredRoomsList;
+
+      console.log("Liste des équipements filtrés:", this.filteredEquipmentsList);
+      console.log("Liste des chambres filtrées:", this.filteredRoomsList);
+    } else {
+      console.error("Les données d'état ne contiennent pas les listes attendues.");
+    }
+
+    console.log("État de réservation mis à jour:", data);
+  }
+
    
+ else {
+  
+  
+
     this.getEquipmentTypes();
     this.getRoomsTypes();
     this.route.queryParams.subscribe((params: Params) => {
@@ -75,7 +110,7 @@ equipmentsList: Equipments[] =[];
       this.selectedReturnTime = params['returnTime'];
       
     console.log('Selected date:', this.selectedDate);
-    console.log('Selected departure time:', this.selectedDepartureTime);
+    console.log('Selected  departure time:', this.selectedDepartureTime);
     console.log('Selected return time:', this.selectedReturnTime);
   
       if (this.selectedDate) {
@@ -85,7 +120,9 @@ equipmentsList: Equipments[] =[];
       }
     });
     
+  }});
   }
+ 
   onCheckboxChange(event: any, item: any, selectedDate: string, selectedDepartureTime: string, selectedReturnTime: string) {
     console.log('Checkbox état:', event.checked ? 'coché' : 'non coché');
   
@@ -110,9 +147,45 @@ equipmentsList: Equipments[] =[];
    
   }
   
-
   onSubmit() {
-    // Redirigez l'utilisateur vers la page de liste
+    // Stockez l'état actuel du tableau avant de naviguer vers la page de liste
+    const currentState: { filteredEquipmentsList: Equipments[]; filteredRoomsList: Rooms[] }[] = [
+      {
+        filteredEquipmentsList: this.filteredEquipmentsList,
+        filteredRoomsList: this.filteredRoomsList
+      }
+      
+    ];
+  
+  // Enregistrez les éléments cochés et les réservations actuelles
+  const selectedDate = this.selectedDate;
+  const selectedDepartureTime = this.selectedDepartureTime;
+  const selectedReturnTime = this.selectedReturnTime;
+  const checkedItems = this.reservationService.checkedItems;
+  
+  
+ // Cochez les éléments correspondants dans filteredEquipmentsList et filteredRoomsList
+ checkedItems.forEach(item => {
+  if (item.category === 'Equipments') {
+    const equipment = this.filteredEquipmentsList.find(e => e.id === item.id);
+    if (equipment) {
+      equipment.checked = true;
+    }
+  } else if (item.category === 'Rooms') {
+    const room = this.filteredRoomsList.find(r => r.id === item.id);
+    if (room) {
+      room.checked = true;
+    }
+  }
+});
+currentState.push({
+  filteredEquipmentsList: this.filteredEquipmentsList,
+  filteredRoomsList:this.filteredRoomsList
+});
+
+// Stockez l'état actuel dans le service de réservation
+  this.reservationService.storeReservationState(currentState);
+
     this.router.navigateByUrl('reservation/list');
   }
 
