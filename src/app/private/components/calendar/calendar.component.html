@@ -104,14 +104,28 @@
           <form [formGroup]="reservationForm">
               <label for="departureDate">Select Date</label>
               <input type="date" id="departureDate" name="departureDate" formControlName="departureDate">
+              <div *ngIf="reservationForm.get('departureDate')?.invalid && (reservationForm.get('departureDate')?.dirty || reservationForm.get('departureDate')?.touched)">
+                <small class="text-danger">Please select a valid departure date.</small>
+              </div>
+           
           
+            <div class="form-group">
               <label for="departureTime">Select Hour of Departure</label>
-              <input type="time" id="departureTime" name="departureTime" formControlName="departureTime">
-          
+              <input type="time" id="departureTime" name="departureTime" formControlName="departureTime" class="form-control">
+              <div *ngIf="reservationForm.get('departureTime')?.invalid && (reservationForm.get('departureTime')?.dirty || reservationForm.get('departureTime')?.touched)">
+                <small class="text-danger">Please select a valid departure time.</small>
+              </div>
+            </div>
+            
+            <div class="form-group">
               <label for="returnTime">Select Hour of Return</label>
-              <input type="time" id="returnTime" name="returnTime" formControlName="returnTime">
-            </form>
-      </div>
+              <input type="time" id="returnTime" name="returnTime" formControlName="returnTime" class="form-control">
+              <div *ngIf="reservationForm.get('returnTime')?.invalid && (reservationForm.get('returnTime')?.dirty || reservationForm.get('returnTime')?.touched)">
+                <small class="text-danger">Please select a valid return time.</small>
+              </div>
+            </div>
+          </form>
+        </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" (click)="navigateAndSave()"[disabled]="!reservationForm.valid" >choose Benefits</button>

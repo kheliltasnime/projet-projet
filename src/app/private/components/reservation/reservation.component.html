@@ -25,11 +25,11 @@
 
   /* Existing styles */
   .blue-button {
-    background-color: rgb(0, 47, 255);
-    color: white;
+    background-color: rgb(37, 33, 218);
+    color: #67abeb;
   }
   .mat-checkbox-inner-container {
-    background-color: #0e0d0d;
+    background-color: #1425c4;
   }
 </style>
 
@@ -100,8 +100,6 @@
             <td>
               <mat-checkbox [(ngModel)]="equipments.checked" (change)="onCheckboxChange($event, equipments, selectedDate, selectedDepartureTime, selectedReturnTime)" [disabled]="equipments.state === 'Disabled'"></mat-checkbox>
 
-
-
               <button class="btn btn-primary" (click)="openDetailsModal(equipments)">Check Details</button>
             </td>
             
@@ -115,8 +113,6 @@
             <td>{{rooms.maintenance_status}}</td>
             <td>
               <mat-checkbox [(ngModel)]="rooms.checked" (change)="onCheckboxChange($event, rooms,selectedDate, selectedDepartureTime, selectedReturnTime)" [disabled]="rooms.state === 'Disabled'"></mat-checkbox>
-
-
               <button class="btn btn-primary" (click)="openDetailsModal(rooms)">Check Details</button>
               
             </td>

@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { CalendarEvent, CalendarView,  } from 'angular-calendar';
 import { isSameDay, isSameMonth } from 'date-fns';
 import { Subject } from 'rxjs';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import * as dateFns from 'date-fns';
 
 
-import { Injectable } from '@angular/core';
-import { FormControl, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
+import { ValidatorFn,FormControl, AbstractControl, FormGroup, ValidationErrors } from '@angular/forms';
+
+
 
 @Component({
   selector: 'app-calendar',
@@ -27,15 +27,17 @@ export class CalendarComponent {viewDate: Date = new Date();
   selectedDate: string='';
   selectedDepartureTime: string='';
   selectedReturnTime: string='';
-  reservationForm: FormGroup = this.fb.group({  // Initialize reservationForm inline
-    departureDate: [null, [Validators.required, this.futureDateValidator()]],
-    departureTime: [null, [Validators.required, Validators.pattern('^08:3[0-9]|0[9-9]:[0-5][0-9]$')]],
-    returnTime: [null, [Validators.required, Validators.pattern('^(1[0-7]|0[0-9]):[0-5][0-9]$')]]
-  });
-
   
 
+  reservationForm: FormGroup;
+
   constructor(private router :Router ,private fb: FormBuilder){
+    this.reservationForm = this.fb.group({  
+      departureDate: [null, [Validators.required, this.futureDateValidator()]],
+      departureTime: [null, [Validators.required, Validators.pattern('^08:[0-5][0-9]$|^09:[0-5][0-9]$|^1[0-7]:[0-5][0-9]$')]],
+      returnTime: [null, [Validators.required, Validators.pattern('^08:[0-5][0-9]$|^09:[0-5][0-9]$|^1[0-7]:[0-5][0-9]$')]],
+    }, { validators: this.timeRangeValidator() }); // Ajouter le validateur de plage d'heures
+    
     const event1 = {
       title: "Pc hp Reservation",
       start: new Date("2024-04-25T10:30"),
@@ -44,15 +46,8 @@ export class CalendarComponent {viewDate: Date = new Date();
       resizable: {
         beforeStart: true,
         afterEnd: true,
-      },
-      this:this.reservationForm = this.fb.group({
-        departureDate: [null, [Validators.required, this.futureDateValidator()]],
-        departureTime: [null, [Validators.required, Validators.pattern('^08:3[0-9]|0[9-9]:[0-5][0-9]$|^0[9-9]:[0-5][0-9]$|1[0-7]:[0-5][0-9]$')]],
-        returnTime: [null, [Validators.required, Validators.pattern('^(1[0-7]|0[0-9]):[0-5][0-9]$')]]
-      })
-      
-    }
-
+      }
+    };
     this.events.push(event1);
     this.reservationForm.get('departureDate')?.valueChanges.subscribe(value => {
       this.selectedDate = value; // Mettre à jour selectedDate
@@ -78,12 +73,67 @@ export class CalendarComponent {viewDate: Date = new Date();
   }
 
   ngOnInit(): void {
-    this.reservationForm = this.fb.group({
-      departureDate: ['', Validators.required],
-      departureTime: ['', Validators.required],
-      returnTime: ['', Validators.required]
-    });
+  //  this.reservationForm = this.fb.group({
+    //  departureDate: ['', Validators.required],
+     // departureTime: ['', Validators.required],
+      //returnTime: ['', Validators.required]
+    //});
   }
+  timeRangeValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (control instanceof FormGroup) {
+        const departureDate = control.get('departureDate')?.value;
+        const departureTime = control.get('departureTime')?.value;
+        const returnTime = control.get('returnTime')?.value;
+  
+        // Obtenir l'heure actuelle en Tunisie
+        const currentDateTunisia = new Date().toLocaleString('en-US', { timeZone: 'Africa/Tunis' });
+  
+        if (departureDate && departureTime && returnTime) {
+          // Convertir la date de départ en objet Date
+          const selectedDepartureDate = new Date(departureDate);
+  
+          // Si la date de départ est aujourd'hui en Tunisie
+          if (isSameDay(selectedDepartureDate, new Date(currentDateTunisia))) {
+            // Convertir l'heure de départ en objet Date
+            const selectedDepartureTime = new Date(`2000-01-01T${departureTime}`);
+  
+            // Obtenir l'heure actuelle en Tunisie
+            const currentHour = new Date(currentDateTunisia).getHours();
+            const currentMinute = new Date(currentDateTunisia).getMinutes();
+  
+            // Convertir l'heure actuelle en objet Date pour comparer avec l'heure de départ
+            const currentTime = new Date(`2000-01-01T${currentHour}:${currentMinute}`);
+  
+            // Si l'heure de départ est dans le passé par rapport à l'heure actuelle en Tunisie
+            if (selectedDepartureTime <= currentTime) {
+              return { pastDepartureTime: true };
+            }
+          }
+  
+          // Vérifier si les heures sont dans l'intervalle spécifié (08:00 - 18:00)
+          const departureHour = parseInt(departureTime.split(':')[0]);
+          const returnHour = parseInt(returnTime.split(':')[0]);
+  
+          if (departureHour < 8 || returnHour > 18) {
+            return { invalidTimeRange: true };
+          }
+  
+          // Vérifier si l'heure de départ est avant l'heure de retour
+          if (departureHour >= returnHour) {
+            return { invalidTimeOrder: true };
+          }
+        }
+      }
+  
+      return null;
+    };
+  }
+  
+  
+  
+  
+  
   setView(view : CalendarView) {
     this.view = view;
   }
@@ -178,14 +228,6 @@ formatDate(dateString: string): string {
     };
   }
 
-  timeFormatValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const timePattern = /^([01][0-9]|2[0-3]):[0-5][0-9]$/;
-      const isValid = timePattern.test(control.value);
-
-      return isValid ? null : { invalidTimeFormat: true };
-    };
-  }
 
 
 }

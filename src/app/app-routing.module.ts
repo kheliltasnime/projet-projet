@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { EmployeeComponent } from './private/components/employee/employee.component';
-import { DetailsEmployeeComponent } from './private/components/employee/details-employee/details-employee.component';
-import { HomeComponent } from './private/components/home/home.component';
+
 import { DashboardComponent } from './private/components/dashboard/dashboard.component';
 import { ChartsComponent } from './private/components/charts/charts.component';
 import { CalendarComponent } from './private/components/calendar/calendar.component';
@@ -15,6 +14,7 @@ import { EditRoomComponent } from './private/components/benefit/rooms/edit/edit-
 import { PopupComponent } from './private/components/popup/popup.component';
 import { PopiComponent } from './popi/popi/popi.component';
 import { ListreservComponent } from './private/components/reservation/listreserv/listreserv.component';
+
 
 const routes: Routes = [
   {
@@ -87,6 +87,7 @@ const routes: Routes = [
     path: 'reservation/list',
     component: ListreservComponent,
   },
+  
   
 ];
 

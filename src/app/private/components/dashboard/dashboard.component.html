@@ -1,7 +1,145 @@
-<h1>Dashboard</h1>
-<div class="card">
-    <div class="card-head">slxfvg osfji - Dashboard</div>
-    <div class="card-body">
-        lgvnfdsgn snfopsnfgv sfdvj,dsgjvolws ksgvj,ffsowgvol sldfvgj,nwsoldsj,f fodshf oisfjdoisdfos soifdjoishfgdosdh shfgdidsgfi dsghishg sgujnfhxighxdf sgdofvhsfdgvfds b dgvsnofdgv nhdsfvgsgjs fogvkjjnfgvjxf n 
-    </div>
+<!-- dashboard.component.html -->
+<style>/* dashboard.component.css */
+/* dashboard.component.css */
+/* dashboard.component.css */
+
+.dashboard-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dashboard-container h2 {
+    font-size: 22px;
+    margin-bottom: 12px;
+    color: #333;
+  }
+  
+  .dashboard-container ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .dashboard-container li {
+    margin-bottom: 12px;
+    padding: 12px;
+    background-color: #801f1f;
+    border-radius: 6px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dashboard-container li:first-child {
+    margin-top: 0;
+  }
+  
+  .dashboard-container .empty-message {
+    color: #666;
+  }
+  
+  .dashboard-container .reservation-info {
+    font-size: 16px;
+    color: #555;
+  }
+  
+  .dashboard-container .reservation-info .name {
+    font-weight: bold;
+  }
+  
+  .dashboard-container .reservation-info .hours {
+    font-style: italic;
+  }
+  /* dashboard.component.css */
+
+.dashboard-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dashboard-container h2 {
+    font-size: 22px;
+    margin-bottom: 12px;
+    color: #333;
+  }
+  
+  .dashboard-container ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .dashboard-container li {
+    margin-bottom: 12px;
+    padding: 12px;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dashboard-container li:first-child {
+    margin-top: 0;
+  }
+  
+  .dashboard-container .empty-message {
+    color: #666;
+  }
+  
+  .dashboard-container .reservation-info {
+    font-size: 16px;
+    color: #555;
+  }
+  
+  .dashboard-container .reservation-info .name {
+    font-weight: bold;
+  }
+  
+  .dashboard-container .reservation-info .hours {
+    font-style: italic;
+  }
+  
+  /* Ajout de formes spécifiques */
+  
+  /* Coins arrondis pour le conteneur principal */
+  .dashboard-container {
+    border-radius: 20px;
+  }
+  
+  /* Angles inclinés pour les éléments de liste */
+  .dashboard-container li:nth-child(odd) {
+    transform: skewX(-5deg);
+    border-radius: 8px;
+  }
+  
+  .dashboard-container li:nth-child(even) {
+    transform: skewX(5deg);
+    border-radius: 8px;
+  }
+  
+
+    </style>
+<div class="dashboard-container">
+    <h2>Réservations en cours</h2>
+    <ul>
+      <li *ngFor="let reservation of currentReservations">
+        {{ reservation.name }} - {{ reservation.departHour }} à {{ reservation.returnHour }}
+      </li>
+      <li *ngIf="currentReservations.length === 0">Aucune réservation en cours</li>
+    </ul>
+  
+    <h2>Réservations à venir</h2>
+    <ul>
+      <li *ngFor="let reservation of upcomingReservations">
+        {{ reservation.name }} - {{ reservation.departHour }} à {{ reservation.returnHour }}
+      </li>
+      <li *ngIf="upcomingReservations.length === 0">Aucune réservation à venir</li>
+    </ul>
+  
+    <h2>Réservations passées</h2>
+    <ul>
+      <li *ngFor="let reservation of pastReservations">
+        {{ reservation.name }} - {{ reservation.departHour }} à {{ reservation.returnHour }}
+      </li>
+      <li *ngIf="pastReservations.length === 0">Aucune réservation passée</li>
+    </ul>
 </div>

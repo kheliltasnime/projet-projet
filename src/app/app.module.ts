@@ -39,6 +39,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { DetailsModalComponent } from './private/components/benefit/equipments/details-modal/details-modal.component';
 import { ListreservComponent } from './private/components/reservation/listreserv/listreserv.component';
 import { ReservationService } from './private/services/reservation.service';
+import { NgxMaterialTimepicker12HoursFaceComponent } from 'ngx-material-timepicker/src/app/material-timepicker/components/timepicker-12-hours-face/ngx-material-timepicker-12-hours-face.component';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+
+
 class CustomDateFormatter extends CalendarNativeDateFormatter{
   public override dayViewHour({ date,locale}: DateFormatterParams) : string{
     return new Intl.DateTimeFormat(locale, {hour: 'numeric', minute: 'numeric'}).format(date);
@@ -70,6 +74,7 @@ class CustomDateFormatter extends CalendarNativeDateFormatter{
     PopiComponent,
     DetailsModalComponent,
     ListreservComponent,
+    
    
   ],
   imports: [
@@ -102,6 +107,7 @@ class CustomDateFormatter extends CalendarNativeDateFormatter{
     OverlayModule,
     MatFormFieldModule,
     ReactiveFormsModule,
+    NgxMaterialTimepickerModule
     
   ],
   providers: [

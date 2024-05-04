@@ -78,6 +78,7 @@ equipmentsList: Equipments[] =[];
 console.log(this.filteredEquipmentsList);
 console.log(this.filteredRoomsList);
 this.reservationService.getReservationState().subscribe((data: any[]) => {
+  
   if (data && data.length > 0) {
     // Mettez à jour la variable locale avec les données de l'état de réservation
     this.reservationState = data;
@@ -96,16 +97,10 @@ this.reservationService.getReservationState().subscribe((data: any[]) => {
     console.log("État de réservation mis à jour:", data);
   }
 
-   
- else {
-  
-  
-
     this.getEquipmentTypes();
     this.getRoomsTypes();
     this.route.queryParams.subscribe((params: Params) => {
       this.selectedDate = params['date'];
-      
       this.selectedDepartureTime = params['departureTime'];
       this.selectedReturnTime = params['returnTime'];
       
@@ -120,7 +115,7 @@ this.reservationService.getReservationState().subscribe((data: any[]) => {
       }
     });
     
-  }});
+  });
   }
  
   onCheckboxChange(event: any, item: any, selectedDate: string, selectedDepartureTime: string, selectedReturnTime: string) {
