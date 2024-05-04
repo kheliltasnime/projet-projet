@@ -2,7 +2,9 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReservationService } from 'src/app/private/services/reservation.service';
 import { Injectable } from '@angular/core';
-
+import { FormBuilder, FormGroup } from '@angular/forms'; 
+import { MatDialog } from '@angular/material/dialog';
+import * as emailjs from 'emailjs-com';
 import { Reservation } from 'src/app/private/model/reservation';
 @Component({
   selector: 'app-listreserv',
@@ -12,7 +14,7 @@ import { Reservation } from 'src/app/private/model/reservation';
 export class ListreservComponent {
   reservationState: any[] = [];
   constructor(public reservationService: ReservationService,
-    private router: Router,
+    private router: Router,private fb:FormBuilder
    ) {}
 
   ngOnInit() {
@@ -24,6 +26,30 @@ export class ListreservComponent {
       this.reservationState = data;
     });
   }
+  
+  form :FormGroup=this.fb.group({
+  
+    to_name: "asma",
+    from_name: '',
+    from_email:'',
+    subject:'',
+    message:''
+    });
+
+async send(){
+  emailjs.init('GDIu91oJLy4x2Qpry');
+  let response =await emailjs.send("service_a7y27df","template_g4ch4ug",{
+
+   
+    from_name: this.form.value.from_name,
+    to_name:this.form.value.to_name,
+    from_email:this.form.value.from_email,
+    subject:this.form.value.subject,
+    message:this.form.value.message
+    });
+    alert('message has been sent ');
+    this.form.reset();
+}
   
  // Méthode appelée lors du clic sur le bouton de validation
  onAddMoreClicked(): void {

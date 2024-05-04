@@ -22,3 +22,26 @@
 <!-- Bouton pour revenir et ajouter d'autres éléments -->
 <button class="btn btn-primary" (click)="goBack()">Add More</button>
 </div>
+<router-outlet></router-outlet><form [formGroup]="form" (ngSubmit)="send()">
+  <div>
+    <label for="to_name">To Name:</label>
+    <input type="text" id="to_name" formControlName="to_name" />
+  </div>
+  <div>
+    <label for="from_name">From Name:</label>
+    <input type="text" id="from_name" formControlName="from_name" />
+  </div>
+  <div>
+    <label for="from_email">From Email:</label>
+    <input type="email" id="from_email" formControlName="from_email" />
+  </div>
+  <div>
+    <label for="subject">Subject:</label>
+    <input type="text" id="subject" formControlName="subject" />
+  </div>
+  <div>
+    <label for="message">Message:</label>
+    <textarea id="message" formControlName="message"></textarea>
+  </div>
+  <button type="submit">Send</button>
+</form>
