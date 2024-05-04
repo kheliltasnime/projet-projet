@@ -117,30 +117,39 @@ this.reservationService.getReservationState().subscribe((data: any[]) => {
     
   });
   }
- 
   onCheckboxChange(event: any, item: any, selectedDate: string, selectedDepartureTime: string, selectedReturnTime: string) {
     console.log('Checkbox état:', event.checked ? 'coché' : 'non coché');
   
     if (event.checked) {
-      // Créer un nouvel objet contenant toutes les données nécessaires
+      // Désélectionner toutes les autres chambres dans la liste et les retirer de checkedItems
+      this.filteredRoomsList.forEach(room => {
+        if (room !== item && room.checked) {
+          room.checked = false;
+          const index = this.reservationService.checkedItems.findIndex(x => x.id === room.id);
+          if (index !== -1) {
+            this.reservationService.checkedItems.splice(index, 1);
+          }
+        }
+      });
+  
+      // Ajouter la chambre sélectionnée à checkedItems
       const newItem = {
         ...item,
         selectedDate: selectedDate,
         selectedDepartureTime: selectedDepartureTime,
         selectedReturnTime: selectedReturnTime
       };
-      console.log('checkedItems ye tas ',newItem);
+      console.log('checkedItems ye tas ', newItem);
       this.reservationService.checkedItems.push(newItem);
     } else {
-      // Supprimer l'élément de la liste si la case est décochée
-      const index = this.reservationService.checkedItems.findIndex(x => 
-        x.id === item.id);  // Assurez-vous que chaque 'item' a un identifiant unique ou modifiez la condition pour correspondre à votre cas d'usage.
+      // Supprimer la chambre désélectionnée de checkedItems
+      const index = this.reservationService.checkedItems.findIndex(x => x.id === item.id);
       if (index !== -1) {
         this.reservationService.checkedItems.splice(index, 1);
       }
     }
-   
   }
+  
   
   onSubmit() {
     // Stockez l'état actuel du tableau avant de naviguer vers la page de liste
