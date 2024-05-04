@@ -30,6 +30,7 @@ export class ListreservComponent {
   form :FormGroup=this.fb.group({
   
     to_name: "asma",
+    
     from_name: '',
     from_email:'',
     subject:'',
@@ -39,16 +40,19 @@ export class ListreservComponent {
 async send(){
   emailjs.init('GDIu91oJLy4x2Qpry');
   let response =await emailjs.send("service_a7y27df","template_g4ch4ug",{
-
-   
-    from_name: this.form.value.from_name,
-    to_name:this.form.value.to_name,
-    from_email:this.form.value.from_email,
-    subject:this.form.value.subject,
-    message:this.form.value.message
-    });
-    alert('message has been sent ');
-    this.form.reset();
+    from_name: 'Admin', // Remplacez par votre nom
+    to_name: 'Asma', // Remplacez par le nom du destinataire
+    from_email: 'kheliltassnime@email.com', // Remplacez par votre adresse e-mail
+    subject: 'Reservation', // Remplacez par le sujet du message
+    message: 'Your Reservation is added successfully'
+  }).then(response => {
+    // Traitez la réponse si nécessaire
+    alert('Message sent successfully!');
+  }).catch(error => {
+    // Traitez les erreurs si nécessaire
+    console.error('Error sending message:', error);
+    alert('An error occurred while sending the message.');
+  });
 }
   
  // Méthode appelée lors du clic sur le bouton de validation
@@ -84,6 +88,7 @@ async send(){
   }// Appeler la méthode pour ajouter les réservations
   this.addReservationFromCheckedItems();
   this.reservationService.sendAddMoreClicked();
+  this.send();
 }
 
 addReservationFromCheckedItems() {
