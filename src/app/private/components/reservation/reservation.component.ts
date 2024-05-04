@@ -201,8 +201,9 @@ currentState.push({
         next: (res) => {
             // Remplir la liste des réservations avec les réservations pour la date sélectionnée
             this.reservations = res.filter(reservation =>   reservation.departDate === selectedDate && 
-              reservation.departHour === selectedDepartureTime && 
-              reservation.returnHour === selectedReturnTime
+            ( (!reservation.departHour || reservation.departHour <= selectedDepartureTime) || 
+            (!reservation.returnHour || reservation.returnHour >= selectedReturnTime)
+        )
           );
 
             // Afficher les réservations récupérées dans la console
