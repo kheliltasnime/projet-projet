@@ -41,6 +41,7 @@ import { ListreservComponent } from './private/components/reservation/listreserv
 import { ReservationService } from './private/services/reservation.service';
 import { NgxMaterialTimepicker12HoursFaceComponent } from 'ngx-material-timepicker/src/app/material-timepicker/components/timepicker-12-hours-face/ngx-material-timepicker-12-hours-face.component';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { LoginComponent } from './private/components/login/login/login.component';
 
 
 class CustomDateFormatter extends CalendarNativeDateFormatter{
@@ -74,6 +75,7 @@ class CustomDateFormatter extends CalendarNativeDateFormatter{
     PopiComponent,
     DetailsModalComponent,
     ListreservComponent,
+    LoginComponent,
     
    
   ],

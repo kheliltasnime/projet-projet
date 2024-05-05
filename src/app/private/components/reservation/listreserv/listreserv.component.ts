@@ -42,7 +42,7 @@ async send(){
   let response =await emailjs.send("service_a7y27df","template_g4ch4ug",{
     from_name: 'Admin', // Remplacez par votre nom
     to_name: 'Asma', // Remplacez par le nom du destinataire
-    from_email: 'kheliltassnime@email.com', // Remplacez par votre adresse e-mail
+    from_email: 'contact@teamdev.tn ', // Remplacez par votre adresse e-mail
     subject: 'Reservation', // Remplacez par le sujet du message
     message: 'Your Reservation is added successfully'
   }).then(response => {
@@ -60,7 +60,7 @@ async send(){
   this.reservationService.sendAddMoreClicked();
 }
  validateReservation() {
-
+ // const equipmentIds: number[] = [];
   // Parcourir tous les éléments vérifiés
   for (const item of this.reservationService.checkedItems) {
     // Extraire les informations nécessaires de l'objet 'item'
@@ -73,7 +73,8 @@ async send(){
       const category = item.category;
       const id = item.id;
       const subcategory=item.type;
-
+      
+    ///  equipmentIds.push(id);
       // Maintenant, vous avez toutes les informations nécessaires pour chaque élément
       // Faites ce que vous devez faire avec ces informations, comme les envoyer à un service ou les traiter directement ici
       console.log('Selected Date:', selectedDate);
@@ -85,7 +86,11 @@ async send(){
 
       // Continuez à exécuter votre logique de validation ou d'autres opérations ici
     }
-  }// Appeler la méthode pour ajouter les réservations
+  }
+   // Stocker les identifiants d'équipements dans la liste avant d'appeler la méthode 'addReservationFromCheckedItems'
+  // console.log('Equipment IDs:', equipmentIds);// Appeler la méthode pour ajouter les réservations
+
+  
   this.addReservationFromCheckedItems();
   this.reservationService.sendAddMoreClicked();
   this.send();

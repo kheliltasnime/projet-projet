@@ -248,6 +248,7 @@ currentState.push({
             console.error('Erreur lors de la récupération des réservations:', error);
         }
     });
+  
 }
 extractDepartureDates(reservations: Reservation[]): { equipmentsId: number | undefined; roomsId: number | undefined }[] {
    this.departureDatesList;//{ equipmentsId: ; roomsId: number | undefined }[] = [];
@@ -288,6 +289,11 @@ extractDepartureDates(reservations: Reservation[]): { equipmentsId: number | und
       console.log(res); // Log the retrieved room types to verify data
     });
   }
+
+
+
+
+
 
 
 

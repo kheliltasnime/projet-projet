@@ -1,0 +1,9 @@
+<form >
+    <label>Email:</label>
+    <input type="email" [(ngModel)]="email"[ngModelOptions]="{standalone: true}" name="email" required>
+    <label>Password:</label>
+    <input type="password" [(ngModel)]="password" [ngModelOptions]="{standalone: true}" name="password" required>
+    <button type="submit" (click)="login()">Login</button>
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+</form>
+  

@@ -31,8 +31,10 @@ export class EmployeeService {
     return this.httpclient.get<Employee>(this.baseUrl + '/employee/' +id );
   }
   
-  
-  
+  login(email: string, password: string): Observable<any> {
+    const loginData = { email, password }; 
+    return this.httpclient.post<any>(`${this.baseUrl}/employee/login`, loginData);
+  }
 
   
 

@@ -14,6 +14,7 @@ import { EditRoomComponent } from './private/components/benefit/rooms/edit/edit-
 import { PopupComponent } from './private/components/popup/popup.component';
 import { PopiComponent } from './popi/popi/popi.component';
 import { ListreservComponent } from './private/components/reservation/listreserv/listreserv.component';
+import { LoginComponent } from './private/components/login/login/login.component';
 
 
 const routes: Routes = [
@@ -54,6 +55,10 @@ const routes: Routes = [
     path: '',
     redirectTo: 'dashboard',
     pathMatch: 'full'
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
   },
   {
     path: 'reservation',
