@@ -1,278 +1,223 @@
-@import url('https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 :root {
-    --main-color: #22BAA0;
-    --color-dark: #34425A;
-    --text-grey: #B0B0B0;
-}
+    --clr-primary: #7380ec;
+    --clr-danger: #ff7782;
+    --clr-success: #41f1b6;
+    --clr-white: #fff;
+    --clr-info-dark: #7d8da1;
+    --clr-info-light: #dce1eb;
+    --clr-dark: #363949;
+    --clr-warnig: #ff4edc;
+    --clr-light: rgba(132, 139, 200, 0.18);
+    --clr-primary-variant: #111e88;
+    --clr-dark-variant: #c0c0c0;
+    --clr-color-background: #f6f6f9;
+    --clr-icons:#0C4284;
+    --clr-logo: #04A79E;
+    --card-border-radius: 2rem;
+    --border-radius-1: 0.4rem;
+    --border-radius-2: 0.8rem;
+    --border-radius-3: 1.2rem;
+  
+    --card-padding: 1.8rem;
+    --padding-1: 1.2rem;
+    --box-shadow: 0 2rem 3rem var(--clr-light);
+  
+  }
+  
+  /* dark theme */
+  .dark-theme-variables {
+    --clr-color-background: #181a1e;
+    --clr-white: #202528;
+    --clr-light: rgba(0, 0, 0, 0.4);
+    --clr-dark: #edeffd;
+    --clr-dark-variant: #677483;
+    --box-shadow: 0 2rem 3rem var(--clr-light)
+  }
 
-
-
-main {
-    margin-top: -30px;
-}
-
-
-.page-content {
-    padding: 1.3rem 1rem;
-    background: #f1f4f9;
-}
-
-.analytics {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-gap: 2rem;
-    margin-top: .5rem;
-    margin-bottom: 2rem;
-}
-
-.card {
-    box-shadow: 0px 5px 5px -5px rgb(0 0 0 / 10%);
-    background: #fff;
-    padding: 1rem;
-    border-radius: 3px;
-}
-
-.card-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.card-head h2 {
-    color: #333;
-    font-size: 1.8rem;
-    font-weight: 500;
-}
-
-.card-head span {
-    font-size: 3.2rem;
-    color: var(--text-grey);
-}
-
-.card-progress small {
-    color: #777;
-    font-size: .8rem;
-    font-weight: 600;
-}
-
-.card-indicator {
-    margin: .7rem 0rem;
-    height: 10px;
-    border-radius: 4px;
-    background: #e9edf2;
-    overflow: hidden;
-}
-
-.indicator {
-    height: 10px;
-    border-radius: 4px;
-}
-
-.indicator.one {
-    background: #22baa0;
-}
-
-.indicator.two {
-    background: #11a8c3;
-}
-
-.indicator.three {
-    background: #f6d433;
-}
-
-.indicator.four {
-    background: #f25656;
-}
-
-.records {
-    box-shadow: 0px 5px 5px -5px rgb(0 0 0 / 10%);
-    background: #fff;
-    border-radius: 3px;
-}
-
-.record-header {
-    padding: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.add, .browse {
-    display: flex;
-    align-items: center;
-}
-
-.add span {
-    display: inline-block;
-    margin-right: .6rem;
-    font-size: .9rem;
-    color: #666;
-}
-
-input, button, select {
-    outline: none;
-}
-
-.add select, .browse input, .browse select {
-    height: 35px;
-    border: 1px solid #b0b0b0;
-    border-radius: 3px;
-    display: inline-block;
-    width: 75px;
-    padding: 0rem .5rem;
-    margin-right: .8rem;
-    color: #666;
-}
-
-.add button {
-    background: var(--main-color);
-    color: #fff;
-    height: 37px;
-    border-radius: 4px;
-    padding: 0rem 1rem;
-    border: none;
-    font-weight: 600;
-}
-
-.browse input {
-    width: 150px;
-}
-
-.browse select {
-    width: 100px;
-}
-
-.table-responsive {
+  
+.container{
+    display:grid;
     width: 100%;
-    overflow: auto;
+    gap: 1.8rem;
+    grid-template-columns: 14rem auto 14rem;
+    margin-top: -50px;
+}
+a{
+    color: var(--clr-icons);
+}
+h1{
+    font-weight: 800;
+    font-size: 1.8rem;
+}
+h2{
+    font-size: 1.4rem;
+}
+h3{
+    font-size: 0.87rem;
+}
+h4{
+    font-size: 0.8rem;
+}
+h5{
+    font-size: 0.77rem;
 }
 
-table {
-    border-collapse: collapse;
+small{
+    font-size: 0.75rem;
+}
+.text-muted{
+    color: var(--clr-dark-variant);
+}
+p{
+    color: var(--clr-dark-variant);
+}
+b{
+    color: var(--clr-dark);
+}
+.primary{
+    color: var(--clr-success);
+}
+.danger{
+    color: var(--clr-danger);
+}
+.color_logo{
+    color: var(--clr-logo);
+}
+.warning{
+    color: var(--clr-warnig);
 }
 
-table thead tr {
-    background: #e9edf2;
+/* =============== MAIN  ===================  */
+
+
+.insights {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 1.6rem;
 }
 
-table thead th {
-    padding: 1rem 0rem;
-    text-align: left;
-    color: #444;
-    font-size: .9rem;
+.insights > div {
+    background: #f1f1f1;
+    padding: 1.8rem;
+    width: 300px;
+    height: 250px;
+    border-radius: 2rem;
+    margin-top: 1rem;
+    box-shadow: 0 2rem 3rem #b9b9b9;
+    transition: all 300ms ease;
+  }
+
+.insights > div:hover {
+    box-shadow: none;
 }
 
-table thead th:first-child {
-    padding-left: 1rem;
+.insights > div span {
+    background-color: #04A79E;
+    padding: 0.5rem;
+    border-radius: 50%;
+    color: white;
+    font-size: 2rem;
 }
 
-table tbody td {
-    padding: 1rem 0rem;
-    color: #444;
-}
-
-table tbody td:first-child {
-    padding-left: 1rem;
-    color: var(--main-color);
-    font-weight: 600;
-    font-size: .9rem;
-}
-
-table tbody tr {
-    border-bottom: 1px solid #dee2e8;
-}
-
-.client {
+.insights > div .middle{
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
-.client-img {
-    margin-right: .5rem;
-    border: 2px solid #b0b0b0;
-    height: 45px;
-    width: 45px;
+.insights h3 {
+    margin: 1rem 0 0.6rem;
+    font-size: 1rem;
 }
 
-.client-info h4 {
-    color: #555;
-    font-size: .95rem;
+.insights svg {
+    width: 7rem;
+    height: 7rem;
 }
 
-.client-info small {
-    color: #777;
+.insights svg circle {
+    fill: none;
+    stroke: #0d6ee5;
+    stroke-width: 14;
+    stroke-linecap: round;
+    transform: translate(5px, 5px);
+    stroke-dasharray: 110;
+    stroke-dashoffset: 92;
 }
 
-.actions span {
-    display: inline-block;
-    font-size: 1.5rem;
-    margin-right: .5rem;
+.insights .sales svg circle {
+    stroke-dashoffset: -30;
+    stroke-dasharray: 200;
 }
 
-.paid {
-    display: inline-block;
-    text-align: center;
-    font-weight: 600;
-    color: var(--main-color);
-    background: #e5f8ed;
-    padding: .5rem 1rem;
-    border-radius: 20px;
-    font-size: .8rem;
+.insights .expense svg circle {
+    stroke-dashoffset: 20;
+    stroke-dasharray: 80;
 }
 
-@media only screen and (max-width: 1200px) {
-    .analytics {
-        grid-template-columns: repeat(2, 1fr);
-    }
+.insights .income svg circle {
+    stroke-dashoffset: 35;
+    stroke-dasharray: 110;
 }
 
-@media only screen and (max-width: 768px) {
-    .analytics {
-        grid-template-columns: 100%;
-    }
-    
-    .sidebar {
-        left: -165px;
-        z-index: 90;
-    }
-    
-    header {
-        left: 0;
-        width: 100%;
-    }
-    
-    .main-content {
-        margin-left: 0;
-        width: 100%;
-    }
-    
-    #menu-toggle:checked ~ .sidebar {
-        left: 0;
-    }
-    
-    #menu-toggle:checked ~ .sidebar {
-        width: 165px;
-    }
+.insights small {
+    margin-top: 1.6rem;
+    display: block;
+}
 
-    #menu-toggle:checked ~ .sidebar .side-header span {
-        display: inline-block;
-    }
+/*  CHARTS    */
 
-    #menu-toggle:checked ~ .sidebar .profile,
-    #menu-toggle:checked ~ .sidebar .side-menu a small {
-        display: block;
-    }
+.charts{
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-gap: 20px;
+    width: 20px;
+    padding: 20px;
+    padding-top: 0;
+    margin-top: 50px;
+}
 
-    #menu-toggle:checked ~ .sidebar .side-menu a span {
-        font-size: 1.7rem;
-    }
-    
-    #menu-toggle:checked ~ .main-content header {
-        left: 0px;
-    }
-    
-    table {
-        width: 900px;
-    }
+.chart {
+    background: #f1f1f1;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2rem 3rem #b9b9b9;
+    width: 600px;
+}
+.high {
+    color: red; /* Couleur du texte pour les valeurs élevées */
+}
+
+.medium {
+    color: orange; /* Couleur du texte pour les valeurs moyennes */
+}
+
+.low {
+    color: green; /* Couleur du texte pour les valeurs faibles */
+}
+
+.circle.high {
+    fill: red; /* Couleur du cercle pour les valeurs élevées */
+}
+
+.circle.medium {
+    fill: orange; /* Couleur du cercle pour les valeurs moyennes */
+}
+
+.circle.low {
+    fill: green; /* Couleur du cercle pour les valeurs faibles */
+}
+/* Ajouter des règles CSS pour définir la couleur du cercle en fonction des valeurs */
+.circle.high {
+    fill: red; /* Rouge pour les valeurs élevées */
+}
+
+.circle.medium {
+    fill: orange; /* Orange pour les valeurs moyennes */
+}
+
+.circle.low {
+    fill: green; /* Vert pour les valeurs faibles */
 }

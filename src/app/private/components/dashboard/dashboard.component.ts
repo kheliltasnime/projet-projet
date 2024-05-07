@@ -1,15 +1,16 @@
-import { Component } from '@angular/core';
-import { Reservation } from '../../model/reservation';
-import { ReservationService } from '../../services/reservation.service';
-import { Equipments } from '../../model/equipments';
-import { EquipmentsService } from '../../services/equipments.service';
+import { Component, OnInit } from '@angular/core';
+import { Chart } from 'chart.js';
 
+//import { createChart } from './charts1';
+import { createChartDoughunt } from './charts2';
+import { ReservationService } from '../../services/reservation.service';
+import { EquipmentsService } from '../../services/equipments.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent {
+export class DashboardComponent  {
   currentMonth: string = ''; // Variable pour stocker le mois actuel
   reservationDepartDates: string[] = []; // Variable pour stocker les dates de départ des réservations
   reservationsThisMonth: number = 0; // Variable pour stocker le nombre de réservations ce mois-ci
@@ -17,14 +18,96 @@ export class DashboardComponent {
   disabledCount: number = 0; // Variable pour stocker le nombre d'états "disabled"
   totalEquipments: number = 0; // Variable pour stocker le nombre total d'équipements
   pour:number=0;
+
+
+  lineChart: any;
+  monthOccurrences: Map<number, number> = new Map();
+
   constructor(private reservationService: ReservationService,private equipmentService: EquipmentsService) { }
+
 
   ngOnInit(): void {
     this.getCurrentMonth();
     this.getReservationDepartDates();
     this.getEquipmentStates();
+    this.getAllReservationsAndCountOccurrences(); 
+   
+   
   }
 
+
+ 
+  getAllReservationsAndCountOccurrences(): void {
+    this.reservationService.getAllReservations().subscribe(reservations => {
+      reservations.forEach(reservation => {
+        if (reservation.departDate) { // Vérifie si departDate n'est pas null
+          const departureDateParts = (reservation.departDate as string).split('-');
+          const month = parseInt(departureDateParts[1], 10);
+          if (!isNaN(month)) { // Vérifie si le mois est un nombre valide
+            if (this.monthOccurrences.has(month)) {
+              const currentCount = this.monthOccurrences.get(month) as number;
+              this.monthOccurrences.set(month, currentCount + 1);
+            } else {
+              this.monthOccurrences.set(month, 1);
+            }
+          }
+        }
+      });
+  
+      this.monthOccurrences.forEach((occurrences, month) => {
+        console.log(`Month ${month}: ${occurrences} occurrences`);
+      });
+  
+      // Créez le graphique une fois que la boucle forEach est terminée
+      this.createLineChart();
+    });
+  }
+   
+  getMonthName(month: number): string {
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    return monthNames[month - 1]; // Soustrayez 1 car les mois commencent à 0 dans JavaScript
+  }
+  createLineChart(): void {
+    if (this.lineChart) {
+      this.lineChart.destroy(); // Détruire le graphique existant s'il existe
+    }
+  
+    const canvas = document.getElementById('lineChart') as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      const months = Array.from(this.monthOccurrences.keys());
+      const occurrences = Array.from(this.monthOccurrences.values());
+  
+      this.lineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: months.map(month => this.getMonthName(month)),
+          datasets: [{
+            label: 'Reservation Occurrences',
+            data: occurrences,
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    } else {
+      console.error('Failed to get 2D context for line chart canvas');
+    }
+  }
+  
+  
+  
+  
+ 
+  
   getCurrentMonth(): void {
     const currentDate = new Date(); // Obtenez la date actuelle
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -58,6 +141,7 @@ export class DashboardComponent {
         }
       });
       
+      console.log('Nombre de réservations pour chaque mois : ', this.reservationsThisMonth);
     });
     console.log(this.reservationsThisMonth);
   }
@@ -78,21 +162,50 @@ export class DashboardComponent {
       this.pour=(this.disabledCount /this. totalEquipments) * 100
     });
   }
+
+  ngAfterViewInit() {
+    const canvasLineChart = document.getElementById('lineChart');
+    const canvasDoughuntChart = document.getElementById('doughuntChart');
+
+    if (canvasLineChart instanceof HTMLCanvasElement) {
+      const ctxLineChart = canvasLineChart.getContext('2d');
+      if (ctxLineChart) {
+      //  const lineChart = createChart(ctxLineChart);
+      } else {
+        console.error('Failed to get 2D context for line chart canvas');
+      }
+    } else {
+      console.error('Failed to find canvas element with id "myChart"');
+    }
+
+    if (canvasDoughuntChart instanceof HTMLCanvasElement) {
+      const ctxDoughuntChart = canvasDoughuntChart.getContext('2d');
+      if (ctxDoughuntChart) {
+        const doughuntChart = createChartDoughunt(ctxDoughuntChart);
+      } else {
+        console.error('Failed to get 2D context for doughnut chart canvas');
+      }
+    } else {
+      console.error('Failed to find canvas element with id "doughuntChart"');
+    }
+    this.createLineChart();
+  }
+
+
+  calculateStrokeOffset(value: number): number {
+    if (value < 0) {
+      value = 0; // Assurez-vous que la valeur est au moins égale à 0
+    } else if (value > 100) {
+      value = 100; // Assurez-vous que la valeur est au plus égale à 100
+    }
   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    const circleLength = 2 * Math.PI * 36; // Circonférence du cercle avec un rayon de 36 pixels
+    const filledLength = circleLength * (value / 100); // Longueur remplie en fonction de la valeur donnée
+    const remainingLength = circleLength - filledLength; // Calcul de la longueur restante
+    
+    return remainingLength;
+  }
+  
 
 
 

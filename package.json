@@ -27,6 +27,7 @@
     "@syncfusion/ej2-material-theme": "~25.1.39",
     "angular-calendar": "^0.31.1",
     "bootstrap": "^5.3.3",
+    "chart.js": "^4.4.2",
     "date-fns": "^3.6.0",
     "emailjs-com": "^3.2.0",
     "ngx-material-timepicker": "^13.1.1",

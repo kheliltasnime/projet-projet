@@ -78,6 +78,7 @@ export class CalendarComponent {viewDate: Date = new Date();
      // departureTime: ['', Validators.required],
       //returnTime: ['', Validators.required]
     //});
+    this.timeRangeValidator();
   }
   timeRangeValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -86,27 +87,28 @@ export class CalendarComponent {viewDate: Date = new Date();
         const departureTime = control.get('departureTime')?.value;
         const returnTime = control.get('returnTime')?.value;
   
-        // Obtenir l'heure actuelle en Tunisie
-        const currentDateTunisia = new Date().toLocaleString('en-US', { timeZone: 'Africa/Tunis' });
-  
         if (departureDate && departureTime && returnTime) {
           // Convertir la date de départ en objet Date
           const selectedDepartureDate = new Date(departureDate);
   
-          // Si la date de départ est aujourd'hui en Tunisie
-          if (isSameDay(selectedDepartureDate, new Date(currentDateTunisia))) {
+          // Obtenir l'heure actuelle
+          const currentTime = new Date();
+      //    currentTime.setHours(currentTime.getHours() - 1);
+          const currentHour = currentTime.getHours();
+          const currentMinute = currentTime.getMinutes();
+  console.log('lyoumm',currentTime);
+          // Vérifier si la date de départ est aujourd'hui
+          const isToday = isSameDay(selectedDepartureDate, currentTime);
+  
+          // Si la date de départ est aujourd'hui, on vérifie si l'heure de départ est dans le passé
+          if (isToday) {
             // Convertir l'heure de départ en objet Date
             const selectedDepartureTime = new Date(`2000-01-01T${departureTime}`);
-  
-            // Obtenir l'heure actuelle en Tunisie
-            const currentHour = new Date(currentDateTunisia).getHours();
-            const currentMinute = new Date(currentDateTunisia).getMinutes();
-  
-            // Convertir l'heure actuelle en objet Date pour comparer avec l'heure de départ
-            const currentTime = new Date(`2000-01-01T${currentHour}:${currentMinute}`);
-  
-            // Si l'heure de départ est dans le passé par rapport à l'heure actuelle en Tunisie
-            if (selectedDepartureTime <= currentTime) {
+            const selectedHour = selectedDepartureTime.getHours();
+            const selectedMinute = selectedDepartureTime.getMinutes();
+
+            // Si l'heure de départ est dans le passé par rapport à l'heure actuelle
+            if (selectedHour < currentHour || (selectedHour === currentHour && selectedMinute < currentMinute)) {
               return { pastDepartureTime: true };
             }
           }
@@ -129,10 +131,6 @@ export class CalendarComponent {viewDate: Date = new Date();
       return null;
     };
   }
-  
-  
-  
-  
   
   setView(view : CalendarView) {
     this.view = view;
