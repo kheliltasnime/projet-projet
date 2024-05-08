@@ -3,6 +3,10 @@ export interface Equipments{
     checked?: boolean;
     name? : string;
     type? : string;
+    returned?:string;
+    reservation_State?:string;
+    description?:string;
+    taken?:string;
     manufactuer? : string;
     model? : string;
     purchase_date? :Date;

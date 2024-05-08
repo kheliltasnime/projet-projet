@@ -56,9 +56,9 @@
             <td>{{equipments.quantity}}</td>
             <td>{{equipments.price}}</td>
             <td>{{equipments.maintenance_status}}</td>
-            <td>Reservation state</td>
-            <td> </td><!---->
-            <td> </td><!---->
+            <td>{{equipments.reservation_State}}</td>
+            <td>{{equipments.returned}}</td><!---->
+            <td>{{equipments.taken}}</td>          <!---->
             <td>
               <mat-card-header>
                 <button mat-raised-button color="primary" (click)="addCustomer(equipments?.id)">Edit</button>
@@ -71,7 +71,7 @@
               </span>
             </td>
           
-            <td> </td><!---->
+            <td>{{equipments.description}}</td>     <!---->
            
             
           </tr>
