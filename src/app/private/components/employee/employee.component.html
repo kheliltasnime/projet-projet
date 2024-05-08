@@ -1,5 +1,11 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<div class="container">
+<div class="container"><!---->
+  <div class="search-container">
+    <input type="text" [(ngModel)]="searchText" (input)="search()" class="form-control" placeholder="Search...">
+
+
+  </div>
+  <!---->
     <div class="table-wrapper">
       <div class="table-title">
         <div class="row">
@@ -30,13 +36,17 @@
             <th>Account Type</th>
             <th>Department</th>
             <th>Job</th>
+            <th>Reservations</th>
             <th>State</th> <!-- Nouvelle colonne ajoutée -->
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let employee of employeeList">
-            <td>{{employee.firstName }}</td>
+          <tr *ngFor="let employee of filteredEmployeeList">
+            <td>{{ employee.firstName! }}</td>
+
+
+
             <td>{{employee.lastName}}</td>
             <td>{{employee.phoneNumber}}</td>
             <td>{{employee.address}}</td>
@@ -44,16 +54,11 @@
             <td>{{employee.account_type}}</td>
             <td>{{employee.department}}</td>
             <td>{{employee.job}}</td>
+            <td>  <button (click)="getReservationsByEmployeeId(1)" class="btn btn-primary">View Reservations</button>
             <td [style.color]="employee.state === 'Enabled' ? 'green' : 'red'">
               {{ employee.state }}
             </td>
-            
-            
-            
-            
-            
-            
-    
+          
             <td>
               <a href="#editEmployeeModal" [routerLink]="'/employee/'+ employee.id" class="edit" data-toggle="edit"
                 ><i class="material-icons" data-toggle="tooltip" title="Edit"
@@ -74,7 +79,15 @@
       <div class="clearfix">
         <div class="hint-text">Showing <b>{{employeeList.length}}</b> entries</div>
       </div>
-    
+    <!-- Modal pour afficher les réservations -->
+<div *ngIf="(reservations$ | async) as reservations">
+  <h2>Réservations</h2>
+  <ul>
+    <li *ngFor="let reservation of reservations">
+      {{ reservation.details }} <!-- Adaptez selon la structure de vos données -->
+    </li>
+  </ul>
+</div>
     </div>
   </div>
 

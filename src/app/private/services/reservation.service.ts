@@ -101,5 +101,11 @@ storeReservationState(state: any[]): void {
     const url = `${this.baseUrl}/reservation?departureDate=${departureDate}`;
     return this.httpclient.get<Reservation[]>(url);
   }
+    // Méthode pour récupérer les réservations d'un employé par son ID
+    getReservationsByEmployeeId(employeeId: number): Observable<any[]> {
+      // Remplacez 'votre-backend-url' par l'URL de votre API qui récupère les réservations par ID d'employé
+      const url = `${this.baseUrl}/reservations?employeeId=${employeeId}`;
+      return this.httpclient.get<any[]>(url);
+    }
+  
 }
-

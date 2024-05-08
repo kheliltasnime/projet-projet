@@ -16,17 +16,47 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class RoomsComponent implements OnInit {
   roomsList: Rooms[] =[];
+  searchText: string = ''; 
   selectedRoom: Rooms | undefined;
+  filteredRoomsList: Rooms[] = [];
   constructor(
     private RoomsService: RoomsService,private dialog:MatDialog
   ){}
   ngOnInit(): void {
     this.displayRooms();
   }
+  
+  search(): void {
+    // Filtrer la liste d'employés en fonction du texte de recherche
+    if (this.searchText.trim() === '') {
+      // Si le champ de recherche est vide, réinitialiser filteredEmployeeList avec employeeList
+      this.filteredRoomsList = this.roomsList;
+    } else {
+      // Sinon, appliquer la recherche normalement
+      this.filteredRoomsList = this.roomsList.filter(room => {
+        // Vérifier si employee.firstName, employee.lastName et employee.email ne sont pas undefined
+        const location = room.location ? room.location.toLowerCase() : '';
+        const name = room.name ? room.name.toLowerCase() : '';
+        const type = room.type ? room.type.toLowerCase() : '';
+    
+        // Rechercher le texte dans firstName, lastName et email
+        return (
+          location.includes(this.searchText.toLowerCase()) ||
+          name.includes(this.searchText.toLowerCase()) ||
+          type.includes(this.searchText.toLowerCase())
+        );
+      });
+    }console.log('Filtered equipment List:', this.filteredRoomsList);
+  }
+
+
+
 
   displayRooms() {
     this.RoomsService.getAllRooms().subscribe((res) => {
       this.roomsList = res;
+       
+      this.filteredRoomsList = res;
       console.log(res);
     });
   }

@@ -171,6 +171,7 @@ export class DashboardComponent  {
       const ctxLineChart = canvasLineChart.getContext('2d');
       if (ctxLineChart) {
       //  const lineChart = createChart(ctxLineChart);
+      this.createLineChart();
       } else {
         console.error('Failed to get 2D context for line chart canvas');
       }
@@ -181,7 +182,12 @@ export class DashboardComponent  {
     if (canvasDoughuntChart instanceof HTMLCanvasElement) {
       const ctxDoughuntChart = canvasDoughuntChart.getContext('2d');
       if (ctxDoughuntChart) {
-        const doughuntChart = createChartDoughunt(ctxDoughuntChart);
+        // Récupérez les données des équipements depuis votre source de données
+        // Par exemple, en appelant un service qui récupère les données des équipements
+        this.equipmentService.getAllEquipments().subscribe(equipments => {
+          // Créez le graphique doughnut avec les données des équipements
+          const doughuntChart = createChartDoughunt(ctxDoughuntChart, equipments);
+        });
       } else {
         console.error('Failed to get 2D context for doughnut chart canvas');
       }

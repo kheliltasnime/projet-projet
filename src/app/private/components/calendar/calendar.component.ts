@@ -132,6 +132,15 @@ export class CalendarComponent {viewDate: Date = new Date();
     };
   }
   
+
+
+
+
+
+
+
+
+  
   setView(view : CalendarView) {
     this.view = view;
   }

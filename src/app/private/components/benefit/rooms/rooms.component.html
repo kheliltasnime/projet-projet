@@ -1,5 +1,9 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <div class="container">
+  
+<div class="search-container">
+  <input type="text" [(ngModel)]="searchText" (input)="search()" class="form-control" placeholder="Search...">
+</div>
     <div class="table-wrapper">
       <div class="table-title">
         <div class="row">
@@ -32,7 +36,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let Rooms of roomsList">
+          <tr *ngFor="let Rooms of filteredRoomsList">
             <td>{{Rooms.name }}</td>
             <td>{{Rooms.type}}</td>
             <td>{{Rooms.location}}</td>

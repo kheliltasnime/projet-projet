@@ -2,6 +2,10 @@
 
 
 <div class="container">
+  
+<div class="search-container">
+  <input type="text" [(ngModel)]="searchText" (input)="search()" class="form-control" placeholder="Search...">
+</div>
     <div class="table-wrapper">
       <div class="table-title">
         <div class="row">
@@ -33,12 +37,17 @@
             <th>Quantity</th>
             <th>Price</th>
             <th>Maintenance Status</th>
+            <th>Reservation State </th>
+            <th>Returned </th>
+            <th>Taken </th>
             <th>Action</th> <!-- Add Action column header -->
-            <th>State</th> <!-- Add State column header -->
+            <th>Equipment State</th> <!-- Add State column header -->
+            <th>Description </th>
+            
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let equipments of equipmentsList">
+          <tr *ngFor="let equipments of filteredEquipmentList"><!---->
             <td>{{equipments.name }}</td>
             <td>{{equipments.type}}</td>
             <td>{{equipments.manufactuer}}</td>
@@ -47,6 +56,9 @@
             <td>{{equipments.quantity}}</td>
             <td>{{equipments.price}}</td>
             <td>{{equipments.maintenance_status}}</td>
+            <td>Reservation state</td>
+            <td> </td><!---->
+            <td> </td><!---->
             <td>
               <mat-card-header>
                 <button mat-raised-button color="primary" (click)="addCustomer(equipments?.id)">Edit</button>
@@ -59,7 +71,7 @@
               </span>
             </td>
           
-            
+            <td> </td><!---->
            
             
           </tr>

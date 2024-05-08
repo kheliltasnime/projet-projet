@@ -2,6 +2,7 @@ export interface Reservation{
     id? : number;
     name? : string;
     equipmentsId? : number;
+    employeeId?:number;
     roomsId? : number;
     state?:string;
     maintenance_status?:string;
