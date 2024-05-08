@@ -31,6 +31,9 @@
             <th>Location</th>
             <th>Capacity</th>
             <th>Maintenance Status</th>
+            <th>Rservation State </th>
+            <th>Free</th>
+            <th>Occupied</th>
             <th>Action</th> <!-- Add Action column header -->
             <th>State</th> <!-- Add State column header -->
           </tr>
@@ -42,6 +45,10 @@
             <td>{{Rooms.location}}</td>
             <td>{{Rooms.capacity}}</td>
             <td>{{Rooms.maintenance_status}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            
             <td>
               <mat-card-header>
                 <button mat-raised-button color="primary" (click)="addCustomer(Rooms?.id)">Edit</button>
