@@ -37,12 +37,18 @@ export class RoomsComponent implements OnInit {
         // Vérifier si employee.firstName, employee.lastName et employee.email ne sont pas undefined
         const location = room.location ? room.location.toLowerCase() : '';
         const name = room.name ? room.name.toLowerCase() : '';
+        const reserved=room.reservation_State? room.reservation_State.toLowerCase():'';
+        const free=room.free? room.free.toLowerCase():'';
+        const occupied=room.occupied? room.occupied.toLowerCase():'';
         const type = room.type ? room.type.toLowerCase() : '';
     
         // Rechercher le texte dans firstName, lastName et email
         return (
           location.includes(this.searchText.toLowerCase()) ||
           name.includes(this.searchText.toLowerCase()) ||
+          free.includes(this.searchText.toLowerCase()) ||
+          occupied.includes(this.searchText.toLowerCase()) ||
+          reserved.includes(this.searchText.toLowerCase()) ||
           type.includes(this.searchText.toLowerCase())
         );
       });

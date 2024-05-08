@@ -34,12 +34,18 @@ export class EquipmentsComponent implements OnInit {
         // Vérifier si employee.firstName, employee.lastName et employee.email ne sont pas undefined
         const model = equipment.model ? equipment.model.toLowerCase() : '';
         const name = equipment.name ? equipment.name.toLowerCase() : '';
+        const reserved = equipment.reservation_State ? equipment.reservation_State.toLowerCase() : '';
+        const taken=equipment.taken? equipment.taken.toLowerCase():'';
+        const returned=equipment.returned? equipment.returned.toLowerCase():'';
         const type = equipment.type ? equipment.type.toLowerCase() : '';
     
         // Rechercher le texte dans firstName, lastName et email
         return (
           model.includes(this.searchText.toLowerCase()) ||
           name.includes(this.searchText.toLowerCase()) ||
+          reserved.includes(this.searchText.toLowerCase()) ||
+          taken.includes(this.searchText.toLowerCase()) ||
+          returned.includes(this.searchText.toLowerCase()) ||
           type.includes(this.searchText.toLowerCase())
         );
       });
