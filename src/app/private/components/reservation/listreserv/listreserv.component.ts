@@ -102,6 +102,7 @@ async send(){
   this.addReservationFromCheckedItems();
   this.reservationService.sendAddMoreClicked();
   this.send();
+  this.router.navigate(['/calendar']);
 }
 
 addReservationFromCheckedItems() {

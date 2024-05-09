@@ -92,6 +92,7 @@ equipmentsList: Equipments[] =[];
                 console.log("Liste des équipements filtrés:", this.filteredEquipmentsList);
                 console.log("Liste des chambres filtrées:", this.filteredRoomsList);
             } else {
+              
                 console.error("Les données d'état ne contiennent pas les listes attendues.");
             }
 
@@ -115,9 +116,17 @@ equipmentsList: Equipments[] =[];
                     // Si la date de départ est définie, chargez les réservations correspondantes
                     this.loadReservationsByDepartureDate(this.selectedDate, this.selectedDepartureTime, this.selectedReturnTime);
                 }
+                else {
+                  this.displayEquipments();
+                  this.displayRooms();
+                }
             });
         }
     });
+
+
+
+  
 }
 
 
