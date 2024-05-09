@@ -235,7 +235,8 @@ chooseDateFirst(): void {
   
   onSubmit() {
     if (!this.reservationService.checkedItems.length) {
-      console.log("No items checked. Exiting the submit function.");
+     
+      window.alert("No items checked. Please check at least one item to proceed.");
       return; // Arrête l'exécution si aucun élément n'est coché
     }
     // Stockez l'état actuel du tableau avant de naviguer vers la page de liste
