@@ -13,6 +13,10 @@ import { Reservation } from 'src/app/private/model/reservation';
 })
 export class ListreservComponent {
   reservationState: any[] = [];
+  selectedDate:string='';
+  departureTime:string='';
+  returnTime:string='';
+data:any[]=[];
   constructor(public reservationService: ReservationService,
     private router: Router,private fb:FormBuilder
    ) {}
@@ -20,10 +24,14 @@ export class ListreservComponent {
   ngOnInit() {
     console.log("ahaya",this.reservationService.checkedItems);
   
-    console.log("emchi abaath message ");
+   // hedhy feha date et heure  ili hiye checked
     this.reservationService.getReservationState().subscribe((data: any[]) => {
       // Mettez à jour la variable locale avec les données de l'état de réservation
       this.reservationState = data;
+      this.data=data;
+      console.log("norù*******",data);
+    
+     
     });
   }
   
@@ -64,22 +72,22 @@ async send(){
   // Parcourir tous les éléments vérifiés
   for (const item of this.reservationService.checkedItems) {
     // Extraire les informations nécessaires de l'objet 'item'
-    const selectedDate = item.selectedDate;
-    const departureTime = item.selectedDepartureTime;
-    const returnTime = item.selectedReturnTime;
+     this.selectedDate = item.selectedDate;
+     this.departureTime = item.selectedDepartureTime;
+     this.returnTime = item.selectedReturnTime;
 
     // Vérifier si l'élément possède les propriétés nécessaires
     if ('category' in item &&'type' in item && 'selectedDate' in item && 'selectedDepartureTime' in item && 'selectedReturnTime' in item && 'id' in item) {
       const category = item.category;
       const id = item.id;
       const subcategory=item.type;
-      
+      const selectedDate=this.selectedDate;
     ///  equipmentIds.push(id);
       // Maintenant, vous avez toutes les informations nécessaires pour chaque élément
       // Faites ce que vous devez faire avec ces informations, comme les envoyer à un service ou les traiter directement ici
-      console.log('Selected Date:', selectedDate);
-      console.log('Departure Time:', departureTime);
-      console.log('Return Time:', returnTime);
+      console.log('Selected Date:', this.selectedDate);
+      console.log('Departure Time:', this.departureTime);
+      console.log('Return Time:', this.returnTime);
       console.log('Category:', category);
       console.log('Subcategory:', subcategory);
       console.log('ID:', id);
@@ -105,7 +113,7 @@ addReservationFromCheckedItems() {
       category: item.category,
       subCategory:item.type
     };
-
+console.log("fi add fama ???????",reservation);//nnonn 
     // Vérifiez si la catégorie est "Equipments" ou "Rooms"
     if (item.category === 'Equipments') {
       reservation.equipmentsId = item.id;
@@ -132,7 +140,8 @@ showSuccessMessage() {
 
 goBack() {
 
-  
+  console.log("f go back ------------",this.reservationState);
+  this.reservationState=this.data;
 this.reservationService.storeReservationState(this.reservationState);
  // Naviguer vers la page de réservation
   this.router.navigate(['/reservation']); // Remplacez '/previous-page' par le chemin de la page précédente

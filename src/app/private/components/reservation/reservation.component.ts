@@ -72,51 +72,55 @@ equipmentsList: Equipments[] =[];
   ngOnInit(): void {
     console.log('ouiiiiiiii');
    
-  //this.displayEquipments();
-   // this.displayRooms();
- 
-console.log(this.filteredEquipmentsList);
-console.log(this.filteredRoomsList);
-this.reservationService.getReservationState().subscribe((data: any[]) => {
-  
-  if (data && data.length > 0) {
-    // Mettez à jour la variable locale avec les données de l'état de réservation
-    this.reservationState = data;
+    console.log(this.filteredEquipmentsList);
+    console.log(this.filteredRoomsList);
 
-    // bdl filtredrromslist
-    if (data[0].filteredEquipmentsList && data[0].filteredRoomsList) {
-      this.filteredEquipmentsList = data[0].filteredEquipmentsList;
-      this.filteredRoomsList = data[0].filteredRoomsList;
+    this.reservationService.getReservationState().subscribe((data: any[]) => {
+        if (data && data.length > 0) {
+            this.reservationState = data;
+            this.selectedDate = data[0].selectedDate;
+            console.log("trah 2",this.selectedDate);
+            this.selectedDepartureTime = data[0].selectedDepartureDate;
+            this.selectedReturnTime = data[0].selectedReturnTime;
+            console.log("trah2",data[0]);
+            console.log("trah2",this.selectedReturnTime);
+            // Vérifiez si les listes d'équipements et de chambres sont disponibles
+            if (data[0].filteredEquipmentsList && data[0].filteredRoomsList) {
+                this.filteredEquipmentsList = data[0].filteredEquipmentsList;
+                this.filteredRoomsList = data[0].filteredRoomsList;
 
-      console.log("Liste des équipements filtrés:", this.filteredEquipmentsList);
-      console.log("Liste des chambres filtrées:", this.filteredRoomsList);
-    } else {
-      console.error("Les données d'état ne contiennent pas les listes attendues.");
-    }
+                console.log("Liste des équipements filtrés:", this.filteredEquipmentsList);
+                console.log("Liste des chambres filtrées:", this.filteredRoomsList);
+            } else {
+                console.error("Les données d'état ne contiennent pas les listes attendues.");
+            }
 
-    console.log("État de réservation mis à jour:", data);
-  }
-
-    this.getEquipmentTypes();
-    this.getRoomsTypes();
-    this.route.queryParams.subscribe((params: Params) => {
-      this.selectedDate = params['date'];
-      this.selectedDepartureTime = params['departureTime'];
-      this.selectedReturnTime = params['returnTime'];
-      
-    console.log('Selected date:', this.selectedDate);
-    console.log('Selected  departure time:', this.selectedDepartureTime);
-    console.log('Selected return time:', this.selectedReturnTime);
-  
-      if (this.selectedDate) {
-        // Si la date de départ est définie, charger les réservations correspondantes
-        this.loadReservationsByDepartureDate(this.selectedDate,this.selectedDepartureTime,this.selectedReturnTime);
-    
-      }
+            console.log("État de réservation mis à jour:", data);
+        } else {
+            // Vérifiez les paramètres de la requête
+            this.route.queryParams.subscribe((params: Params) => {
+                this.selectedDate = params['date'];
+                this.selectedDepartureTime = params['departureTime'];
+                this.selectedReturnTime = params['returnTime'];
+                
+                console.log('Selected date:', this.selectedDate);
+                console.log('Selected departure time:', this.selectedDepartureTime);
+                console.log('Selected return time:', this.selectedReturnTime);
+        
+                // Vérifiez si la date de départ est définie
+                if (this.selectedDate && this.selectedDepartureTime && this.selectedReturnTime) {
+                  console.log("trah",this.selectedDate);
+                  console.log("trah",this.selectedDepartureTime);
+                  console.log("trah",this.selectedReturnTime);
+                    // Si la date de départ est définie, chargez les réservations correspondantes
+                    this.loadReservationsByDepartureDate(this.selectedDate, this.selectedDepartureTime, this.selectedReturnTime);
+                }
+            });
+        }
     });
-    
-  });
-  }
+}
+
+
   onCheckboxChange(event: any, item: any, selectedDate: string, selectedDepartureTime: string, selectedReturnTime: string) {
     console.log('Checkbox état:', event.checked ? 'coché' : 'non coché');
   
@@ -138,7 +142,7 @@ this.reservationService.getReservationState().subscribe((data: any[]) => {
         selectedDate: selectedDate,
         selectedDepartureTime: selectedDepartureTime,
         selectedReturnTime: selectedReturnTime
-      };
+      };//iciiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
       console.log('checkedItems ye tas ', newItem);
       this.reservationService.checkedItems.push(newItem);
     } else {
@@ -153,10 +157,13 @@ this.reservationService.getReservationState().subscribe((data: any[]) => {
   
   onSubmit() {
     // Stockez l'état actuel du tableau avant de naviguer vers la page de liste
-    const currentState: { filteredEquipmentsList: Equipments[]; filteredRoomsList: Rooms[] }[] = [
+    const currentState: { filteredEquipmentsList: Equipments[]; filteredRoomsList: Rooms[] ;selectedDate:String;selectedDepartureDate:String;selectedReturnTime:String}[] = [
       {
         filteredEquipmentsList: this.filteredEquipmentsList,
-        filteredRoomsList: this.filteredRoomsList
+        filteredRoomsList: this.filteredRoomsList,
+        selectedDate:this.selectedDate,
+        selectedDepartureDate:this.selectedDepartureTime,
+        selectedReturnTime:this.selectedReturnTime
       }
       
     ];
@@ -166,8 +173,11 @@ this.reservationService.getReservationState().subscribe((data: any[]) => {
   const selectedDepartureTime = this.selectedDepartureTime;
   const selectedReturnTime = this.selectedReturnTime;
   const checkedItems = this.reservationService.checkedItems;
-  
-  
+  console.log("check check",this.reservationService.checkedItems);
+  console.log("ya date ",this.selectedDate);
+  console.log("ya date ",this.selectedDepartureTime);
+
+  console.log("ya date ",this.selectedReturnTime);
  // Cochez les éléments correspondants dans filteredEquipmentsList et filteredRoomsList
  checkedItems.forEach(item => {
   if (item.category === 'Equipments') {
@@ -184,9 +194,12 @@ this.reservationService.getReservationState().subscribe((data: any[]) => {
 });
 currentState.push({
   filteredEquipmentsList: this.filteredEquipmentsList,
-  filteredRoomsList:this.filteredRoomsList
+  filteredRoomsList:this.filteredRoomsList,
+  selectedDate:this.selectedDate,
+  selectedDepartureDate:this.selectedDepartureTime,
+  selectedReturnTime:this.selectedReturnTime
 });
-
+console.log("w fi current famechy date ",currentState);
 // Stockez l'état actuel dans le service de réservation
   this.reservationService.storeReservationState(currentState);
 

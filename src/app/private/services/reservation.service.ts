@@ -34,11 +34,15 @@ export class ReservationService {
  
 
   getReservationState(): Observable<any[]> {
+     // Afficher le contenu de reservationStateSubject dans la console
+     console.log("w fi get store", this.reservationStateSubject);
     return this.reservationStateSubject.asObservable();
+    console.log("w fi get store",this.reservationStateSubject);
   }
 
 storeReservationState(state: any[]): void {
   this.reservationStateSubject.next(state);
+  console.log("fi store trah",this.reservationStateSubject);
 }
 
 
