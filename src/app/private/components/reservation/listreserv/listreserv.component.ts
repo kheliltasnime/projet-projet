@@ -147,6 +147,9 @@ this.reservationService.storeReservationState(this.reservationState);
  // Naviguer vers la page de réservation
   this.router.navigate(['/reservation']); // Remplacez '/previous-page' par le chemin de la page précédente
 }
+Back(){
+  this.router.navigate(['/calendar']);
+}
 
 
 

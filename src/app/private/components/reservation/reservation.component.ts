@@ -38,7 +38,7 @@ equipmentsList: Equipments[] =[];
 
   equipments: any = { checked: false }; // Initialisation à false
   checkedItems: any[] = [];
-
+  rooms: any = { checked: false };
 
   filteredEquipmentsList: Equipments[] = [];
   filteredRoomsList: Rooms[] = [];
@@ -54,6 +54,7 @@ equipmentsList: Equipments[] =[];
   private addMoreClickedSubscription: Subscription = new Subscription();
   equipmentsId:number=0;
   roomsId:number=0;
+
   updateButtonState() {
     this.isButtonEnabled = this.equipmentsList.some(equipment => equipment.checked) || this.roomsList.some(room => room.checked);
   }
@@ -78,6 +79,8 @@ equipmentsList: Equipments[] =[];
     this.reservationService.getReservationState().subscribe((data: any[]) => {
         if (data && data.length > 0) {
           this.isButtonEnabled = true;
+          this.equipments.checked=true;
+          this.rooms.checked=true;
             this.reservationState = data;
             this.selectedDate = data[0].selectedDate;
             console.log("trah 2",this.selectedDate);
@@ -100,6 +103,8 @@ equipmentsList: Equipments[] =[];
             console.log("État de réservation mis à jour:", data);
         } else {
           this.isButtonEnabled = true;
+          this.equipments.checked=true;
+                  this.rooms.checked=true;
             // Vérifiez les paramètres de la requête
             this.route.queryParams.subscribe((params: Params) => {
                 this.selectedDate = params['date'];
@@ -123,16 +128,28 @@ equipmentsList: Equipments[] =[];
                   this.displayEquipments();
                   this.displayRooms();
                   this.isButtonEnabled = false;
-                  
+                  this.equipments.checked=false;
+                  this.rooms.checked=false;
                 }
             });
         }
     });
-
-
-
-  
 }
+
+
+filterItemsByName(name: string): void {
+  // Filtrer la liste d'équipements en fonction du nom
+  this.filteredEquipmentsList = this.filteredEquipmentsList.filter(equipment => equipment && equipment.name && equipment.name.toLowerCase().includes(name.toLowerCase()));
+  
+  // Filtrer la liste de chambres en fonction du nom
+  this.filteredRoomsList = this.filteredRoomsList.filter(room => room && room.name && room.name.toLowerCase().includes(name.toLowerCase()));
+}
+
+
+
+
+
+
 chooseDateFirst(): void {
   this.router.navigate(['/calendar']);
 
@@ -173,6 +190,7 @@ chooseDateFirst(): void {
   
   
   onSubmit() {
+    
     // Stockez l'état actuel du tableau avant de naviguer vers la page de liste
     const currentState: { filteredEquipmentsList: Equipments[]; filteredRoomsList: Rooms[] ;selectedDate:String;selectedDepartureDate:String;selectedReturnTime:String}[] = [
       {

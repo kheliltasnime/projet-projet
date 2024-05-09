@@ -3,6 +3,7 @@ export interface Rooms{
     name? : string;
     type? : string;
     location? : string;
+   
     reservation_State?:string;
     description?:string;
     occupied?:string;
