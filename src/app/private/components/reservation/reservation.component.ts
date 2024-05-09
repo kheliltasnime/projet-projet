@@ -21,7 +21,7 @@ import { DetailsModalComponent } from '../benefit/equipments/details-modal/detai
 })
 export class ReservationComponent {
 
-
+  searchText: string = '';
 equipmentsList: Equipments[] =[];
   roomsList: Rooms[] =[];
   equipmentTypes: string[] = [];
@@ -54,7 +54,7 @@ equipmentsList: Equipments[] =[];
   private addMoreClickedSubscription: Subscription = new Subscription();
   equipmentsId:number=0;
   roomsId:number=0;
-
+  originalFilteredEquipmentsList: Equipments[] = [];
   updateButtonState() {
     this.isButtonEnabled = this.equipmentsList.some(equipment => equipment.checked) || this.roomsList.some(room => room.checked);
   }
@@ -70,6 +70,7 @@ equipmentsList: Equipments[] =[];
   ){}
 
   reservationState: any[] = [];
+  
   ngOnInit(): void {
     console.log('ouiiiiiiii');
    
@@ -127,6 +128,7 @@ equipmentsList: Equipments[] =[];
                 
                   this.displayEquipments();
                   this.displayRooms();
+                 // this.filterBySearchText();
                   this.isButtonEnabled = false;
                   this.equipments.checked=false;
                   this.rooms.checked=false;
@@ -134,21 +136,63 @@ equipmentsList: Equipments[] =[];
             });
         }
     });
-}
 
-
-filterItemsByName(name: string): void {
-  // Filtrer la liste d'équipements en fonction du nom
-  this.filteredEquipmentsList = this.filteredEquipmentsList.filter(equipment => equipment && equipment.name && equipment.name.toLowerCase().includes(name.toLowerCase()));
-  
-  // Filtrer la liste de chambres en fonction du nom
-  this.filteredRoomsList = this.filteredRoomsList.filter(room => room && room.name && room.name.toLowerCase().includes(name.toLowerCase()));
 }
 
 
 
+filterBySearchText(): void {
+  if (this.selectedDate) {
+    this.filterEquipmentsBySearchText();
+  } else {
+    this.filterroomsBySearchText();
+  }
+}
 
+// hedhy metmechich maa ili par defaut 
+filterEquipmentsBySearchText(): void {
+  // Si le champ de recherche n'est pas vide
+  if (this.searchText.trim() !== '') {
+    // Filtrer la liste en fonction du texte de recherche
+    this.filteredEquipmentsList = this.availableEquipments.filter(equipment =>
+      (equipment.name && equipment.name.toLowerCase().includes(this.searchText.toLowerCase())) ||
+      (equipment.category && equipment.category.toLowerCase().includes(this.searchText.toLowerCase())) ||
+      (equipment.type && equipment.type.toLowerCase().includes(this.searchText.toLowerCase()))
+    );
+    this.filteredRoomsList = this.availableRooms.filter(rooms =>
+      (rooms.name && rooms.name.toLowerCase().includes(this.searchText.toLowerCase())) ||
+      (rooms.category && rooms.category.toLowerCase().includes(this.searchText.toLowerCase())) ||
+      (rooms.type && rooms.type.toLowerCase().includes(this.searchText.toLowerCase()))
+    );
 
+  } else {
+    // lezm hne taarf chethot
+    this.filteredEquipmentsList = this.availableEquipments;
+    this.filteredRoomsList=this.availableRooms;
+  }
+}
+
+filterroomsBySearchText(): void {
+  // Si le champ de recherche n'est pas vide
+  if (this.searchText.trim() !== '') {
+    // Filtrer la liste en fonction du texte de recherche
+    this.filteredEquipmentsList = this.equipmentsList.filter(equipment =>
+      (equipment.name && equipment.name.toLowerCase().includes(this.searchText.toLowerCase())) ||
+      (equipment.category && equipment.category.toLowerCase().includes(this.searchText.toLowerCase())) ||
+      (equipment.type && equipment.type.toLowerCase().includes(this.searchText.toLowerCase()))
+    );
+    this.filteredRoomsList = this.roomsList.filter(rooms =>
+      (rooms.name && rooms.name.toLowerCase().includes(this.searchText.toLowerCase())) ||
+      (rooms.category && rooms.category.toLowerCase().includes(this.searchText.toLowerCase())) ||
+      (rooms.type && rooms.type.toLowerCase().includes(this.searchText.toLowerCase()))
+    );
+
+  } else {
+    // lezm hne taarf chethot
+    this.filteredEquipmentsList = this.equipmentsList;
+    this.filteredRoomsList=this.roomsList;
+  }
+}
 
 chooseDateFirst(): void {
   this.router.navigate(['/calendar']);
@@ -190,7 +234,7 @@ chooseDateFirst(): void {
   
   
   onSubmit() {
-    
+
     // Stockez l'état actuel du tableau avant de naviguer vers la page de liste
     const currentState: { filteredEquipmentsList: Equipments[]; filteredRoomsList: Rooms[] ;selectedDate:String;selectedDepartureDate:String;selectedReturnTime:String}[] = [
       {
@@ -348,15 +392,16 @@ extractDepartureDates(reservations: Reservation[]): { equipmentsId: number | und
 
   displayEquipments() {
     this.equipmentsService.getAllEquipments().subscribe((res) => {
-    //  this.equipmentsList = res;
+     this.equipmentsList = res;
       this.filteredEquipmentsList = res;
       console.log(res);
+     
     });
   }
 
   displayRooms() {
     this.roomsService.getAllRooms().subscribe((res) => {
-    //  this.roomsList = res;
+      this.roomsList = res;
       this.filteredRoomsList = res;
       console.log(res);
     });
