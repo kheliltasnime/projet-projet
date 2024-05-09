@@ -2,4 +2,11 @@
 .mat-checkbox-inner-container {
     background-color: #0e0d0d; /* Couleur de fond personnalisée */
   }
- 
+  .button-container {
+    display: flex;
+    justify-content: flex-end; /* Alignement des boutons à droite */
+  }
+  
+  .button-container button {
+    margin-left: 10px; /* Espacement entre les boutons */
+  }

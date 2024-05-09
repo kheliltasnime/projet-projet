@@ -125,7 +125,8 @@
   </div>
     <div class="button-container">
     <div class="button-container">
-      <button class="btn btn-success blue-button" [ngClass]="{'btn-disabled': !isButtonEnabled, 'btn-enabled': isButtonEnabled}" (click)="onSubmit()" >Submit</button>
+      <button *ngIf="!selectedDate || !selectedDepartureTime || !selectedReturnTime" class="btn btn-info" (click)="chooseDateFirst()" enabled>Choose Date First</button>
+      <button class="btn btn-success blue-button" [ngClass]="{'btn-disabled': !isButtonEnabled, 'btn-enabled': isButtonEnabled}"[disabled]="!isButtonEnabled" (click)="onSubmit()" >Submit</button>
     </div>
     
 </div>

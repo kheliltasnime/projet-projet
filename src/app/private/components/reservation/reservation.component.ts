@@ -77,6 +77,7 @@ equipmentsList: Equipments[] =[];
 
     this.reservationService.getReservationState().subscribe((data: any[]) => {
         if (data && data.length > 0) {
+          this.isButtonEnabled = true;
             this.reservationState = data;
             this.selectedDate = data[0].selectedDate;
             console.log("trah 2",this.selectedDate);
@@ -98,6 +99,7 @@ equipmentsList: Equipments[] =[];
 
             console.log("État de réservation mis à jour:", data);
         } else {
+          this.isButtonEnabled = true;
             // Vérifiez les paramètres de la requête
             this.route.queryParams.subscribe((params: Params) => {
                 this.selectedDate = params['date'];
@@ -116,9 +118,12 @@ equipmentsList: Equipments[] =[];
                     // Si la date de départ est définie, chargez les réservations correspondantes
                     this.loadReservationsByDepartureDate(this.selectedDate, this.selectedDepartureTime, this.selectedReturnTime);
                 }
-                else {
+                else {//ici par defautttt 
+                
                   this.displayEquipments();
                   this.displayRooms();
+                  this.isButtonEnabled = false;
+                  
                 }
             });
         }
@@ -128,7 +133,10 @@ equipmentsList: Equipments[] =[];
 
   
 }
+chooseDateFirst(): void {
+  this.router.navigate(['/calendar']);
 
+}
 
   onCheckboxChange(event: any, item: any, selectedDate: string, selectedDepartureTime: string, selectedReturnTime: string) {
     console.log('Checkbox état:', event.checked ? 'coché' : 'non coché');
