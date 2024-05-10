@@ -4,6 +4,8 @@ import { Reservation } from '../model/reservation';
 import { Observable } from 'rxjs';
 import { BehaviorSubject } from 'rxjs';
 import { Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
@@ -95,9 +97,12 @@ storeReservationState(state: any[]): void {
     return this.httpclient.get<Reservation[]>(this.baseUrl+id + '/equipments');
   }
 
-  getReservationByDateAndTimeWithEquipments(departDate :string, departHour :string ,returnHour : string){
-    return this.httpclient.get<Reservation[]>(this.baseUrl+'/byDateTimeWithEquipments'+departDate+departHour+returnHour);
+  getReservationByDateAndTimeWithEquipments(departDate: string, departHour: string, returnHour: string) {
+    const url = `${this.baseUrl}/byDateTimeWithEquipments${departDate}${departHour}${returnHour}`;
+    console.log('URL de la requête :', url); // Ajout du console.log
+    return this.httpclient.get<Reservation[]>(url);
   }
+  
   getReservationByDateAndTimeWithRooms(departDate :string, departHour :string ,returnHour : string){
     return this.httpclient.get<Reservation[]>(this.baseUrl+'/byDateTimeWithRooms'+departDate+departHour+returnHour);
   }
@@ -112,4 +117,7 @@ storeReservationState(state: any[]): void {
       return this.httpclient.get<any[]>(url);
     }
   
+
+
+
 }

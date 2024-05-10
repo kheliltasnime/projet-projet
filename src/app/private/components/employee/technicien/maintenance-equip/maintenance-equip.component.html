@@ -1,0 +1,58 @@
+<div class="container">
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Model</th>
+            <th>Type</th>
+            <th>Manufacturer</th>
+            <th>Maintenance Status</th>
+            <th>Reservation State</th>
+            <th>Returned</th>
+            <th>Taken</th>
+            <th>Quantity</th>
+            <th>Equipment State</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let equipment of equipments">
+            <td>{{ equipment.name }}</td>
+            <td>{{ equipment.model }}</td>
+            <td>{{ equipment.type }}</td>
+            <td>{{ equipment.manufactuer }}</td>
+            <td>{{ equipment.maintenance_status }}</td>
+            <td>
+                <select [(ngModel)]="equipment.reservation_State">
+                  <option value="Reserved">Reserved</option>
+                  <option value="Available">Available</option>
+                  <option value="Not Available">Not Available</option>
+                </select>
+              </td>
+              <td>
+                <select [(ngModel)]="equipment.returned">
+                  <option value="Reserved">yes</option>
+                  <option value="Available">Not yet</option>
+                </select>
+              </td>
+              <td>
+                <select [(ngModel)]="equipment.taken">
+                  <option value="Reserved">yes</option>
+                  <option value="Available">Not yet</option>
+                </select>
+              </td>
+              <td>
+                {{ equipment.quantity !== undefined ? equipment.quantity : 'N/A' }}
+              </td>
+            <td>{{ equipment.state }}</td>
+            <!-- Ajoutez ici les boutons ou liens pour les actions -->
+            <td>
+              <!-- Ajoutez ici les boutons ou liens pour les actions -->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  

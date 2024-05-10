@@ -15,7 +15,8 @@ import { PopupComponent } from './private/components/popup/popup.component';
 import { PopiComponent } from './popi/popi/popi.component';
 import { ListreservComponent } from './private/components/reservation/listreserv/listreserv.component';
 import { LoginComponent } from './private/components/login/login/login.component';
-
+import { TechnicienComponent } from './private/components/employee/technicien/technicien.component';
+import { MaintenanceEquipComponent } from './private/components/employee/technicien/maintenance-equip/maintenance-equip.component';
 
 const routes: Routes = [
   {
@@ -92,7 +93,14 @@ const routes: Routes = [
     path: 'reservation/list',
     component: ListreservComponent,
   },
-  
+  {
+    path:'technicien',
+    component:TechnicienComponent,
+  },
+  {
+    path:'technicien/maintenance-equipment',
+    component:MaintenanceEquipComponent,
+  },
   
 ];
 
