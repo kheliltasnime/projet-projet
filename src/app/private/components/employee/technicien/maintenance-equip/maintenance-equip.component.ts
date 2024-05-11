@@ -12,7 +12,8 @@ import { Reservation } from 'src/app/private/model/reservation';
 export class MaintenanceEquipComponent {
   equipments: Equipments[] = [];
   selectedEquipment: Equipments | undefined;
-  tableauResultat: { equipmentId: number , departureDate: Date, departureHour: string }[] = [];
+  tableauResultat: { equipmentId: number , departureDate: Date, departureHour: string, returnHour: string }[] = [];
+
    donneesFinales: any[] = [];
     donneesEquipements: any[] = [];
   constructor(
@@ -33,7 +34,7 @@ export class MaintenanceEquipComponent {
       console.log('Toutes les réservations:', reservations);
   
       // Liste pour stocker les ID des équipements avec leur date de départ et heures
-      const equipmentsWithDate: { equipmentId: number, departureDate: Date, departureHour: string }[] = [];
+      const equipmentsWithDate: { equipmentId: number, departureDate: Date, departureHour: string,returnHour:string }[] = [];
   
       // Filtrer les réservations à partir de la date actuelle
       const futureReservations = reservations.filter(reservation => {
@@ -53,7 +54,8 @@ export class MaintenanceEquipComponent {
             equipmentsWithDate.push({
               equipmentId: reservation.equipmentsId, // Assuré que reservation.equipmentsId est défini
               departureDate: departureDate,
-              departureHour: reservation.departHour
+              departureHour: reservation.departHour,
+              returnHour:reservation.returnHour
             });
           }
           return true; // Renvoyer true pour inclure cette réservation dans la liste des réservations futures
@@ -96,7 +98,7 @@ filterAndProcessData() {
         // Ajouter les informations de date et heure à l'équipement correspondant
         equipementCorrespondant.departDate = element.departureDate;
         equipementCorrespondant.departHour = element.departureHour;
-
+        equipementCorrespondant.returnHour = element.returnHour;
         // Stocker l'équipement dans l'objet equipmentsMap avec son ID comme clé
         equipmentsMap[element.equipmentId] = equipementCorrespondant;
       } else {

@@ -21,4 +21,5 @@ export interface Equipments{
   benefit_id?:number | null;
   departHour: string; 
   departDate:Date;
+  returnHour:string;
 }
