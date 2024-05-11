@@ -14,6 +14,10 @@ export class MaintenanceEquipComponent {
   selectedEquipment: Equipments | undefined;
   tableauResultat: { equipmentId: number , departureDate: Date, departureHour: string, returnHour: string }[] = [];
 
+  disableReservationState: boolean = false;
+disableReturned: boolean = false;
+disableTaken: boolean = false;
+
    donneesFinales: any[] = [];
     donneesEquipements: any[] = [];
   constructor(
@@ -23,11 +27,13 @@ export class MaintenanceEquipComponent {
 
   ngOnInit(): void {
     this.loadFutureReservationsAndEquipments();
+
   }
 
   loadFutureReservationsAndEquipments() {
     // Obtenir la date actuelle
     const currentDate = new Date();
+    
   
     // Récupérer toutes les réservations
     this.reservationService.getAllReservations().subscribe((reservations: Reservation[]) => {
@@ -120,19 +126,31 @@ filterAndProcessData() {
   
 }
 
-
-
-
 onFieldChange(newValue: any, fieldName: string) {
   // Stockez la nouvelle valeur avec le nom du champ modifié
   console.log('Nouvelle valeur de', fieldName, ':', newValue);
+
+  // Désactiver les autres champs si la condition est remplie
+  if (fieldName === 'maintenance_status' && ['Under maintenance', 'Damaged'].includes(newValue)) {
+    this.disableReservationState = true;
+    this.disableReturned = true;
+    this.disableTaken = true;
+  } else if (fieldName === 'state' && newValue === 'Disabled') {
+    this.disableReservationState = true;
+    this.disableReturned = true;
+    this.disableTaken = true;
+  } else {
+    // Activer tous les champs s'ils ne correspondent pas aux conditions de désactivation
+    this.disableReservationState = false;
+    this.disableReturned = false;
+    this.disableTaken = false;
+  }
+
   // Vous pouvez stocker la nouvelle valeur dans un objet ou un tableau selon vos besoins
-  
 }
+
 // Définir des variables de contrôle pour activer ou désactiver l'édition des champs
-disableReservationState: boolean = false;
-disableReturned: boolean = false;
-disableTaken: boolean = false;
+
 performAction(equipement: any) {
   // Mettez ici le code pour gérer l'action pour l'équipement spécifique
   console.log("Action performed for equipment:", equipement);
@@ -158,17 +176,8 @@ performAction(equipement: any) {
       state:equipement.equipmentData.state
       // Ajoutez d'autres caractéristiques modifiées si nécessaire
     };
-    if (equipement.equipmentData.maintenance_status === 'Under maintenance' || 
-    equipement.equipmentData.maintenance_status === 'Damaged' || 
-    equipement.equipmentData.state === 'Disabled') {
-  this.disableReservationState = true;
-  this.disableReturned = true;
-  this.disableTaken = true;
-} else {
-  this.disableReservationState = false;
-  this.disableReturned = false;
-  this.disableTaken = false;
-}
+   
+  
     // Faites quelque chose avec l'ID de l'équipement et les caractéristiques modifiées
     console.log("ID de l'équipement modifié:", equipmentId);
     console.log("Caractéristiques modifiées:", modifiedCharacteristics);

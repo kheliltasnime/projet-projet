@@ -27,16 +27,16 @@
                 <td>{{ equipement.equipmentData.type }}</td>
                 <td>{{ equipement.equipmentData.manufactuer }}</td>
                 <td>
-                  <select [(ngModel)]="equipement.equipmentData.maintenance_status" (ngModelChange)="onFieldChange($event, 'maintenanceStatus')">
+                  <select [(ngModel)]="equipement.equipmentData.maintenance_status" (ngModelChange)="onFieldChange($event, 'maintenance_status')">
                       <option [ngValue]="'Operational'" [selected]="equipement.equipmentData.maintenance_status === 'Operational'">Operational</option>
-                      <option [ngValue]="'under maintenance'" [selected]="equipement.equipmentData.maintenance_status === 'under maintenance'">Under Maintenance</option>
+                      <option [ngValue]="'Under maintenance'" [selected]="equipement.equipmentData.maintenance_status === 'Under maintenance'">Under Maintenance</option>
                       <option [ngValue]="'Damaged'" [selected]="equipement.equipmentData.maintenance_status === 'Damaged'">Damaged</option>
                   </select>
               </td>
               
                   
                   <td>
-                    <select [(ngModel)]="equipement.equipmentData.reservation_State" (ngModelChange)="onFieldChange($event, 'reservationState')"[disabled]="disableReservationState">
+                    <select [(ngModel)]="equipement.equipmentData.reservation_State" (ngModelChange)="onFieldChange($event, 'reservation_State')"[disabled]="disableReservationState">
                       <option [ngValue]="'Reserved'">Reserved</option>
                       <option [ngValue]="'Available'">Available</option>
                       <option [ngValue]="'Not Available'">Not Available</option>
