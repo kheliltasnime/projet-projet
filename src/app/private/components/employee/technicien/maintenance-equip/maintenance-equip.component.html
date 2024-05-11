@@ -13,30 +13,30 @@
             <th>Taken</th>
             <th>Quantity</th>
             <th>Equipment State</th>
-            <th>Action</th>
-            <th>Description</th>
             <th>Depart Date</th>
             <th>Depart Hour</th>
             <th>Return Date</th>
+            <th>Action</th>
+            <th>Description</th>
           </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let equipement of donneesEquipements">
-                
+            <tr *ngFor="let equipement of donneesEquipements">   
                 <td>{{ equipement.equipmentData.name }}</td>
                 <td>{{ equipement.equipmentData.model }}</td>
                 <td>{{ equipement.equipmentData.type }}</td>
                 <td>{{ equipement.equipmentData.manufactuer }}</td>
                 <td>
-                    <select [(ngModel)]="equipement.equipmentData.maintenanceStatus" (ngModelChange)="onFieldChange($event, 'maintenanceStatus')">
-                      <option [ngValue]="'Operational'">Operational</option>
-                      <option [ngValue]="'under maintenance'">Under Maintenance</option>
-                      <option [ngValue]="'Damaged'">Damaged</option>
-                    </select>
-                  </td>
+                  <select [(ngModel)]="equipement.equipmentData.maintenance_status" (ngModelChange)="onFieldChange($event, 'maintenanceStatus')">
+                      <option [ngValue]="'Operational'" [selected]="equipement.equipmentData.maintenance_status === 'Operational'">Operational</option>
+                      <option [ngValue]="'under maintenance'" [selected]="equipement.equipmentData.maintenance_status === 'under maintenance'">Under Maintenance</option>
+                      <option [ngValue]="'Damaged'" [selected]="equipement.equipmentData.maintenance_status === 'Damaged'">Damaged</option>
+                  </select>
+              </td>
+              
                   
                   <td>
-                    <select [(ngModel)]="equipement.equipmentData.reservation_State" (ngModelChange)="onFieldChange($event, 'reservationState')">
+                    <select [(ngModel)]="equipement.equipmentData.reservation_State" (ngModelChange)="onFieldChange($event, 'reservationState')"[disabled]="disableReservationState">
                       <option [ngValue]="'Reserved'">Reserved</option>
                       <option [ngValue]="'Available'">Available</option>
                       <option [ngValue]="'Not Available'">Not Available</option>
@@ -45,33 +45,45 @@
                   
                   
                   <td>
-                    <select [(ngModel)]="equipement.returned" (ngModelChange)="onFieldChange($event, 'returned')">
+                    <select [(ngModel)]="equipement.equipmentData.returned" (ngModelChange)="onFieldChange($event, 'returned')"[disabled]="disableReturned">
                       <option value="yes">yes</option>
                       <option value="Not yet">Not yet</option>
                     </select>
                   </td>
                   
                   <td>
-                    <select [(ngModel)]="equipement.taken" (ngModelChange)="onFieldChange($event, 'taken')">
+                    <select [(ngModel)]="equipement.equipmentData.taken" (ngModelChange)="onFieldChange($event, 'taken')"[disabled]="disableTaken">
                       <option value="yes">yes</option>
                       <option value="Not yet">Not yet</option>
                     </select>
                   </td>
                   <td>
+                    <button (click)="incrementQuantity(equipement)">+</button>
                     <input type="text" [(ngModel)]="equipement.equipmentData.quantity" (ngModelChange)="onFieldChange($event, 'quantity')">
+                    <button (click)="decrementQuantity(equipement)">-</button>
                   </td>
+                  
                   
               <td>{{ equipement.equipmentData.state }}</td>
-             
-            <!-- Ajoutez ici les boutons ou liens pour les actions -->
-            <td>
-                <button (click)="performAction(equipement)">Action</button>
-            </td>
-            <td></td>
+            
             <td>{{ equipement.equipmentData.departDate }}</td>
             <td>{{ equipement.equipmentData.departHour }}</td>
             <td>{{ equipement.equipmentData.returnHour }}</td>
-            <td></td>
+           
+            <td>
+              <button (click)="performAction(equipement)">Action</button>
+          </td>
+          <td>
+            <select [(ngModel)]="equipement.equipmentData.description" (ngModelChange)="onFieldChange($event, 'description')">
+                <option [ngValue]="'Returned Late'">Returned Late</option>
+                <option [ngValue]="'Returned Damaged'">Returned Damaged</option>
+                <option [ngValue]="'Returned in Good Condition'">Returned in Good Condition</option>
+                <option [ngValue]="'Returned in Good Condition'">Returned at time</option>
+                <!-- Ajoutez d'autres options de commentaire au besoin -->
+            </select>
+        </td>
+        
+        
           </tr>
         </tbody>
       </table>

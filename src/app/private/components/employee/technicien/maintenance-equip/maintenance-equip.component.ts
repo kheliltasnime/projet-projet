@@ -66,10 +66,11 @@ export class MaintenanceEquipComponent {
   
       this.tableauResultat = equipmentsWithDate; // Mise à jour de tableauResultat avec les données filtrées
 
-  
-
-    // Afficher le tableau résultat
+// Afficher le tableau résultat
     console.log("tableauResultat",this.tableauResultat);
+
+
+
     this.equipmentService.getAllEquipments().subscribe((equipments: Equipments[]) => {
       console.log('Tous les équipements:', equipments);
       
@@ -99,6 +100,7 @@ filterAndProcessData() {
         equipementCorrespondant.departDate = element.departureDate;
         equipementCorrespondant.departHour = element.departureHour;
         equipementCorrespondant.returnHour = element.returnHour;
+
         // Stocker l'équipement dans l'objet equipmentsMap avec son ID comme clé
         equipmentsMap[element.equipmentId] = equipementCorrespondant;
       } else {
@@ -115,9 +117,8 @@ filterAndProcessData() {
 
   // Afficher les données finales
   console.log("donne", this.donneesEquipements);
+  
 }
-
-
 
 
 
@@ -128,11 +129,99 @@ onFieldChange(newValue: any, fieldName: string) {
   // Vous pouvez stocker la nouvelle valeur dans un objet ou un tableau selon vos besoins
   
 }
-
+// Définir des variables de contrôle pour activer ou désactiver l'édition des champs
+disableReservationState: boolean = false;
+disableReturned: boolean = false;
+disableTaken: boolean = false;
 performAction(equipement: any) {
   // Mettez ici le code pour gérer l'action pour l'équipement spécifique
   console.log("Action performed for equipment:", equipement);
+
+  // Trouver l'index de l'équipement dans donneesEquipements
+  const index = this.donneesEquipements.findIndex((e: any) => e.equipmentId === equipement.equipmentId);
+
+  // Vérifier si l'index est valide
+  if (index !== -1) {
+    // Stocker l'ID de l'équipement
+    const equipmentId = equipement.equipmentId;
+
+    // Stocker les caractéristiques modifiées
+    const modifiedCharacteristics = {
+      // Ajoutez ici les caractéristiques modifiées que vous souhaitez stocker
+      // Par exemple, si vous souhaitez stocker la quantité modifiée
+      quantity: equipement.equipmentData.quantity,
+      maintenance_status:equipement.equipmentData.maintenance_status,
+      description:equipement.equipmentData.description,
+      reservation_State:equipement.equipmentData.reservation_State,
+      returned:equipement.equipmentData.returned,
+      taken:equipement.equipmentData.taken,
+      state:equipement.equipmentData.state
+      // Ajoutez d'autres caractéristiques modifiées si nécessaire
+    };
+    if (equipement.equipmentData.maintenance_status === 'Under maintenance' || 
+    equipement.equipmentData.maintenance_status === 'Damaged' || 
+    equipement.equipmentData.state === 'Disabled') {
+  this.disableReservationState = true;
+  this.disableReturned = true;
+  this.disableTaken = true;
+} else {
+  this.disableReservationState = false;
+  this.disableReturned = false;
+  this.disableTaken = false;
 }
+    // Faites quelque chose avec l'ID de l'équipement et les caractéristiques modifiées
+    console.log("ID de l'équipement modifié:", equipmentId);
+    console.log("Caractéristiques modifiées:", modifiedCharacteristics);
+  } else {
+    console.error("ID d'équipement non trouvé dans donneesEquipements.");
+  }
+  console.log("equiiiiiiiiiiiii",equipement.equipmentData);
+  this.equipmentService.editEquipment(equipement.equipmentId, equipement.equipmentData).subscribe(response => {
+    console.log('Mise à jour réussie', response);
+}, error => {
+    console.error('Erreur lors de la mise à jour', error);
+});
+}
+
+incrementQuantity(equipement: any) {
+  equipement.equipmentData.quantity++;
+}
+
+decrementQuantity(equipement: any) {
+  if (equipement.equipmentData.quantity > 0) {
+    equipement.equipmentData.quantity--;
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
