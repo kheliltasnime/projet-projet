@@ -2,9 +2,6 @@
 
 import { Rooms } from 'src/app/private/model/rooms';
 import { RoomsService } from 'src/app/private/services/rooms.service';
-
-
-
 import { Component ,OnInit} from '@angular/core';
 
 import { PopuupComponent } from 'src/app/popuup/popuup/popuup.component';
@@ -54,9 +51,6 @@ export class RoomsComponent implements OnInit {
       });
     }console.log('Filtered equipment List:', this.filteredRoomsList);
   }
-
-
-
 
   displayRooms() {
     this.RoomsService.getAllRooms().subscribe((res) => {

@@ -23,7 +23,9 @@ export class PopupComponent implements OnInit {
     state: '',
     category: '',
     subcategory: '',
-    benefit_id:7
+    benefit_id:7, 
+    departDate:new Date(), 
+    departHour:''
   };
   
   equipmentId!: number;

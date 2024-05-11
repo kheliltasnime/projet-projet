@@ -12,7 +12,7 @@ import { Reservation } from 'src/app/private/model/reservation';
 export class MaintenanceEquipComponent {
   equipments: Equipments[] = [];
   selectedEquipment: Equipments | undefined;
-  tableauResultat: { equipmentId: number | null, departureDate: Date, departureHour: string }[] = [];
+  tableauResultat: { equipmentId: number , departureDate: Date, departureHour: string }[] = [];
    donneesFinales: any[] = [];
     donneesEquipements: any[] = [];
   constructor(
@@ -62,14 +62,8 @@ export class MaintenanceEquipComponent {
         }
       });
   
-      console.log('Équipements avec leur date de départ et heures:', equipmentsWithDate);
-      equipmentsWithDate.forEach((element) => {
-        this.tableauResultat.push({
-            equipmentId: element.equipmentId,
-            departureDate: element.departureDate,
-            departureHour: element.departureHour
-        });
-    });
+      this.tableauResultat = equipmentsWithDate; // Mise à jour de tableauResultat avec les données filtrées
+
   
 
     // Afficher le tableau résultat
@@ -88,33 +82,43 @@ console.log(this.equipments);
 }
 // Déclaration d'un tableau pour stocker les données d'équipements correspondantes
 filterAndProcessData() {
-  // Filtrer les éléments de tableauResultat qui ont un ID d'équipement défini
-  const elementsAvecID = this.tableauResultat.filter(element => element.equipmentId !== null);
-  console.log("elemm", elementsAvecID);
-
   const equipmentsMap: { [key: number]: Equipments } = {};
 
-  // Pour chaque ID d'équipement défini, trouver l'équipement correspondant dans la table equipments
-  elementsAvecID.forEach(element => {
-      if (element.equipmentId !== null) {
-        // Trouver l'équipement correspondant dans la table equipments
-        const equipementCorrespondant = this.equipments.find(equipement => equipement.id === element.equipmentId);
+  // Pour chaque élément de tableauResultat, trouver l'équipement correspondant dans la table equipments
+  this.tableauResultat.forEach(element => {
+    // Vérifier si l'équipement a déjà été ajouté à equipmentsMap
+    if (!equipmentsMap[element.equipmentId]) {
+      // Trouver l'équipement correspondant dans la table equipments
+      const equipementCorrespondant = this.equipments.find(equipement => equipement.id === element.equipmentId);
 
-        // Vérifier si l'équipement correspondant a été trouvé
-        if (equipementCorrespondant) {
-          // Stocker l'équipement dans l'objet equipmentsMap avec son ID comme clé
-          equipmentsMap[element.equipmentId] = equipementCorrespondant;
-        } else {
-      console.log(`L'équipement avec l'ID ${element.equipmentId} n'a pas été trouvé dans la table equipments.`);
-    }}
+      // Vérifier si l'équipement correspondant a été trouvé
+      if (equipementCorrespondant) {
+        // Ajouter les informations de date et heure à l'équipement correspondant
+        equipementCorrespondant.departDate = element.departureDate;
+        equipementCorrespondant.departHour = element.departureHour;
+
+        // Stocker l'équipement dans l'objet equipmentsMap avec son ID comme clé
+        equipmentsMap[element.equipmentId] = equipementCorrespondant;
+      } else {
+        console.log(`L'équipement avec l'ID ${element.equipmentId} n'a pas été trouvé dans la table equipments.`);
+      }
+    }
   });
+
+  // Créer un tableau de données d'équipements enrichi avec les dates de départ
   this.donneesEquipements = Object.keys(equipmentsMap).map(key => ({
     equipmentId: parseInt(key),
     equipmentData: equipmentsMap[parseInt(key)]
   }));
+
   // Afficher les données finales
   console.log("donne", this.donneesEquipements);
 }
+
+
+
+
+
 
 onFieldChange(newValue: any, fieldName: string) {
   // Stockez la nouvelle valeur avec le nom du champ modifié
@@ -127,8 +131,6 @@ performAction(equipement: any) {
   // Mettez ici le code pour gérer l'action pour l'équipement spécifique
   console.log("Action performed for equipment:", equipement);
 }
-
-
 
 
 

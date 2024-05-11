@@ -62,12 +62,14 @@
                   </td>
                   
               <td>{{ equipement.equipmentData.state }}</td>
+             
             <!-- Ajoutez ici les boutons ou liens pour les actions -->
             <td>
                 <button (click)="performAction(equipement)">Action</button>
             </td>
             <td></td>
-            <td></td>
+            <td>{{ equipement.equipmentData.departDate }}</td>
+            <td>{{ equipement.equipmentData.departHour }}</td>
             <td></td>
             <td></td>
           </tr>

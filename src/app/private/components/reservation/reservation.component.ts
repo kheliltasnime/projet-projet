@@ -232,7 +232,6 @@ chooseDateFirst(): void {
     }
   }
   
-  
   onSubmit() {
     if (!this.reservationService.checkedItems.length) {
      
