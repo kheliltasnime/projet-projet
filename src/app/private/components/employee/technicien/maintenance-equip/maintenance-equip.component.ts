@@ -24,9 +24,6 @@ export class MaintenanceEquipComponent {
     this.loadFutureReservationsAndEquipments();
   }
 
-
-
-  
   loadFutureReservationsAndEquipments() {
     // Obtenir la date actuelle
     const currentDate = new Date();
@@ -82,7 +79,7 @@ export class MaintenanceEquipComponent {
       
       // Stockez les équipements dans la variable de classe equipments
       this.equipments = equipments;
-
+console.log(this.equipments);
       // Appeler la méthode pour filtrer et traiter les données
       this.filterAndProcessData();// Vous pouvez maintenant utiliser la liste equipmentsWithDate pour stocker ou manipuler les données comme nécessaire
     });
@@ -95,30 +92,44 @@ filterAndProcessData() {
   const elementsAvecID = this.tableauResultat.filter(element => element.equipmentId !== null);
   console.log("elemm", elementsAvecID);
 
+  const equipmentsMap: { [key: number]: Equipments } = {};
+
   // Pour chaque ID d'équipement défini, trouver l'équipement correspondant dans la table equipments
   elementsAvecID.forEach(element => {
-    // Trouver l'équipement correspondant dans la table equipments
-    const equipementCorrespondant = this.equipments.find(equipement => equipement.id === element.equipmentId);
+      if (element.equipmentId !== null) {
+        // Trouver l'équipement correspondant dans la table equipments
+        const equipementCorrespondant = this.equipments.find(equipement => equipement.id === element.equipmentId);
 
-    // Vérifier si l'équipement cor respondant a été trouvé
-    if (equipementCorrespondant) {
-      // Ajouter les données de l'équipement correspondant au tableau de données d'équipements
-      this.donneesEquipements.push({
-        equipmentId: element.equipmentId,
-        equipmentData: equipementCorrespondant
-      });
-
-      // Mettre à jour les données finales
-      this.donneesFinales.push({
-        equipmentId: element.equipmentId,
-        equipmentData: equipementCorrespondant
-      });
-    } else {
+        // Vérifier si l'équipement correspondant a été trouvé
+        if (equipementCorrespondant) {
+          // Stocker l'équipement dans l'objet equipmentsMap avec son ID comme clé
+          equipmentsMap[element.equipmentId] = equipementCorrespondant;
+        } else {
       console.log(`L'équipement avec l'ID ${element.equipmentId} n'a pas été trouvé dans la table equipments.`);
-    }
+    }}
   });
-
+  this.donneesEquipements = Object.keys(equipmentsMap).map(key => ({
+    equipmentId: parseInt(key),
+    equipmentData: equipmentsMap[parseInt(key)]
+  }));
   // Afficher les données finales
   console.log("donne", this.donneesEquipements);
 }
+
+onFieldChange(newValue: any, fieldName: string) {
+  // Stockez la nouvelle valeur avec le nom du champ modifié
+  console.log('Nouvelle valeur de', fieldName, ':', newValue);
+  // Vous pouvez stocker la nouvelle valeur dans un objet ou un tableau selon vos besoins
+  
+}
+
+performAction(equipement: any) {
+  // Mettez ici le code pour gérer l'action pour l'équipement spécifique
+  console.log("Action performed for equipment:", equipement);
+}
+
+
+
+
+
 }

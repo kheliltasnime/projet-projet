@@ -1,0 +1,49 @@
+/* Style pour le tableau */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  /* Style pour les cellules du tableau */
+  td, th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  /* Style pour les en-têtes du tableau */
+  th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #3498db; /* Couleur bleue */
+    color: #fff; /* Texte en blanc */
+  }
+  
+  /* Style pour les lignes impaires du tableau */
+  tr:nth-child(odd) {
+    background-color: #ecf0f1; /* Couleur de fond gris clair */
+  }
+  
+  /* Style pour les options du select */
+  select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #3498db; /* Bordure bleue */
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  /* Style pour les cellules du tableau avec selects */
+  td select {
+    width: 100%;
+  }
+  
+  /* Style pour les boutons ou liens pour les actions */
+  .actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Ajoutez vos autres styles ici */
+  

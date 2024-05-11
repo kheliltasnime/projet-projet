@@ -14,42 +14,62 @@
             <th>Quantity</th>
             <th>Equipment State</th>
             <th>Action</th>
+            <th>Description</th>
+            <th>Depart Date</th>
+            <th>Depart Hour</th>
+            <th>Return Date</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let equipment of equipments">
-            <td>{{ equipment.name }}</td>
-            <td>{{ equipment.model }}</td>
-            <td>{{ equipment.type }}</td>
-            <td>{{ equipment.manufactuer }}</td>
-            <td>{{ equipment.maintenance_status }}</td>
-            <td>
-                <select [(ngModel)]="equipment.reservation_State">
-                  <option value="Reserved">Reserved</option>
-                  <option value="Available">Available</option>
-                  <option value="Not Available">Not Available</option>
-                </select>
-              </td>
-              <td>
-                <select [(ngModel)]="equipment.returned">
-                  <option value="Reserved">yes</option>
-                  <option value="Available">Not yet</option>
-                </select>
-              </td>
-              <td>
-                <select [(ngModel)]="equipment.taken">
-                  <option value="Reserved">yes</option>
-                  <option value="Available">Not yet</option>
-                </select>
-              </td>
-              <td>
-                {{ equipment.quantity !== undefined ? equipment.quantity : 'N/A' }}
-              </td>
-            <td>{{ equipment.state }}</td>
+            <tr *ngFor="let equipement of donneesEquipements">
+                
+                <td>{{ equipement.equipmentData.name }}</td>
+                <td>{{ equipement.equipmentData.model }}</td>
+                <td>{{ equipement.equipmentData.type }}</td>
+                <td>{{ equipement.equipmentData.manufactuer }}</td>
+                <td>
+                    <select [(ngModel)]="equipement.equipmentData.maintenanceStatus" (ngModelChange)="onFieldChange($event, 'maintenanceStatus')">
+                      <option [ngValue]="'Operational'">Operational</option>
+                      <option [ngValue]="'under maintenance'">Under Maintenance</option>
+                      <option [ngValue]="'Damaged'">Damaged</option>
+                    </select>
+                  </td>
+                  
+                  <td>
+                    <select [(ngModel)]="equipement.equipmentData.reservation_State" (ngModelChange)="onFieldChange($event, 'reservationState')">
+                      <option [ngValue]="'Reserved'">Reserved</option>
+                      <option [ngValue]="'Available'">Available</option>
+                      <option [ngValue]="'Not Available'">Not Available</option>
+                    </select>
+                  </td>
+                  
+                  
+                  <td>
+                    <select [(ngModel)]="equipement.returned" (ngModelChange)="onFieldChange($event, 'returned')">
+                      <option value="yes">yes</option>
+                      <option value="Not yet">Not yet</option>
+                    </select>
+                  </td>
+                  
+                  <td>
+                    <select [(ngModel)]="equipement.taken" (ngModelChange)="onFieldChange($event, 'taken')">
+                      <option value="yes">yes</option>
+                      <option value="Not yet">Not yet</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text" [(ngModel)]="equipement.equipmentData.quantity" (ngModelChange)="onFieldChange($event, 'quantity')">
+                  </td>
+                  
+              <td>{{ equipement.equipmentData.state }}</td>
             <!-- Ajoutez ici les boutons ou liens pour les actions -->
             <td>
-              <!-- Ajoutez ici les boutons ou liens pour les actions -->
+                <button (click)="performAction(equipement)">Action</button>
             </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
           </tr>
         </tbody>
       </table>
