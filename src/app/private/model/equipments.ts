@@ -22,4 +22,12 @@ export interface Equipments{
   departHour: string; 
   departDate:Date;
   returnHour:string;
+  
+
+
+
+  disabledReservationState?: boolean;
+  disabledReturned?: boolean;
+  disabledTaken?: boolean;
+  disabledDescription?: boolean;
 }

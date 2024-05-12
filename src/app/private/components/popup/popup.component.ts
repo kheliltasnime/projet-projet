@@ -26,7 +26,8 @@ export class PopupComponent implements OnInit {
     benefit_id:7, 
     departDate:new Date(), 
     departHour:'',
-    returnHour:''
+    returnHour:'',
+    
   };
   
   equipmentId!: number;
