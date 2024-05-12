@@ -1,92 +1,80 @@
 <div class="container">
-    <div class="table-responsive">
-      <table class="table table-bordered table-hover">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Model</th>
-            <th>Type</th>
-            <th>Manufacturer</th>
-            <th>Maintenance Status</th>
-            <th>Reservation State</th>
-            <th>Returned</th>
-            <th>Taken</th>
-            <th>Quantity</th>
-            <th>Equipment State</th>
-            <th>Depart Date</th>
-            <th>Depart Hour</th>
-            <th>Return Date</th>
-            <th>Action</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let equipement of donneesEquipements">   
-                <td>{{ equipement.equipmentData.name }}</td>
-                <td>{{ equipement.equipmentData.model }}</td>
-                <td>{{ equipement.equipmentData.type }}</td>
-                <td>{{ equipement.equipmentData.manufactuer }}</td>
-                <td>
-                  <select [(ngModel)]="equipement.equipmentData.maintenance_status" (ngModelChange)="onFieldChange($event, 'maintenance_status')">
-                      <option [ngValue]="'Operational'" [selected]="equipement.equipmentData.maintenance_status === 'Operational'">Operational</option>
-                      <option [ngValue]="'Under maintenance'" [selected]="equipement.equipmentData.maintenance_status === 'Under maintenance'">Under Maintenance</option>
-                      <option [ngValue]="'Damaged'" [selected]="equipement.equipmentData.maintenance_status === 'Damaged'">Damaged</option>
-                  </select>
-              </td>
-              
-                  
-                  <td>
-                    <select [(ngModel)]="equipement.equipmentData.reservation_State" (ngModelChange)="onFieldChange($event, 'reservation_State')"[disabled]="disableReservationState">
-                      <option [ngValue]="'Reserved'">Reserved</option>
-                      <option [ngValue]="'Available'">Available</option>
-                      <option [ngValue]="'Not Available'">Not Available</option>
-                    </select>
-                  </td>
-                  
-                  
-                  <td>
-                    <select [(ngModel)]="equipement.equipmentData.returned" (ngModelChange)="onFieldChange($event, 'returned')"[disabled]="disableReturned">
-                      <option value="yes">yes</option>
-                      <option value="Not yet">Not yet</option>
-                    </select>
-                  </td>
-                  
-                  <td>
-                    <select [(ngModel)]="equipement.equipmentData.taken" (ngModelChange)="onFieldChange($event, 'taken')"[disabled]="disableTaken">
-                      <option value="yes">yes</option>
-                      <option value="Not yet">Not yet</option>
-                    </select>
-                  </td>
-                  <td>
-                    <button (click)="incrementQuantity(equipement)">+</button>
-                    <input type="text" [(ngModel)]="equipement.equipmentData.quantity" (ngModelChange)="onFieldChange($event, 'quantity')">
-                    <button (click)="decrementQuantity(equipement)">-</button>
-                  </td>
-                  
-                  
-              <td>{{ equipement.equipmentData.state }}</td>
-            
-            <td>{{ equipement.equipmentData.departDate }}</td>
-            <td>{{ equipement.equipmentData.departHour }}</td>
-            <td>{{ equipement.equipmentData.returnHour }}</td>
-           
-            <td>
-              <button (click)="performAction(equipement)">Action</button>
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Model</th>
+          <th>Type</th>
+          <th>Manufactuer</th>
+          <th>Maintenance Status</th>
+          <th>Reservation State</th>
+          <th>Returned</th>
+          <th>Taken</th>
+          <th>Quantity</th>
+          <th>Equipment State</th>
+          <th>Depart Date</th>
+          <th>Depart Hour</th>
+          <th>Return Hour</th>
+          <th>Action</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let equipmentData of FinalEquipmentData">   
+          <td>{{ equipmentData.equipmentData.name }}</td>
+          <td>{{ equipmentData.equipmentData.model }}</td>
+          <td>{{ equipmentData.equipmentData.type }}</td>
+          <td>{{ equipmentData.equipmentData.manufactuer }}</td>
+          <td>
+            <select [(ngModel)]="equipmentData.equipmentData.maintenance_status" (ngModelChange)="onFieldChange($event, 'maintenance_status')">
+              <option [ngValue]="'Operational'" [selected]="equipmentData.equipmentData.maintenance_status === 'Operational'">Operational</option>
+              <option [ngValue]="'Under maintenance'" [selected]="equipmentData.equipmentData.maintenance_status === 'Under maintenance'">Under Maintenance</option>
+              <option [ngValue]="'Damaged'" [selected]="equipmentData.equipmentData.maintenance_status === 'Damaged'">Damaged</option>
+            </select>
           </td>
           <td>
-            <select [(ngModel)]="equipement.equipmentData.description" (ngModelChange)="onFieldChange($event, 'description')">
-                <option [ngValue]="'Returned Late'">Returned Late</option>
-                <option [ngValue]="'Returned Damaged'">Returned Damaged</option>
-                <option [ngValue]="'Returned in Good Condition'">Returned in Good Condition</option>
-                <option [ngValue]="'Returned in Good Condition'">Returned at time</option>
-                <!-- Ajoutez d'autres options de commentaire au besoin -->
+            <select [(ngModel)]="equipmentData.equipmentData.reservation_State" (ngModelChange)="onFieldChange($event, 'reservation_State')" [disabled]="disableReservationState">
+              <option [ngValue]="'Reserved'">Reserved</option>
+              <option [ngValue]="'Available'">Available</option>
+              <option [ngValue]="'Not Available'">Not Available</option>
             </select>
-        </td>
-        
-        
-          </tr>
-        </tbody>
-      </table>
-    </div>
+          </td>
+          <td>
+            <select [(ngModel)]="equipmentData.equipmentData.returned" (ngModelChange)="onFieldChange($event, 'returned')" [disabled]="disableReturned">
+              <option value="yes">yes</option>
+              <option value="Not yet">Not yet</option>
+            </select>
+          </td>
+          <td>
+            <select [(ngModel)]="equipmentData.equipmentData.taken" (ngModelChange)="onFieldChange($event, 'taken')" [disabled]="disableTaken">
+              <option value="yes">yes</option>
+              <option value="Not yet">Not yet</option>
+            </select>
+          </td>
+          <td>
+            <button (click)="incrementQuantity(equipmentData)">+</button>
+            <input type="text" [(ngModel)]="equipmentData.equipmentData.quantity" (ngModelChange)="onFieldChange($event, 'quantity')">
+            <button (click)="decrementQuantity(equipmentData)">-</button>
+          </td>
+          <td>{{ equipmentData.equipmentData.state }}</td>
+          <td>{{ equipmentData.date | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ equipmentData.departureTime }}</td>
+          <td>{{ equipmentData.returnTime }}</td>
+          <td>
+            <button (click)="performAction(equipmentData)">Action</button>
+          </td>
+          <td>
+            <select [(ngModel)]="equipmentData.equipmentData.description" (ngModelChange)="onFieldChange($event, 'description')">
+              <option [ngValue]="'Returned Late'">Returned Late</option>
+              <option [ngValue]="'Returned Damaged'">Returned Damaged</option>
+              <option [ngValue]="'Returned in Good Condition'">Returned in Good Condition</option>
+              <option [ngValue]="'Returned at time'">Returned at time</option>
+              <!-- Ajoutez d'autres options de commentaire au besoin -->
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  
+</div>

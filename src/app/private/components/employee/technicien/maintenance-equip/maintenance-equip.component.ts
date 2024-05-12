@@ -14,10 +14,21 @@ export class MaintenanceEquipComponent {
   selectedEquipment: Equipments | undefined;
   tableauResultat: { equipmentId: number , departureDate: Date, departureHour: string, returnHour: string }[] = [];
 
+
+  equipmentsWithDate: { equipmentId: number, departureDate: Date, departureHour: string, returnHour:string }[] = [];
+
+  FinalEquipmentData: {
+    equipmentId: number;
+    date: Date;
+    departureTime: string; // Ajout de l'heure de départ
+    returnTime: string; // Ajout de l'heure de retour
+    equipmentData: any;
+  }[]=[];
+
   disableReservationState: boolean = false;
 disableReturned: boolean = false;
 disableTaken: boolean = false;
-
+disableDescription:boolean=false;
    donneesFinales: any[] = [];
     donneesEquipements: any[] = [];
   constructor(
@@ -40,7 +51,7 @@ disableTaken: boolean = false;
       console.log('Toutes les réservations:', reservations);
   
       // Liste pour stocker les ID des équipements avec leur date de départ et heures
-      const equipmentsWithDate: { equipmentId: number, departureDate: Date, departureHour: string,returnHour:string }[] = [];
+     // const equipmentsWithDate: { equipmentId: number, departureDate: Date, departureHour: string,returnHour:string }[] = [];
   
       // Filtrer les réservations à partir de la date actuelle
       const futureReservations = reservations.filter(reservation => {
@@ -57,20 +68,23 @@ disableTaken: boolean = false;
           // Vérifier si equipmentId est défini avant de l'ajouter à la liste
           if (reservation.equipmentsId !== undefined) {
             // Stocker l'ID de l'équipement avec sa date de départ et heure de départ dans la liste
-            equipmentsWithDate.push({
+            this.equipmentsWithDate.push({
               equipmentId: reservation.equipmentsId, // Assuré que reservation.equipmentsId est défini
               departureDate: departureDate,
               departureHour: reservation.departHour,
-              returnHour:reservation.returnHour
+              returnHour:reservation.returnHour,
+              
             });
-          }
+          } 
           return true; // Renvoyer true pour inclure cette réservation dans la liste des réservations futures
         } else {
           return false; // Renvoyer false pour exclure cette réservation de la liste des réservations futures
         }
       });
   
-      this.tableauResultat = equipmentsWithDate; // Mise à jour de tableauResultat avec les données filtrées
+      this.tableauResultat = this.equipmentsWithDate; // Mise à jour de tableauResultat avec les données filtrées
+
+      
 
 // Afficher le tableau résultat
     console.log("tableauResultat",this.tableauResultat);
@@ -83,47 +97,67 @@ disableTaken: boolean = false;
       // Stockez les équipements dans la variable de classe equipments
       this.equipments = equipments;
 console.log(this.equipments);
+
+/*
+const isDamagedOrUnderMaintenance = this.equipments.some(equipment => ['Damaged', 'Under maintenance'].includes(equipment.maintenance_status!));
+this.disableReservationState = isDamagedOrUnderMaintenance;
+this.disableReturned = isDamagedOrUnderMaintenance;
+this.disableTaken = isDamagedOrUnderMaintenance;
+this.disableDescription = isDamagedOrUnderMaintenance;*/
+
+const isOperational = this.equipments.every(equipment => equipment.maintenance_status === 'Operational');
+if (isOperational) {
+  this.disableReservationState = false;
+  this.disableReturned = false;
+  this.disableTaken = false;
+  this.disableDescription = false;
+} else {
+  this.disableReservationState = true;
+  this.disableReturned = true;
+  this.disableTaken = true;
+  this.disableDescription = true;
+}
       // Appeler la méthode pour filtrer et traiter les données
       this.filterAndProcessData();// Vous pouvez maintenant utiliser la liste equipmentsWithDate pour stocker ou manipuler les données comme nécessaire
     });
   });
   // Déclaration d'un tableau pour stocker les données finales
 }
-// Déclaration d'un tableau pour stocker les données d'équipements correspondantes
+
+
 filterAndProcessData() {
-  const equipmentsMap: { [key: number]: Equipments } = {};
-
-  // Pour chaque élément de tableauResultat, trouver l'équipement correspondant dans la table equipments
+  // Tableau pour stocker les données finales
+  // Parcourir chaque élément de tableauResultat
   this.tableauResultat.forEach(element => {
-    // Vérifier si l'équipement a déjà été ajouté à equipmentsMap
-    if (!equipmentsMap[element.equipmentId]) {
-      // Trouver l'équipement correspondant dans la table equipments
-      const equipementCorrespondant = this.equipments.find(equipement => equipement.id === element.equipmentId);
+    // Extraire l'ID de l'équipement
+    const equipmentId = element.equipmentId;
 
-      // Vérifier si l'équipement correspondant a été trouvé
-      if (equipementCorrespondant) {
-        // Ajouter les informations de date et heure à l'équipement correspondant
-        equipementCorrespondant.departDate = element.departureDate;
-        equipementCorrespondant.departHour = element.departureHour;
-        equipementCorrespondant.returnHour = element.returnHour;
+    // Vérifier si l'ID de l'équipement est défini
+    if (equipmentId !== null) {
+      const date = element.departureDate;
+      const departureTime = element.departureHour;
+      const returnTime = element.returnHour;
 
-        // Stocker l'équipement dans l'objet equipmentsMap avec son ID comme clé
-        equipmentsMap[element.equipmentId] = equipementCorrespondant;
-      } else {
-        console.log(`L'équipement avec l'ID ${element.equipmentId} n'a pas été trouvé dans la table equipments.`);
+      // Rechercher les données de l'équipement correspondant à cet ID, à cette date et à cette heure
+      const equipmentDataForId = this.equipments.find(equipment => equipment.id === equipmentId );
+
+      // Vérifier si des données ont été trouvées
+      if (equipmentDataForId) {
+        // Ajouter les données trouvées au tableau final
+        this.FinalEquipmentData.push({
+          equipmentId: equipmentId,
+          date: date,
+          departureTime: departureTime,
+          returnTime: returnTime,
+          equipmentData: equipmentDataForId
+        });
       }
     }
   });
-
-  // Créer un tableau de données d'équipements enrichi avec les dates de départ
-  this.donneesEquipements = Object.keys(equipmentsMap).map(key => ({
-    equipmentId: parseInt(key),
-    equipmentData: equipmentsMap[parseInt(key)]
-  }));
+  this.FinalEquipmentData.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
   // Afficher les données finales
-  console.log("donne", this.donneesEquipements);
-  
+  console.log("finalEquipmentData", this.FinalEquipmentData);
 }
 
 onFieldChange(newValue: any, fieldName: string) {
@@ -135,15 +169,18 @@ onFieldChange(newValue: any, fieldName: string) {
     this.disableReservationState = true;
     this.disableReturned = true;
     this.disableTaken = true;
+    this.disableDescription=true;
   } else if (fieldName === 'state' && newValue === 'Disabled') {
     this.disableReservationState = true;
     this.disableReturned = true;
     this.disableTaken = true;
+    this.disableDescription=true;
   } else {
     // Activer tous les champs s'ils ne correspondent pas aux conditions de désactivation
     this.disableReservationState = false;
     this.disableReturned = false;
     this.disableTaken = false;
+    this.disableDescription=false;
   }
 
   // Vous pouvez stocker la nouvelle valeur dans un objet ou un tableau selon vos besoins
@@ -153,8 +190,12 @@ onFieldChange(newValue: any, fieldName: string) {
 
 performAction(equipement: any) {
   // Mettez ici le code pour gérer l'action pour l'équipement spécifique
-  console.log("Action performed for equipment:", equipement);
-
+  const confirmation = window.confirm("Are you sure you want to perform this action?");
+  
+  // Vérifier si l'utilisateur a confirmé
+  if (confirmation) {
+    // Mettez ici le code pour gérer l'action pour l'équipement spécifique
+    console.log("Action performed for equipment:", equipement);
   // Trouver l'index de l'équipement dans donneesEquipements
   const index = this.donneesEquipements.findIndex((e: any) => e.equipmentId === equipement.equipmentId);
 
@@ -190,7 +231,7 @@ performAction(equipement: any) {
 }, error => {
     console.error('Erreur lors de la mise à jour', error);
 });
-}
+}}
 
 incrementQuantity(equipement: any) {
   equipement.equipmentData.quantity++;
