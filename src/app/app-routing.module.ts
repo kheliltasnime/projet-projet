@@ -18,6 +18,7 @@ import { LoginComponent } from './private/components/login/login/login.component
 import { TechnicienComponent } from './private/components/employee/technicien/technicien.component';
 import { MaintenanceEquipComponent } from './private/components/employee/technicien/maintenance-equip/maintenance-equip.component';
 import { MaintenanceRoomComponent } from './private/components/employee/technicien/maintenance-room/maintenance-room.component';
+import { DataserviceComponent } from './data/dataservice/dataservice.component';
 const routes: Routes = [
   {
     path: 'employee',
@@ -105,6 +106,11 @@ const routes: Routes = [
     path:'technicien/maintenance-room',
     component:MaintenanceRoomComponent,
   },
+  {
+    path:'data',
+    component:DataserviceComponent,
+  },
+  
   
 ];
 

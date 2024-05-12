@@ -45,6 +45,7 @@ import { LoginComponent } from './private/components/login/login/login.component
 import { TechnicienComponent } from './private/components/employee/technicien/technicien.component';
 import { MaintenanceEquipComponent } from './private/components/employee/technicien/maintenance-equip/maintenance-equip.component';
 import { MaintenanceRoomComponent } from './private/components/employee/technicien/maintenance-room/maintenance-room.component';
+import { DataserviceComponent } from './data/dataservice/dataservice.component';
 
 
 
@@ -83,6 +84,7 @@ class CustomDateFormatter extends CalendarNativeDateFormatter{
     TechnicienComponent,
     MaintenanceEquipComponent,
     MaintenanceRoomComponent,
+    DataserviceComponent,
   
    
   ],
