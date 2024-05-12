@@ -7,17 +7,20 @@
           <th>Model</th>
           <th>Type</th>
           <th>Manufactuer</th>
+          <th>Quantity</th>
+          <th>Depart Date</th>
+          <th>Depart Hour</th>
+          <th>Return Hour</th>
           <th>Maintenance Status</th>
           <th>Reservation State</th>
           <th>Returned</th>
           <th>Taken</th>
-          <th>Quantity</th>
+         
           <th>Equipment State</th>
-          <th>Depart Date</th>
-          <th>Depart Hour</th>
-          <th>Return Hour</th>
-          <th>Action</th>
+         
           <th>Description</th>
+          <th>Action</th>
+         
         </tr>
       </thead>
       <tbody>
@@ -26,6 +29,14 @@
           <td>{{ equipmentData.equipmentData.model }}</td>
           <td>{{ equipmentData.equipmentData.type }}</td>
           <td>{{ equipmentData.equipmentData.manufactuer }}</td>
+          <td>
+            <button (click)="incrementQuantity(equipmentData)">+</button>
+            <input type="text" [(ngModel)]="equipmentData.equipmentData.quantity" (ngModelChange)="onFieldChange($event, 'quantity')">
+            <button (click)="decrementQuantity(equipmentData)">-</button>
+          </td>
+          <td>{{ equipmentData.date | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ equipmentData.departureTime }}</td>
+          <td>{{ equipmentData.returnTime }}</td>
           <td>
             <select [(ngModel)]="equipmentData.equipmentData.maintenance_status" (ngModelChange)="onFieldChange($event, 'maintenance_status')">
               <option [ngValue]="'Operational'" [selected]="equipmentData.equipmentData.maintenance_status === 'Operational'">Operational</option>
@@ -52,11 +63,7 @@
               <option value="Not yet">Not yet</option>
             </select>
           </td>
-          <td>
-            <button (click)="incrementQuantity(equipmentData)">+</button>
-            <input type="text" [(ngModel)]="equipmentData.equipmentData.quantity" (ngModelChange)="onFieldChange($event, 'quantity')">
-            <button (click)="decrementQuantity(equipmentData)">-</button>
-          </td>
+        
         
 
           <td>
@@ -68,12 +75,7 @@
           </td>
 
 
-          <td>{{ equipmentData.date | date: 'dd/MM/yyyy' }}</td>
-          <td>{{ equipmentData.departureTime }}</td>
-          <td>{{ equipmentData.returnTime }}</td>
-          <td>
-            <button (click)="performAction(equipmentData)">Update</button>
-          </td>
+        
           <td>
             <select [(ngModel)]="equipmentData.equipmentData.description" (ngModelChange)="onFieldChange($event, 'description')">
               <option [ngValue]="'Returned Late'">Returned Late</option>
@@ -83,6 +85,10 @@
               <!-- Ajoutez d'autres options de commentaire au besoin -->
             </select>
           </td>
+          <td>
+            <button (click)="performAction(equipmentData)">Update</button>
+          </td>
+        
         </tr>
       </tbody>
     </table>

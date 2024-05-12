@@ -70,26 +70,8 @@ disableDescription:boolean=false;
         if (reservation.equipmentsId !== null  && reservation.equipmentsId !== undefined) {
           this.equipmentService.getEquipmentsById(reservation.equipmentsId).subscribe((equipment: Equipments) => {
               console.log('Équipement associé à la réservation:', equipment);
-              
-              // Vérifier Maintenance Status et Equipment State pour cet équipement
-              if (
-                  (equipment.maintenance_status === 'Damaged' || equipment.maintenance_status === 'under maintenance') ||
-                  equipment.state === 'Disabled'
-              ) {
-                  // Désactiver les champs pour cet équipement
-                  if (reservation.equipmentsId !== undefined) {
-                    this.disableFieldsForEquipment(reservation.equipmentsId);
-                } else {
-                    console.error("L'ID de l'équipement n'est pas défini pour cette réservation.");
-                }
+          
                 
-              } else {
-                if (reservation.equipmentsId !== undefined) {
-                  this.enableFieldsForEquipment(reservation.equipmentsId);
-              }
-                  // Activer les champs pour cet équipement
-                  
-              }
 
               if (reservation.equipmentsId !== undefined && reservation.departHour !== undefined && reservation.returnHour !== undefined) {
                   this.equipmentsWithDate.push({
@@ -128,7 +110,7 @@ console.log(this.equipments);
   });
 
   // Déclaration d'un tableau pour stocker les données finales
-}
+}/*
 // Dans votre méthode disableFieldsForEquipment
 disableFieldsForEquipment(equipmentId: number) {
   const index = this.equipments.findIndex(equipment => equipment.id === equipmentId);
@@ -158,7 +140,7 @@ enableFieldsForEquipment(equipmentId: number) {
   }
 }
 
-
+*/
 filterAndProcessData() {
   // Tableau pour stocker les données finales
   // Parcourir chaque élément de tableauResultat
@@ -247,9 +229,9 @@ performAction(equipement: any) {
 
     // Mettez ici le code pour gérer l'action pour l'équipement spécifique
     console.log("Action performed for equipment:", equipement);
-
+console.log("**---------",this.donneesEquipements);
     // Trouver l'index de l'équipement dans donneesEquipements
-    const index = this.donneesEquipements.findIndex((e: any) => e.equipmentId === equipement.equipmentId);
+    const index = this.FinalEquipmentData.findIndex((e: any) => e.equipmentId === equipement.equipmentId);
 
     // Vérifier si l'index est valide
     if (index !== -1) {
