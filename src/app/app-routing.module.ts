@@ -17,7 +17,7 @@ import { ListreservComponent } from './private/components/reservation/listreserv
 import { LoginComponent } from './private/components/login/login/login.component';
 import { TechnicienComponent } from './private/components/employee/technicien/technicien.component';
 import { MaintenanceEquipComponent } from './private/components/employee/technicien/maintenance-equip/maintenance-equip.component';
-
+import { MaintenanceRoomComponent } from './private/components/employee/technicien/maintenance-room/maintenance-room.component';
 const routes: Routes = [
   {
     path: 'employee',
@@ -100,6 +100,10 @@ const routes: Routes = [
   {
     path:'technicien/maintenance-equipment',
     component:MaintenanceEquipComponent,
+  },
+  {
+    path:'technicien/maintenance-room',
+    component:MaintenanceRoomComponent,
   },
   
 ];

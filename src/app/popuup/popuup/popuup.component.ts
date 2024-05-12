@@ -25,7 +25,10 @@ export class PopuupComponent {
     state: '',
     category: '',
     subcategory: '',
-    benefit_id:8
+    benefit_id:8,
+    departDate:new Date(), 
+    departHour:'',
+    returnHour:'',
   };
   
   roomId!: number;

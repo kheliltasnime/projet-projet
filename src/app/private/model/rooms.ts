@@ -17,4 +17,7 @@ export interface Rooms{
   state?:string;
   benefit_id?:number | null;
   checked?: boolean;
+  departHour: string; 
+  departDate:Date;
+  returnHour:string;
 }
