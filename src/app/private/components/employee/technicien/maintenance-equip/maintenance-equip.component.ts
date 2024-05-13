@@ -137,6 +137,9 @@ console.log(this.equipments);
   console.log(equipmentDataForId);
           // Vérifier si des données ont été trouvées
           if (equipmentDataForId) {
+            equipmentDataForId.returned = "returned";
+            equipmentDataForId.taken = "Not taken";
+            equipmentDataForId.reservation_State = "Reserved";
             // Ajouter les données trouvées au tableau final
             this.FinalEquipmentData.push({
               equipmentId: equipmentId,
@@ -168,18 +171,31 @@ onFieldChange(newValue: any, fieldName: string) {
     this.disableReservationState = true;
     this.disableReturned = true;
     this.disableTaken = true;
-    this.disableDescription=true;
+  
+    this.FinalEquipmentData.forEach((equipmentData: any) => {
+      if (equipmentData.equipmentData && equipmentData.equipmentData.taken &&equipmentData.equipmentData.returned) {
+        equipmentData.equipmentData.taken="Not taken";
+        equipmentData.equipmentData.returned="returned";
+
+       
+      }
+    });
+
+
+
+
+
   } else if (fieldName === 'state' && newValue === 'Disabled') {
     this.disableReservationState = true;
     this.disableReturned = true;
     this.disableTaken = true;
-    this.disableDescription=true;
+    
   } else {
     // Activer tous les champs s'ils ne correspondent pas aux conditions de désactivation
     this.disableReservationState = false;
     this.disableReturned = false;
     this.disableTaken = false;
-    this.disableDescription=false;
+   
   }
 
   // Vous pouvez stocker la nouvelle valeur dans un objet ou un tableau selon vos besoins
@@ -201,13 +217,13 @@ performAction(equipement: any) {
       this.disableReservationState = true;
       this.disableReturned = true;
       this.disableTaken = true;
-      this.disableDescription = true;
+    
     } else {
       // Activer tous les champs s'ils ne correspondent pas aux conditions de désactivation
       this.disableReservationState = false;
       this.disableReturned = false;
       this.disableTaken = false;
-      this.disableDescription = false;
+      
     }
 
     // Mettez ici le code pour gérer l'action pour l'équipement spécifique
@@ -227,10 +243,8 @@ console.log("**---------",this.donneesEquipements);
         // Par exemple, si vous souhaitez stocker la quantité modifiée
         quantity: equipement.equipmentData.quantity,
         maintenance_status: equipement.equipmentData.maintenance_status,
-        description: equipement.equipmentData.description,
         reservation_State: equipement.equipmentData.reservation_State,
-        returned: equipement.equipmentData.returned,
-        taken: equipement.equipmentData.taken,
+       
         state: equipement.equipmentData.state
         // Ajoutez d'autres caractéristiques modifiées si nécessaire
       };
@@ -254,6 +268,24 @@ console.log("**---------",this.donneesEquipements);
   }
 }
 
+
+updateFreeField(newValue: string, equipmentData: any) {
+  if (newValue === 'taken') {
+      equipmentData.equipmentData.returned = 'Not returned';
+  } else {
+      equipmentData.equipmentData.returned = 'returned';
+  }
+}
+
+updateOccupiedField(newValue: string, equipmentData: any) {
+  if (newValue === 'returned') {
+      equipmentData.equipmentData.taken = 'Not taken';
+  } else {
+      equipmentData.equipmentData.taken = 'taken';
+  }
+}
+
+
 incrementQuantity(equipement: any) {
   equipement.equipmentData.quantity++;
 }
@@ -264,35 +296,6 @@ decrementQuantity(equipement: any) {
   }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

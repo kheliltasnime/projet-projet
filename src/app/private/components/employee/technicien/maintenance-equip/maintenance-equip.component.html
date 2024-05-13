@@ -15,10 +15,7 @@
           <th>Reservation State</th>
           <th>Returned</th>
           <th>Taken</th>
-         
           <th>Equipment State</th>
-         
-          <th>Description</th>
           <th>Action</th>
          
         </tr>
@@ -37,39 +34,39 @@
           <td>{{ equipmentData.date | date: 'dd/MM/yyyy' }}</td>
           <td>{{ equipmentData.departureTime }}</td>
           <td>{{ equipmentData.returnTime }}</td>
-          <select [(ngModel)]="equipmentData.equipmentData.maintenance_status" (ngModelChange)="onFieldChange($event, 'maintenance_status')"
-          [ngClass]="{ 'text-success': equipmentData.equipmentData.maintenance_status === 'Operational',
-                       'text-warning': equipmentData.equipmentData.maintenance_status === 'Under maintenance',
-                       'text-danger': equipmentData.equipmentData.maintenance_status === 'Damaged' }">
-    <option [ngValue]="'Operational'" [selected]="equipmentData.equipmentData.maintenance_status === 'Operational'">Operational</option>
-    <option [ngValue]="'Under maintenance'" [selected]="equipmentData.equipmentData.maintenance_status === 'Under maintenance'">Under Maintenance</option>
-    <option [ngValue]="'Damaged'" [selected]="equipmentData.equipmentData.maintenance_status === 'Damaged'">Damaged</option>
-  </select>
+        
+       <td>     <select [(ngModel)]="equipmentData.equipmentData.maintenance_status" (ngModelChange)="onFieldChange($event, 'maintenance_status')">
+        <option [ngValue]="'Operational'" [selected]="equipmentData.equipmentData.maintenance_status === 'Operational'">Operational</option>
+        <option [ngValue]="'under maintenance'" [selected]="equipmentData.equipmentData.maintenance_status === 'under maintenance'">Under Maintenance</option>
+        <option [ngValue]="'Damaged'" [selected]="equipmentData.equipmentData.maintenance_status === 'Damaged'">Damaged</option>
+      </select>
+      </td>
   
-          <td>
-            <select [(ngModel)]="equipmentData.equipmentData.reservation_State" (ngModelChange)="onFieldChange($event, 'reservation_State')"  >
-              <option [ngValue]="'Reserved'">Reserved</option>
-              <option [ngValue]="'Available'">Available</option>
-              <option [ngValue]="'Not Available'">Not Available</option>
-            </select>
-          </td>
-          <td>
-            <select [(ngModel)]="equipmentData.equipmentData.returned" (ngModelChange)="onFieldChange($event, 'returned')">
-              <option [value]="'returned'">returned</option>
-              <option  [value]="'Not returned'">Not returned</option>
-            </select>
-          </td>
-          <td>
-            <select [(ngModel)]="equipmentData.equipmentData.taken" (ngModelChange)="onFieldChange($event, 'taken')">
-              <option [value]="'taken'">taken</option>
-              <option [value]="'Not taken'">Not taken</option>
-            </select>
-          </td>
+      <td>
+        <select [(ngModel)]="equipmentData.equipmentData.reservation_State" (ngModelChange)="onFieldChange($event, 'reservation_State')" [disabled]="equipmentData.equipmentData.maintenance_status === 'under maintenance' || equipmentData.equipmentData.state==='Disabled'|| equipmentData.equipmentData.maintenance_status === 'Damaged'"[ngModel]="equipmentData.equipmentData.maintenance_status === 'under maintenance' || equipmentData.equipmentData.maintenance_status === 'Damaged' ? 'Not yet' : equipmentData.equipmentData.reservation_State">
+
+          <option [ngValue]="'Not yet'">Not yet</option>
+          <option [ngValue]="'Reserved'">Reserved</option>
+
+        </select>
+      </td>
+      <td>
+        <select [(ngModel)]="equipmentData.equipmentData.taken" (ngModelChange)="updateFreeField($event, equipmentData)" [disabled]="equipmentData.equipmentData.maintenance_status === 'under maintenance' || equipmentData.equipmentData.state === 'Disabled' || equipmentData.equipmentData.maintenance_status === 'Damaged'">
+            <option [ngValue]="'taken'">taken</option>
+            <option [ngValue]="'Not taken'">Not taken</option>
+        </select>
+    </td>
+    <td>
+      <select [(ngModel)]="equipmentData.equipmentData.returned" (ngModelChange)="updateFreeField($event, equipmentData)" [disabled]="equipmentData.equipmentData.maintenance_status === 'under maintenance' || equipmentData.equipmentData.state === 'Disabled' || equipmentData.equipmentData.maintenance_status === 'Damaged'">
+          <option [ngValue]="'returned'">returned</option>
+          <option [ngValue]="'Not returned'">Not returned</option>
+      </select>
+  </td>
         
         
 
           <td>
-            <select [(ngModel)]="equipmentData.equipmentData.state" (ngModelChange)="onFieldChange($event, 'state')">
+            <select [(ngModel)]="equipmentData.equipmentData.state" >
             
               <option [ngValue]="'Enabled'" [selected]="equipmentData.equipmentData.state === 'Enabled'">Enabled</option>
               <option [ngValue]="'Disabled'" [selected]="equipmentData.equipmentData.state === 'Disabled'">Disabled</option>
@@ -78,15 +75,6 @@
 
 
         
-          <td>
-            <select [(ngModel)]="equipmentData.equipmentData.description" (ngModelChange)="onFieldChange($event, 'description')">
-              <option [ngValue]="'Returned Late'">Returned Late</option>
-              <option [ngValue]="'Returned Damaged'">Returned Damaged</option>
-              <option [ngValue]="'Returned in Good Condition'">Returned in Good Condition</option>
-              <option [ngValue]="'Returned at time'">Returned at time</option>
-              <!-- Ajoutez d'autres options de commentaire au besoin -->
-            </select>
-          </td>
           <td>
             <button (click)="performAction(equipmentData)">Update</button>
           </td>

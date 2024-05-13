@@ -30,14 +30,13 @@
             <td>{{ equipmentData.returnTime }}</td>
 
        <td>     <select [(ngModel)]="equipmentData.roomData.maintenance_status" (ngModelChange)="onFieldChange($event, 'maintenance_status')">
-      <option [ngValue]="'Operational'" [selected]="equipmentData.roomData.maintenance_status === 'OPERATIONAL'">Operational</option>
-      <option [ngValue]="'under maintenance'" [selected]="equipmentData.roomData.maintenance_status === 'Under maintenance'">Under Maintenance</option>
+      <option [ngValue]="'Operational'" [selected]="equipmentData.roomData.maintenance_status === 'Operational'">Operational</option>
+      <option [ngValue]="'under maintenance'" [selected]="equipmentData.roomData.maintenance_status === 'under maintenance'">Under Maintenance</option>
       <option [ngValue]="'Damaged'" [selected]="equipmentData.roomData.maintenance_status === 'Damaged'">Damaged</option>
     </select>
     </td>
             <td>
               <select [(ngModel)]="equipmentData.roomData.reservation_State" (ngModelChange)="onFieldChange($event, 'reservation_State')" [disabled]="equipmentData.roomData.maintenance_status === 'under maintenance' || equipmentData.roomData.state==='Disabled'|| equipmentData.roomData.maintenance_status === 'Damaged'"[ngModel]="equipmentData.roomData.maintenance_status === 'under maintenance' || equipmentData.roomData.maintenance_status === 'Damaged' ? 'Not yet' : equipmentData.roomData.reservation_State">
-
                 <option [ngValue]="'Not yet'">Not yet</option>
                 <option [ngValue]="'Reserved'">Reserved</option>
 

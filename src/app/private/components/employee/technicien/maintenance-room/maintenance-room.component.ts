@@ -118,10 +118,7 @@ disableoccupied: boolean = false;
   
   
   filterAndProcessData() {
-    // Utiliser loadFutureReservationsAndEquipments pour charger les données
-  
-      // Tableau pour stocker les données finales
-    
+
   console.log("eeee");
 console.log(this.tableauResultat);
 console.log(this.rooms);
@@ -141,6 +138,9 @@ console.log(this.rooms);
   console.log(roomDataForId);
           // Vérifier si des données ont été trouvées
           if (roomDataForId) {
+            roomDataForId.free = "free";
+            roomDataForId.occupied = "Not occupied";
+            roomDataForId.reservation_State = "Reserved";
             // Ajouter les données trouvées au tableau final
             this.FinalRoomData.push({
               roomId: roomId,
@@ -159,6 +159,9 @@ console.log(this.rooms);
       // Afficher les données finales
       console.log("Final Equipment Data", this.FinalRoomData);
     ;
+
+
+    
   }
   
   
@@ -169,10 +172,21 @@ onFieldChange(newValue: any, fieldName: string) {
   console.log('Nouvelle valeur de', fieldName, ':', newValue);
 
   // Désactiver les autres champs si la condition est remplie
-  if (fieldName === 'maintenance_status' && ['Under maintenance', 'Damaged'].includes(newValue)) {
+  if (fieldName === 'maintenance_status' && ['under maintenance', 'Damaged'].includes(newValue)) {
     this.disableReservationState = true;
     this.disablefree = true;
     this.disableoccupied = true;
+   
+    this.FinalRoomData.forEach((equipmentData: any) => {
+      if (equipmentData.roomData && equipmentData.roomData.occupied &&equipmentData.roomData.free) {
+        equipmentData.roomData.occupied="Not occupied";
+        equipmentData.roomData.free="free";
+
+        // Accédez à la propriété occupied de chaque élément
+        const occupiedValue = equipmentData.roomData.occupied;
+        console.log('Occupied value:', occupiedValue);
+      }
+    });
    
   } else if (fieldName === 'state' && newValue === 'Disabled') {
     this.disableReservationState = true;
