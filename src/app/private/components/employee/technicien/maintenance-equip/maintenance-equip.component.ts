@@ -4,6 +4,7 @@ import { EquipmentsService } from 'src/app/private/services/equipments.service';
 import * as $ from 'jquery';
 import { ReservationService } from 'src/app/private/services/reservation.service';
 import { Reservation } from 'src/app/private/model/reservation';
+
 @Component({
   selector: 'app-maintenance-equip',
   templateUrl: './maintenance-equip.component.html',
@@ -15,7 +16,7 @@ export class MaintenanceEquipComponent {
   tableauResultat: { equipmentId: number , departureDate: Date, departureHour: string, returnHour: string }[] = [];
 
 
-  equipmentsWithDate: { equipmentId: number, departureDate: Date, departureHour: string, returnHour:string }[] = [];
+  equipmentsWithDate: { equipmentId: number, departureDate: Date, departureHour: string, returnHour:string ,equipmentData:Equipments}[] = [];
 
   FinalEquipmentData: {
     equipmentId: number;
@@ -35,28 +36,27 @@ disableDescription:boolean=false;
     private equipmentService: EquipmentsService,
     private reservationService: ReservationService
   ) { }
-
   ngOnInit(): void {
     this.loadFutureReservationsAndEquipments();
-
+   
   }
-
+  
   loadFutureReservationsAndEquipments() {
     // Obtenir la date actuelle
     const currentDate = new Date();
-    
   
     // Récupérer toutes les réservations
     this.reservationService.getAllReservations().subscribe((reservations: Reservation[]) => {
       console.log('Toutes les réservations:', reservations);
   
-      // Liste pour stocker les ID des équipements avec leur date de départ et heures
-     // const equipmentsWithDate: { equipmentId: number, departureDate: Date, departureHour: string,returnHour:string }[] = [];
-  
-      // Filtrer les réservations à partir de la date actuelle
+      // Filtrer les réservations à partir de la date actuelle et concernant des équipements
       const futureReservations = reservations.filter(reservation => {
         if (!reservation.departDate || !reservation.departHour || !reservation.returnHour) {
-          return false; // Si departDate, departHour ou returnHour sont undefined, retourner false
+          return false; // Exclure les réservations sans date de départ, heure de départ, heure de retour
+        }
+  
+        if (reservation.category !== 'Equipments') {
+          return false; // Exclure cette réservation si elle ne concerne pas des équipements
         }
   
         // Convertir la date de départ de la réservation en objet Date avec le bon format
@@ -64,86 +64,100 @@ disableDescription:boolean=false;
         const departureDate = new Date(year, month - 1, day); // Soustraire 1 de month car les mois sont indexés à partir de 0
   
         // Vérifier si la date de départ est après la date actuelle et que la date de retour est la même que la date de départ
-        if (departureDate >= currentDate ) {
-          // Vérifier si equipmentId est défini avant de l'ajouter à la liste
-        // Vérifier si equipmentId est défini avant de l'ajouter à la liste
-        if (reservation.equipmentsId !== null  && reservation.equipmentsId !== undefined) {
-          this.equipmentService.getEquipmentsById(reservation.equipmentsId).subscribe((equipment: Equipments) => {
-              console.log('Équipement associé à la réservation:', equipment);
-          
-            
-              if (reservation.equipmentsId !== undefined && reservation.departHour !== undefined && reservation.returnHour !== undefined) {
-                  this.equipmentsWithDate.push({
-                      equipmentId: reservation.equipmentsId,
-                      departureDate: departureDate,
-                      departureHour: reservation.departHour,
-                      returnHour: reservation.returnHour,
-                  });
+        return departureDate >= currentDate;
+      });
+  
+      // Traiter les réservations futures
+      futureReservations.forEach(reservation => {
+        if (reservation.equipmentsId !== null && reservation.equipmentsId !== undefined) {
+          const equipmentId: number = reservation.equipmentsId; // Assurez-vous que c'est un number
+          this.equipmentService.getEquipmentsById(equipmentId).subscribe((equipment: Equipments) => {
+            console.log('Équipement associé à la réservation:', equipment);
+  
+            // Assurez-vous que tous les champs requis sont présents
+            if (reservation.departDate && reservation.departHour && reservation.returnHour) {
+              const [day, month, year] = reservation.departDate.split('-').map(part => parseInt(part));
+              const departureDate = new Date(year, month - 1, day);
+  
+              this.equipmentsWithDate.push({
+                equipmentId: equipmentId, // Utilisez la variable temporaire qui est garantie d'être un number
+                departureDate: departureDate,
+                departureHour: reservation.departHour,
+                returnHour: reservation.returnHour,
+                equipmentData: equipment
+              });
+  
+              console.log("equipmentsWithDate",this.equipmentsWithDate);
+              // Vérifier si toutes les opérations asynchrones sont terminées
+              if (this.equipmentsWithDate.length === futureReservations.length) {
+                this.filterAndProcessData();
               }
+            }
           });
-      }
-          return true; // Renvoyer true pour inclure cette réservation dans la liste des réservations futures
-        } else {
-          return false; // Renvoyer false pour exclure cette réservation de la liste des réservations futures
         }
       });
   
-      this.tableauResultat = this.equipmentsWithDate; // Mise à jour de tableauResultat avec les données filtrées
-
-    
-// Afficher le tableau résultat
-    console.log("tableauResultat",this.tableauResultat);
-
-
-
-    this.equipmentService.getAllEquipments().subscribe((equipments: Equipments[]) => {
-      console.log('Tous les équipements:', equipments);
-      
-      // Stockez les équipements dans la variable de classe equipments
-      this.equipments = equipments;
-console.log(this.equipments);
-
-      // Appeler la méthode pour filtrer et traiter les données
-      this.filterAndProcessData();// Vous pouvez maintenant utiliser la liste equipmentsWithDate pour stocker ou manipuler les données comme nécessaire
     });
-  });
+  
+    // Récupérer tous les équipements
+    this.equipmentService.getAllEquipments().subscribe((equipement: Equipments[]) => {
+      console.log('Tous les equip:', equipement);
+  
+      // Stockez les équipements dans la variable de classe equipments
+      this.equipments = equipement;
+  
+    
+    });
 
-  // Déclaration d'un tableau pour stocker les données finales
-}
-filterAndProcessData() {
-  // Tableau pour stocker les données finales
-  // Parcourir chaque élément de tableauResultat
-  this.tableauResultat.forEach(element => {
-    // Extraire l'ID de l'équipement
-    const equipmentId = element.equipmentId;
 
-    // Vérifier si l'ID de l'équipement est défini
-    if (equipmentId !== null) {
-      const date = element.departureDate;
-      const departureTime = element.departureHour;
-      const returnTime = element.returnHour;
+  }
+  
+  
+  filterAndProcessData() {
+    // Utiliser loadFutureReservationsAndEquipments pour charger les données
+  
+      // Tableau pour stocker les données finales
+    
+  console.log("eeee");
+console.log(this.tableauResultat);
+console.log(this.equipments);
+      // Parcourir chaque élément de tableauResultat
+      this.equipmentsWithDate.forEach(element => {
+        // Extraire l'ID de l'équipement
+        const equipmentId = element.equipmentId;
 
-      // Rechercher les données de l'équipement correspondant à cet ID, à cette date et à cette heure
-      const equipmentDataForId = this.equipments.find(equipment => equipment.id === equipmentId );
-
-      // Vérifier si des données ont été trouvées
-      if (equipmentDataForId) {
-        // Ajouter les données trouvées au tableau final
-        this.FinalEquipmentData.push({
-          equipmentId: equipmentId,
-          date: date,
-          departureTime: departureTime,
-          returnTime: returnTime,
-          equipmentData: equipmentDataForId
-        });
-      }
-    }
-  });
-  this.FinalEquipmentData.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-
-  // Afficher les données finales
-  console.log("finalEquipmentData", this.FinalEquipmentData);
-}
+        // Vérifier si l'ID de l'équipement est défini
+        if (equipmentId !== null) {
+          const date = element.departureDate;
+          const departureTime = element.departureHour;
+          const returnTime = element.returnHour;
+  
+          // Rechercher les données de l'équipement correspondant à cet ID, à cette date et à cette heure
+          const equipmentDataForId = this.equipments.find(equipment => equipment.id === equipmentId );
+  console.log(equipmentDataForId);
+          // Vérifier si des données ont été trouvées
+          if (equipmentDataForId) {
+            // Ajouter les données trouvées au tableau final
+            this.FinalEquipmentData.push({
+              equipmentId: equipmentId,
+              date: date,
+              departureTime: departureTime,
+              returnTime: returnTime,
+              equipmentData: equipmentDataForId
+            });
+          }
+        }
+      });
+  
+      // Trier les données par date
+      this.FinalEquipmentData.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  
+      // Afficher les données finales
+      console.log("Final Equipment Data", this.FinalEquipmentData);
+    ;
+  }
+  
+  
 
 onFieldChange(newValue: any, fieldName: string) {
   // Stockez la nouvelle valeur avec le nom du champ modifié

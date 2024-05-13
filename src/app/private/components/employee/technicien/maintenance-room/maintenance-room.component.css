@@ -1,0 +1,40 @@
+/* Style pour le tableau */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Style pour toutes les cellules du tableau */
+td, th {
+  width: calc(100% / 14); /* Divisez la largeur en 14 colonnes égales */
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+/* Style pour les en-têtes du tableau */
+th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #3498db; /* Couleur bleue */
+  color: #fff; /* Texte en blanc */
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}tr:nth-child(odd) {
+  background-color: #f2f2f2; /* Couleur de fond gris clair */
+}.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}/* Barre de défilement */
+.scroll-wrapper {
+  max-height: 600px; /* Hauteur maximale pour la barre de défilement verticale */
+  overflow-y: auto; /* Affichage de la barre de défilement verticale si nécessaire */
+  overflow-x: auto; /* Affichage de la barre de défilement horizontale si nécessaire */
+}
+.table-responsive {
+    display: block;
+    width: 100%; /* Assurez-vous que le conteneur est à 100% de la largeur */
+}

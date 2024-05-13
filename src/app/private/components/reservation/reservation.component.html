@@ -105,7 +105,7 @@
 
             <td>{{equipments.maintenance_status}}</td>
             <td>
-              <mat-checkbox [(ngModel)]="equipments.checked" (change)="onCheckboxChange($event, equipments, selectedDate, selectedDepartureTime, selectedReturnTime)" [disabled]="equipments.state === 'Disabled'"  ></mat-checkbox>
+              <mat-checkbox [(ngModel)]="equipments.checked" (change)="onCheckboxChange($event, equipments, selectedDate, selectedDepartureTime, selectedReturnTime)" [disabled]="equipments.state === 'Disabled' || equipments.maintenance_status==='under maintenance'||equipments.maintenance_status==='Damaged'"  ></mat-checkbox>
 
               <button class="btn btn-primary" (click)="openDetailsModal(equipments)">Check Details</button>
             </td>

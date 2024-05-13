@@ -13,10 +13,11 @@ import { Reservation } from 'src/app/private/model/reservation';
 export class MaintenanceRoomComponent {
   rooms: Rooms[] = [];
   selectedRoom: Rooms | undefined;
-  tableauResultat: { roomsId: number , departureDate: Date, departureHour: string, returnHour: string }[] = [];
+
+  tableauResultat: { roomId: number , departureDate: Date, departureHour: string, returnHour: string }[] = [];
 
 
- roomsWithDate: { roomsId: number, departureDate: Date, departureHour: string, returnHour:string }[] = [];
+  roomsWithDate: { roomId: number, departureDate: Date, departureHour: string, returnHour:string ,roomData:Rooms}[] = [];
 
   FinalRoomData: {
     roomId: number;
@@ -25,13 +26,14 @@ export class MaintenanceRoomComponent {
     returnTime: string; // Ajout de l'heure de retour
     roomData: any;
   }[]=[];
-
-  disableReservationState: boolean = false;
+disableReservationState: boolean = false;
 disablefree: boolean = false;
 disableoccupied: boolean = false;
-disableDescription:boolean=false;
+
+
    donneesFinales: any[] = [];
     donneesrooms: any[] = [];
+
   constructor(
     private roomService: RoomsService,
     private reservationService: ReservationService
@@ -42,22 +44,23 @@ disableDescription:boolean=false;
 
   }
 
+ 
   loadFutureReservationsAndEquipments() {
     // Obtenir la date actuelle
     const currentDate = new Date();
-    
   
     // Récupérer toutes les réservations
     this.reservationService.getAllReservations().subscribe((reservations: Reservation[]) => {
       console.log('Toutes les réservations:', reservations);
   
-      // Liste pour stocker les ID des équipements avec leur date de départ et heures
-     // const equipmentsWithDate: { equipmentId: number, departureDate: Date, departureHour: string,returnHour:string }[] = [];
-  
-      // Filtrer les réservations à partir de la date actuelle
+      // Filtrer les réservations à partir de la date actuelle et concernant des équipements
       const futureReservations = reservations.filter(reservation => {
         if (!reservation.departDate || !reservation.departHour || !reservation.returnHour) {
-          return false; // Si departDate, departHour ou returnHour sont undefined, retourner false
+          return false; // Exclure les réservations sans date de départ, heure de départ, heure de retour
+        }
+  
+        if (reservation.category !== 'Rooms') {
+          return false; // Exclure cette réservation si elle ne concerne pas des équipements
         }
   
         // Convertir la date de départ de la réservation en objet Date avec le bon format
@@ -65,86 +68,101 @@ disableDescription:boolean=false;
         const departureDate = new Date(year, month - 1, day); // Soustraire 1 de month car les mois sont indexés à partir de 0
   
         // Vérifier si la date de départ est après la date actuelle et que la date de retour est la même que la date de départ
-        if (departureDate >= currentDate ) {
-          // Vérifier si equipmentId est défini avant de l'ajouter à la liste
-        // Vérifier si equipmentId est défini avant de l'ajouter à la liste
-        if (reservation.roomsId !== null  && reservation.roomsId !== undefined) {
-          this.roomService.getRoomsById(reservation.roomsId).subscribe((room: Rooms) => {
-              console.log('Équipement associé à la réservation:', room);
-          
-            
-              if (reservation.roomsId !== undefined && reservation.departHour !== undefined && reservation.returnHour !== undefined) {
-                  this.roomsWithDate.push({
-                      roomsId: reservation.roomsId,
-                      departureDate: departureDate,
-                      departureHour: reservation.departHour,
-                      returnHour: reservation.returnHour,
-                  });
+        return departureDate >= currentDate;
+      });
+  
+      // Traiter les réservations futures
+      futureReservations.forEach(reservation => {
+        if (reservation.roomsId !== null && reservation.roomsId !== undefined) {
+          const roomId: number = reservation.roomsId; // Assurez-vous que c'est un number
+          this.roomService.getRoomsById(roomId).subscribe((room: Rooms) => {
+            console.log('room associé à la réservation:', room);
+  
+            // Assurez-vous que tous les champs requis sont présents
+            if (reservation.departDate && reservation.departHour && reservation.returnHour) {
+              const [day, month, year] = reservation.departDate.split('-').map(part => parseInt(part));
+              const departureDate = new Date(year, month - 1, day);
+  
+              this.roomsWithDate.push({
+                roomId: roomId, // Utilisez la variable temporaire qui est garantie d'être un number
+                departureDate: departureDate,
+                departureHour: reservation.departHour,
+                returnHour: reservation.returnHour,
+                roomData: room
+              });
+  
+              console.log("roomsWithDate",this.roomsWithDate);
+              // Vérifier si toutes les opérations asynchrones sont terminées
+              if (this.roomsWithDate.length === futureReservations.length) {
+                this.filterAndProcessData();
               }
+            }
           });
-      }
-          return true; // Renvoyer true pour inclure cette réservation dans la liste des réservations futures
-        } else {
-          return false; // Renvoyer false pour exclure cette réservation de la liste des réservations futures
         }
       });
   
-      this.tableauResultat = this.roomsWithDate; // Mise à jour de tableauResultat avec les données filtrées
-
-    
-// Afficher le tableau résultat
-    console.log("tableauResultat",this.tableauResultat);
-
-
-
-    this.roomService.getAllRooms().subscribe((equipments: Rooms[]) => {
-      console.log('Tous les équipements:', equipments);
-      
-      // Stockez les équipements dans la variable de classe equipments
-      this.rooms = equipments;
-console.log(this.rooms);
-
-      // Appeler la méthode pour filtrer et traiter les données
-      this.filterAndProcessData();// Vous pouvez maintenant utiliser la liste equipmentsWithDate pour stocker ou manipuler les données comme nécessaire
     });
-  });
+  
+    // Récupérer tous les équipements
+    this.roomService.getAllRooms().subscribe((room: Rooms[]) => {
+      console.log('Tous les equip:', this.rooms);
+  
+      // Stockez les équipements dans la variable de classe equipments
+      this.rooms = room;
+  
+    
+    });
 
-  // Déclaration d'un tableau pour stocker les données finales
-}
-filterAndProcessData() {
-  // Tableau pour stocker les données finales
-  // Parcourir chaque élément de tableauResultat
-  this.tableauResultat.forEach(element => {
-    // Extraire l'ID de l'équipement
-    const roomId = element.roomsId;
 
-    // Vérifier si l'ID de l'équipement est défini
-    if (roomId !== null) {
-      const date = element.departureDate;
-      const departureTime = element.departureHour;
-      const returnTime = element.returnHour;
+  }
+  
+  
+  filterAndProcessData() {
+    // Utiliser loadFutureReservationsAndEquipments pour charger les données
+  
+      // Tableau pour stocker les données finales
+    
+  console.log("eeee");
+console.log(this.tableauResultat);
+console.log(this.rooms);
+      // Parcourir chaque élément de tableauResultat
+      this.roomsWithDate.forEach(element => {
+        // Extraire l'ID de l'équipement
+        const roomId = element.roomId;
 
-      // Rechercher les données de l'équipement correspondant à cet ID, à cette date et à cette heure
-      const roomDataForId = this.rooms.find(room => room.id === roomId );
+        // Vérifier si l'ID de l'équipement est défini
+        if (roomId !== null) {
+          const date = element.departureDate;
+          const departureTime = element.departureHour;
+          const returnTime = element.returnHour;
+  
+          // Rechercher les données de l'équipement correspondant à cet ID, à cette date et à cette heure
+          const roomDataForId = this.rooms.find(room => room.id === roomId );
+  console.log(roomDataForId);
+          // Vérifier si des données ont été trouvées
+          if (roomDataForId) {
+            // Ajouter les données trouvées au tableau final
+            this.FinalRoomData.push({
+              roomId: roomId,
+              date: date,
+              departureTime: departureTime,
+              returnTime: returnTime,
+              roomData: roomDataForId
+            });
+          }
+        }
+      });
+  
+      // Trier les données par date
+      this.FinalRoomData.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  
+      // Afficher les données finales
+      console.log("Final Equipment Data", this.FinalRoomData);
+    ;
+  }
+  
+  
 
-      // Vérifier si des données ont été trouvées
-      if (roomDataForId) {
-        // Ajouter les données trouvées au tableau final
-        this.FinalRoomData.push({
-          roomId: roomId,
-          date: date,
-          departureTime: departureTime,
-          returnTime: returnTime,
-          roomData: roomDataForId
-        });
-      }
-    }
-  });
-  this.FinalRoomData.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-
-  // Afficher les données finales
-  console.log("finalEquipmentData", this.FinalRoomData);
-}
 
 onFieldChange(newValue: any, fieldName: string) {
   // Stockez la nouvelle valeur avec le nom du champ modifié
@@ -155,21 +173,20 @@ onFieldChange(newValue: any, fieldName: string) {
     this.disableReservationState = true;
     this.disablefree = true;
     this.disableoccupied = true;
-    this.disableDescription=true;
+   
   } else if (fieldName === 'state' && newValue === 'Disabled') {
     this.disableReservationState = true;
     this.disablefree = true;
     this.disableoccupied = true;
-    this.disableDescription=true;
+  
   } else {
     // Activer tous les champs s'ils ne correspondent pas aux conditions de désactivation
     this.disableReservationState = false;
     this.disableoccupied = false;
     this.disablefree = false;
-    this.disableDescription=false;
+ 
   }
 
-  // Vous pouvez stocker la nouvelle valeur dans un objet ou un tableau selon vos besoins
 }
 
 // Définir des variables de contrôle pour activer ou désactiver l'édition des champs
@@ -188,13 +205,13 @@ performAction(room: any) {
       this.disableReservationState = true;
       this.disablefree = true;
       this.disableoccupied = true;
-      this.disableDescription = true;
+     
     } else {
       // Activer tous les champs s'ils ne correspondent pas aux conditions de désactivation
       this.disableReservationState = false;
       this.disableoccupied = false;
       this.disablefree = false;
-      this.disableDescription = false;
+      
     }
 
     // Mettez ici le code pour gérer l'action pour l'équipement spécifique
@@ -212,12 +229,12 @@ console.log("**---------",this.donneesrooms);
       const modifiedCharacteristics = {
         // Ajoutez ici les caractéristiques modifiées que vous souhaitez stocker
         // Par exemple, si vous souhaitez stocker la quantité modifiée
-        capacity: room.roomData.capacity,
+      
         maintenance_status: room.roomData.maintenance_status,
-        description: room.roomData.description,
+       
         reservation_State: room.roomData.reservation_State,
-        free: room.roomData.returned,
-        taken: room.roomData.taken,
+       
+      
         state: room.roomData.state
         // Ajoutez d'autres caractéristiques modifiées si nécessaire
       };
@@ -241,16 +258,25 @@ console.log("**---------",this.donneesrooms);
   }
 }
 
-incrementQuantity(room: any) {
-  room.roomData.capacity++;
+
+updateFreeField(newValue: string, equipmentData: any) {
+  if (newValue === 'occupied') {
+      equipmentData.roomData.free = 'Not free';
+  } else {
+      equipmentData.roomData.free = 'free';
+  }
 }
 
-decrementQuantity(room: any) {
-  if (room.roomData.capacity > 0) {
-    room.roomData.capacity--;
+updateOccupiedField(newValue: string, equipmentData: any) {
+  if (newValue === 'free') {
+      equipmentData.roomData.occupied = 'Not occupied';
+  } else {
+      equipmentData.roomData.occupied = 'occupied';
+  }
+}
+
   }
 
-}
 
 
 
@@ -280,7 +306,3 @@ decrementQuantity(room: any) {
 
 
 
-
-
-
-}
