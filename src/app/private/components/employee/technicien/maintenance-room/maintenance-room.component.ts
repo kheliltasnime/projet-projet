@@ -226,16 +226,51 @@ performAction(room: any) {
       this.disableoccupied = false;
       this.disablefree = false;
       
+    } const roomIdToUpdate = room.roomId;
+    const index = this.FinalRoomData.findIndex((e: any) => e.roomId === room.roomId);
+   
+    if (room.roomData.reservation_State === 'Not yet') {
+      // Stocker l'ID de la salle dans une variable
+     
+      console.log('ID de la salle à mettre à jour:', roomIdToUpdate);
+
+
+      // Supprimer les réservations associées à cette salle
+      this.reservationService.getAllReservations().subscribe(
+       
+        (reservations: any[]) => {
+          // Parcourir toutes les réservations
+          reservations.forEach((reservation: any) => {
+            console.log("rrrrrrrrr",reservation.rooms_id, roomIdToUpdate);
+            // Vérifier si la réservation a le même rooms_id que roomIdToUpdate
+            if (reservation.roomsId === roomIdToUpdate) {
+              console.log("'''''''''");
+              // Supprimer la réservation
+              this.reservationService.deleteReservation(reservation.id).subscribe(
+                () => {
+                  
+                  console.log('La réservation associée à la salle a été supprimée avec succès.');
+
+                  // Mettez ici le code pour gérer l'action pour l'équipement spécifique
+                  console.log("Action performed for salle:", room);
+                }
+              );
+            }
+          });
+        }
+      );
     }
+    
 
     // Mettez ici le code pour gérer l'action pour l'équipement spécifique
     console.log("Action performed for equipment:", room);
 console.log("**---------",this.donneesrooms);
     // Trouver l'index de l'équipement dans donneesEquipements
-    const index = this.FinalRoomData.findIndex((e: any) => e.roomId === room.roomId);
+  
+  
 
     // Vérifier si l'index est valide
-    if (index !== -1) {
+    if (index !== -1 ) {
       // Stocker l'ID de l'équipement
       const roomId = room.roomId;
 
@@ -254,7 +289,7 @@ console.log("**---------",this.donneesrooms);
       };
     
       // Faites quelque chose avec l'ID de l'équipement et les caractéristiques modifiées
-      console.log("ID de l'équipement modifié:", roomId);
+      console.log("ID de l'salle modifié:", roomId);
       console.log("Caractéristiques modifiées:", modifiedCharacteristics);
 
       // Effectuez la mise à jour de l'équipement
@@ -264,7 +299,7 @@ console.log("**---------",this.donneesrooms);
         console.error('Erreur lors de la mise à jour', error);
       });
     } else {
-      console.error("ID d'équipement non trouvé dans donneesEquipements.");
+      console.error("ID d'salle non trouvé dans donneesEquipements.");
     }
   } else {
     // Afficher un message d'annulation

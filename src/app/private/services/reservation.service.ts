@@ -50,6 +50,7 @@ storeReservationState(state: any[]): void {
 
 
   getAllReservations(){
+    console.log("----------------");
     return this.httpclient.get<Reservation[]>(this.baseUrl+'/reservation');
   }
 

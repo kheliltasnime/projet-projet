@@ -29,7 +29,7 @@ export class MaintenanceEquipComponent {
   disableReservationState: boolean = false;
 disableReturned: boolean = false;
 disableTaken: boolean = false;
-disableDescription:boolean=false;
+
    donneesFinales: any[] = [];
     donneesEquipements: any[] = [];
   constructor(
@@ -244,7 +244,6 @@ console.log("**---------",this.donneesEquipements);
         quantity: equipement.equipmentData.quantity,
         maintenance_status: equipement.equipmentData.maintenance_status,
         reservation_State: equipement.equipmentData.reservation_State,
-       
         state: equipement.equipmentData.state
         // Ajoutez d'autres caractéristiques modifiées si nécessaire
       };
