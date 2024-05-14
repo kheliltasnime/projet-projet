@@ -52,6 +52,7 @@ disableTaken: boolean = false;
       // Filtrer les réservations à partir de la date actuelle et concernant des équipements
       const futureReservations = reservations.filter(reservation => {
         if (!reservation.departDate || !reservation.departHour || !reservation.returnHour) {
+          console.log("55555555");
           return false; // Exclure les réservations sans date de départ, heure de départ, heure de retour
         }
   
@@ -70,7 +71,10 @@ disableTaken: boolean = false;
       // Traiter les réservations futures
       futureReservations.forEach(reservation => {
         if (reservation.equipmentsId !== null && reservation.equipmentsId !== undefined) {
-          const equipmentId: number = reservation.equipmentsId; // Assurez-vous que c'est un number
+
+          const equipmentId: number = reservation.equipmentsId;
+          
+          // Assurez-vous que c'est un number
           this.equipmentService.getEquipmentsById(equipmentId).subscribe((equipment: Equipments) => {
             console.log('Équipement associé à la réservation:', equipment);
   
@@ -101,12 +105,15 @@ disableTaken: boolean = false;
   
     // Récupérer tous les équipements
     this.equipmentService.getAllEquipments().subscribe((equipement: Equipments[]) => {
-      console.log('Tous les equip:', equipement);
+      console.log('Tous les equip:', this.equipments);
   
       // Stockez les équipements dans la variable de classe equipments
       this.equipments = equipement;
   
     
+
+
+
     });
 
 
@@ -167,7 +174,7 @@ onFieldChange(newValue: any, fieldName: string) {
   console.log('Nouvelle valeur de', fieldName, ':', newValue);
 
   // Désactiver les autres champs si la condition est remplie
-  if (fieldName === 'maintenance_status' && ['Under maintenance', 'Damaged'].includes(newValue)) {
+  if (fieldName === 'maintenance_status' && ['under maintenance', 'Damaged'].includes(newValue)) {
     this.disableReservationState = true;
     this.disableReturned = true;
     this.disableTaken = true;
@@ -176,19 +183,22 @@ onFieldChange(newValue: any, fieldName: string) {
       if (equipmentData.equipmentData && equipmentData.equipmentData.taken &&equipmentData.equipmentData.returned) {
         equipmentData.equipmentData.taken="Not taken";
         equipmentData.equipmentData.returned="returned";
-
+    
+        equipmentData.equipmentData.reservation_State = 'Not yet';
+      const occupiedValue = equipmentData.equipmentData.reservation_State;
+        //console.log('Occupied value:', occupiedValue);
        
       }
     });
-
-
-
-
 
   } else if (fieldName === 'state' && newValue === 'Disabled') {
     this.disableReservationState = true;
     this.disableReturned = true;
     this.disableTaken = true;
+   // equipmentData.equipmentData.reservation_State="Not yet";
+    
+
+   
     
   } else {
     // Activer tous les champs s'ils ne correspondent pas aux conditions de désactivation
@@ -210,13 +220,14 @@ performAction(equipement: any) {
   if (confirmation) {
     // Vérifier si les champs Maintenance Status et Equipment State ont les valeurs nécessaires pour désactiver les autres champs
     if (
-      (equipement.equipmentData.maintenance_status === 'Damaged' || equipement.equipmentData.maintenance_status === 'Under maintenance') &&
+      (equipement.equipmentData.maintenance_status === 'Damaged' || equipement.equipmentData.maintenance_status === 'nder maintenance') &&
       equipement.equipmentData.state === 'Disabled'
     ) {
       // Désactiver les autres champs
       this.disableReservationState = true;
       this.disableReturned = true;
       this.disableTaken = true;
+      equipement.equipmentData.reservation_State = 'Not yet';
     
     } else {
       // Activer tous les champs s'ils ne correspondent pas aux conditions de désactivation
@@ -225,12 +236,47 @@ performAction(equipement: any) {
       this.disableTaken = false;
       
     }
+    const roomIdToUpdate = equipement.equipmentId;
+    const index = this.FinalEquipmentData.findIndex((e: any) => e.equipmentId === equipement.equipmentId);
+   console.log("equipement.equipmentData.reservation_State ",equipement.equipmentData.reservation_State );
+    if (equipement.equipmentData.reservation_State === 'Not yet') {
+      // Stocker l'ID de la salle dans une variable
+     
+      console.log('ID de la equip à mettre à jour:', roomIdToUpdate);
+
+
+      // Supprimer les réservations associées à cette salle
+      this.reservationService.getAllReservations().subscribe(
+       
+        (reservations: any[]) => {
+          // Parcourir toutes les réservations
+          reservations.forEach((reservation: any) => {
+            console.log("rrrrrrrrr",reservation.equipmentId, roomIdToUpdate);
+            // Vérifier si la réservation a le même rooms_id que roomIdToUpdate
+            if (reservation.equipmentsId === roomIdToUpdate) {
+              console.log("'''''''''");
+              // Supprimer la réservation
+              this.reservationService.deleteReservation(reservation.id).subscribe(
+                () => {
+                  
+                  console.log('La réservation associée à la equip a été supprimée avec succès.');
+
+                  // Mettez ici le code pour gérer l'action pour l'équipement spécifique
+                  console.log("Action performed for equipment:", equipement);
+                }
+              );
+            }
+          });
+        }
+      );
+    }
+    
 
     // Mettez ici le code pour gérer l'action pour l'équipement spécifique
     console.log("Action performed for equipment:", equipement);
 console.log("**---------",this.donneesEquipements);
     // Trouver l'index de l'équipement dans donneesEquipements
-    const index = this.FinalEquipmentData.findIndex((e: any) => e.equipmentId === equipement.equipmentId);
+  
 
     // Vérifier si l'index est valide
     if (index !== -1) {
@@ -247,8 +293,8 @@ console.log("**---------",this.donneesEquipements);
         state: equipement.equipmentData.state
         // Ajoutez d'autres caractéristiques modifiées si nécessaire
       };
-    
-      // Faites quelque chose avec l'ID de l'équipement et les caractéristiques modifiées
+
+
       console.log("ID de l'équipement modifié:", equipmentId);
       console.log("Caractéristiques modifiées:", modifiedCharacteristics);
 

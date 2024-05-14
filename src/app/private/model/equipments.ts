@@ -19,6 +19,8 @@ export interface Equipments{
   subcategory?: string; // Ajouter la propriété subcategory
   state?:string;
   benefit_id?:number | null;
+
+
   departHour: string; 
   departDate:Date;
   returnHour:string;

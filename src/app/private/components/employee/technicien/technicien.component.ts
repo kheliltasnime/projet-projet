@@ -31,6 +31,7 @@ export class TechnicienComponent {
   navigateToCategoryPage(category: string): void {
     // Rediriger vers la page spécifique en fonction de la catégorie du bénéfice
     if (category.toLowerCase() === 'equipments') {
+      console.log(category);
       this.router.navigate(['technicien/maintenance-equipment']);
     } else if (category.toLowerCase()==='rooms'){
       this.router.navigate(['technicien/maintenance-room']);

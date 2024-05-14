@@ -181,7 +181,7 @@ onFieldChange(newValue: any, fieldName: string) {
       if (equipmentData.roomData && equipmentData.roomData.occupied &&equipmentData.roomData.free) {
         equipmentData.roomData.occupied="Not occupied";
         equipmentData.roomData.free="free";
-
+        equipmentData.roomData.reservation_State="Not yet";
         // Accédez à la propriété occupied de chaque élément
         const occupiedValue = equipmentData.roomData.occupied;
         console.log('Occupied value:', occupiedValue);
@@ -192,7 +192,9 @@ onFieldChange(newValue: any, fieldName: string) {
     this.disableReservationState = true;
     this.disablefree = true;
     this.disableoccupied = true;
-  
+   
+   // equipmentData.roomData.reservation_State="Not yet";
+    
   } else {
     // Activer tous les champs s'ils ne correspondent pas aux conditions de désactivation
     this.disableReservationState = false;
@@ -219,12 +221,16 @@ performAction(room: any) {
       this.disableReservationState = true;
       this.disablefree = true;
       this.disableoccupied = true;
+       // Mettre à jour reservation_State à "Not yet"
+  room.roomData.reservation_State = 'Not yet';
      
     } else {
       // Activer tous les champs s'ils ne correspondent pas aux conditions de désactivation
       this.disableReservationState = false;
       this.disableoccupied = false;
       this.disablefree = false;
+       // Mettre à jour reservation_State à "Reserved"
+ 
       
     } const roomIdToUpdate = room.roomId;
     const index = this.FinalRoomData.findIndex((e: any) => e.roomId === room.roomId);
@@ -325,33 +331,3 @@ updateOccupiedField(newValue: string, equipmentData: any) {
 }
 
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -41,10 +41,8 @@
         <option [ngValue]="'Damaged'" [selected]="equipmentData.equipmentData.maintenance_status === 'Damaged'">Damaged</option>
       </select>
       </td>
-  
       <td>
         <select [(ngModel)]="equipmentData.equipmentData.reservation_State" (ngModelChange)="onFieldChange($event, 'reservation_State')" [disabled]="equipmentData.equipmentData.maintenance_status === 'under maintenance' || equipmentData.equipmentData.state==='Disabled'|| equipmentData.equipmentData.maintenance_status === 'Damaged'"[ngModel]="equipmentData.equipmentData.maintenance_status === 'under maintenance' || equipmentData.equipmentData.maintenance_status === 'Damaged' ? 'Not yet' : equipmentData.equipmentData.reservation_State">
-
           <option [ngValue]="'Not yet'">Not yet</option>
           <option [ngValue]="'Reserved'">Reserved</option>
 

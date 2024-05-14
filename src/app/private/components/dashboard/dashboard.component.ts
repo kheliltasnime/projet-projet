@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Chart } from 'chart.js';
 
+import Chart from 'chart.js/auto';
 //import { createChart } from './charts1';
 import { createChartDoughunt } from './charts2';
 import { ReservationService } from '../../services/reservation.service';
@@ -31,7 +31,7 @@ export class DashboardComponent  {
     this.getReservationDepartDates();
     this.getEquipmentStates();
     this.getAllReservationsAndCountOccurrences(); 
-   
+    this.generatePieChart();
    
   }
 
@@ -105,6 +105,30 @@ export class DashboardComponent  {
   
   
   
+  generatePieChart() {
+    const ctx = document.getElementById('pieChart') as HTMLCanvasElement;
+    const pieChart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Reservations', 'Remaining'],
+        datasets: [{
+          data: [this.reservationsThisMonth, 100 - this.reservationsThisMonth], // Utilisez la valeur actuelle et le complément à 100 pour les données
+          backgroundColor: [
+            'rgb(255, 99, 132)', // Couleur pour les réservations
+            'rgb(54, 162, 235)' // Couleur pour le reste
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    });
+  }
+
+
+
+
   
  
   
