@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import * as emailjs from 'emailjs-com';
 import { Reservation } from 'src/app/private/model/reservation';
+import { EmailService } from 'src/app/private/services/email.service';
 @Component({
   selector: 'app-listreserv',
   templateUrl: './listreserv.component.html',
@@ -17,8 +18,12 @@ export class ListreservComponent {
   departureTime:string='';
   returnTime:string='';
 data:any[]=[];
+
+ //userName = localStorage.getItem('username');
+ email = "kheliltasnime@gmail.com";
   constructor(public reservationService: ReservationService,
-    private router: Router,private fb:FormBuilder
+    private router: Router,private fb:FormBuilder,
+    public emailService:EmailService
    ) {}
 
   ngOnInit() {
@@ -33,11 +38,72 @@ data:any[]=[];
     
      
     });
-  }
+  }/*
+  sendEmail() {
+    const to: string[] = ['kheliltassnime@gmail.com']; // Adresse e-mail du destinataire
+    const cc: string[] = ['kheliltassnime@gmail.com']; // Adresse e-mail en copie
+    const subject = "Test Subject"; // Sujet du courriel
+    const body = "This is a test email."; // Corps du courriel
   
+    // Vérification si les adresses e-mail sont valides
+    if (this.validateEmails(to) && this.validateEmails(cc)) {
+        console.log("Email addresses are valid.");
+        console.log("Data:", to, cc, subject, body);
+        
+        // Appel de la méthode d'envoi d'e-mail du service approprié
+        this.emailService.sendEMail(to, cc, subject, body).subscribe({
+            next: (response) => console.log(response),
+            error: (error) => console.error(error)
+        });
+    } else {
+        console.error('Invalid email address for to or cc.');
+    }
+}*/
+
+
+
+
+sendEmail() {
+  const to: string[] = ['kheliltassnime@gmail.com']; // Adresse e-mail du destinataire
+  const cc: string[] = ['kheliltasnime@gmail.com']; // Adresse e-mail en copie
+  const subject = "Reservation "; // Sujet du courriel
+  const body = "Dear [Recipient's Name],\n your Order Has Been Successfully Placed! \n Best regards, \n Admin"; 
+
+  this.emailService.sendEmail(to, cc, subject, body).subscribe(
+    response => {
+      console.log('Email sent successfully', response);
+    },
+    error => {
+      console.error('Error sending email', error);
+    }
+  );
+}
+
+// Méthode pour valider le format des adresses e-mail
+validateEmails(emails: string[]): boolean {
+    for (const email of emails) {
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(email)) {
+            console.error('Invalid email address:', email);
+            return false;
+        }
+    }
+    return true;
+}
+
+  
+
+
+
+
+
+
+
+
+  /*
   form :FormGroup=this.fb.group({
   
-    to_name: "asma",
+    to_name: this.userName ,
     
     from_name: '',
     from_email:'',
@@ -49,8 +115,9 @@ async send(){
   emailjs.init('GDIu91oJLy4x2Qpry');
   let response =await emailjs.send("service_a7y27df","template_g4ch4ug",{
     from_name: 'Admin', // Remplacez par votre nom
-    to_name: 'Asma', // Remplacez par le nom du destinataire
-    from_email: 'contact@teamdev.tn ', // Remplacez par votre adresse e-mail
+    to_name: this.userName, // Remplacez par le nom du destinataire
+    to_email: this.email
+   , // Remplacez par votre adresse e-mail
     subject: 'Reservation', // Remplacez par le sujet du message
     message: 'Your Reservation is added successfully'
   }).then(response => {
@@ -61,7 +128,7 @@ async send(){
     console.error('Error sending message:', error);
     alert('An error occurred while sending the message.');
   });
-}
+}*/
   
  // Méthode appelée lors du clic sur le bouton de validation
  onAddMoreClicked(): void {
@@ -101,7 +168,8 @@ async send(){
   
   this.addReservationFromCheckedItems();
   this.reservationService.sendAddMoreClicked();
-  this.send();
+ // this.send();
+ this.sendEmail();
   this.router.navigate(['/calendar']);
 }
 

@@ -5,6 +5,7 @@ import * as $ from 'jquery';
 import { ReservationService } from 'src/app/private/services/reservation.service';
 import { Reservation } from 'src/app/private/model/reservation';
 
+
 @Component({
   selector: 'app-maintenance-equip',
   templateUrl: './maintenance-equip.component.html',
@@ -34,7 +35,8 @@ disableTaken: boolean = false;
     donneesEquipements: any[] = [];
   constructor(
     private equipmentService: EquipmentsService,
-    private reservationService: ReservationService
+    private reservationService: ReservationService,
+   
   ) { }
   ngOnInit(): void {
     this.loadFutureReservationsAndEquipments();
@@ -258,7 +260,7 @@ performAction(equipement: any) {
               // Supprimer la réservation
               this.reservationService.deleteReservation(reservation.id).subscribe(
                 () => {
-                  
+                
                   console.log('La réservation associée à la equip a été supprimée avec succès.');
 
                   // Mettez ici le code pour gérer l'action pour l'équipement spécifique

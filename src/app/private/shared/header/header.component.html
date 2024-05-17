@@ -70,19 +70,15 @@
                     <a>View All</a>
                 </span>
             </li>
-            <li class="notification-message-container" 
-                *ngFor="let notfification of notfifications" 
-                cdkMenuItem 
-                >
-                <i [class]="notfification.icon"></i>
+            <li class="notification-message-container" *ngFor="let notification of notifications" cdkMenuItem>
                 <div>
-                  <div class="notifiaction-subject">
-                    {{notfification.Subject}}
-                  </div>
-                  <p class="notfification-desc">
-                    {{notfification.description}}
-                  </p>
-            </div>
+                    <div class="notifiaction-subject">
+                        {{ notification.message }}
+                    </div>
+                    <p class="notfification-desc">
+                        {{ notification.date_envoi }}
+                    </p>
+                </div>
             </li>
         </ul>
     </div>

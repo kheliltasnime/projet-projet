@@ -49,6 +49,7 @@ import { DataserviceComponent } from './data/dataservice/dataservice.component';
 
 
 
+
 class CustomDateFormatter extends CalendarNativeDateFormatter{
   public override dayViewHour({ date,locale}: DateFormatterParams) : string{
     return new Intl.DateTimeFormat(locale, {hour: 'numeric', minute: 'numeric'}).format(date);
@@ -85,6 +86,7 @@ class CustomDateFormatter extends CalendarNativeDateFormatter{
     MaintenanceEquipComponent,
     MaintenanceRoomComponent,
     DataserviceComponent,
+  
   
    
   ],

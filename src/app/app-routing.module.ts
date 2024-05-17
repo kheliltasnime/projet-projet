@@ -19,6 +19,9 @@ import { TechnicienComponent } from './private/components/employee/technicien/te
 import { MaintenanceEquipComponent } from './private/components/employee/technicien/maintenance-equip/maintenance-equip.component';
 import { MaintenanceRoomComponent } from './private/components/employee/technicien/maintenance-room/maintenance-room.component';
 import { DataserviceComponent } from './data/dataservice/dataservice.component';
+
+
+
 const routes: Routes = [
   {
     path: 'employee',
@@ -110,6 +113,8 @@ const routes: Routes = [
     path:'data',
     component:DataserviceComponent,
   },
+ 
+  
   
   
 ];

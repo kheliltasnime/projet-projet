@@ -1,23 +1,7 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
+import { NotifService ,AppNotification} from '../../services/notif.service';
 
-export const notfications = [
-  {
-    icon: 'far fa-cloud-download',
-    Subject: 'Download complete',
-    description: 'lorem ipsum dolor sit amet, constructor.'
-  },
-  {
-    icon: 'far fa-cloud-upload',
-    Subject: 'upload complete',
-    description: 'lorem ipsum dolor sit amet, constructor.'
-  },
-  {
-    icon: 'far fa-trash',
-    Subject: '350 MB trash files',
-    description: 'lorem ipsum dolor sit amet, constructor.'
-  }
-];
 
 export const userItems = [
   {
@@ -45,19 +29,32 @@ export const userItems = [
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit{
-
+ 
   @Input() collapsed = false;
   @Input() screenWidth = 0;
 
   canShowSearchAsOverlay = false;
 
-  notfifications = notfications;
+  notifications: AppNotification[] = [];
   userItems = userItems;
 
   ngOnInit(): void {
     this.chackCanShowSearchOverlay(window.innerWidth);
+    this.loadNotifications();
   }
-  constructor() {}
+  constructor(private NotifService: NotifService) {}
+
+  private loadNotifications(): void {
+    this.NotifService.getNotifications().subscribe(
+      (data: AppNotification[]) => {
+        this.notifications = data;
+        console.log("notiff",this.notifications);
+      },
+      (error) => {
+        console.error('Erreur lors du chargement des notifications', error);
+      }
+    );
+  }
 
   @HostListener('window:resize', ['$event'])
   onResize(event : any){

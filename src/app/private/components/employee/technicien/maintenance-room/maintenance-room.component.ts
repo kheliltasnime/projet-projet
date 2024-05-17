@@ -4,7 +4,9 @@ import { RoomsService } from 'src/app/private/services/rooms.service';
 import * as $ from 'jquery';
 import { ReservationService } from 'src/app/private/services/reservation.service';
 import { Reservation } from 'src/app/private/model/reservation';
-
+import { EmailService } from 'src/app/private/services/email.service';
+ 
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-maintenance-room',
   templateUrl: './maintenance-room.component.html',
@@ -36,13 +38,66 @@ disableoccupied: boolean = false;
 
   constructor(
     private roomService: RoomsService,
-    private reservationService: ReservationService
+    private reservationService: ReservationService,
+    public emailService:EmailService
+  
   ) { }
 
   ngOnInit(): void {
     this.loadFutureReservationsAndEquipments();
 
   }
+
+
+
+  sendEmail() {
+    const to: string[] = ['kheliltassnime@gmail.com']; // Adresse e-mail du destinataire
+    const cc: string[] = ['kheliltasnime@gmail.com']; // Adresse e-mail en copie
+    const subject = "Important Update Regarding Your Reservation "; // Sujet du courriel
+    const body = "Dear [Recipient's Name],\n We hope this message finds you well. We regret to inform you that due to unforeseen maintenance issues/matters beyond our control, we are unable to honor your reservation at this time.We understand the inconvenience this may cause and sincerely apologize for any disruption to your plans. We are committed to providing the highest quality of service and are taking all necessary steps to resolve these issues promptly.\n Best regards, \n Admin"; 
+  
+    this.emailService.sendEmail(to, cc, subject, body).subscribe(
+      response => {
+        console.log('Email sent successfully', response);
+      },
+      error => {
+        console.error('Error sending email', error);
+      }
+    );
+  }
+
+
+  sendEmail2() {
+    const to: string[] = ['kheliltassnime@gmail.com']; // Adresse e-mail du destinataire
+    const cc: string[] = ['kheliltasnime@gmail.com']; // Adresse e-mail en copie
+    const subject = "Important Update Regarding Your Reservation "; // Sujet du courriel
+    const body = "Dear [Recipient's Name],\n We hope this message finds you well. \nWe regret to inform you that due to unforeseen maintenance issues/matters beyond our control, \nwe are unable to honor your reservation at this time.We understand the inconvenience this may cause and sincerely apologize for any disruption to your plans. \nWe are committed to providing the highest quality of service and are taking all necessary steps to resolve these issues promptly.\n Best regards, \n Admin"; 
+  
+    this.emailService.sendEmail(to, cc, subject, body).subscribe(
+      response => {
+        console.log('Email sent successfully', response);
+      },
+      error => {
+        console.error('Error sending email', error);
+      }
+    );
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
  
   loadFutureReservationsAndEquipments() {
@@ -170,7 +225,7 @@ console.log(this.rooms);
 onFieldChange(newValue: any, fieldName: string) {
   // Stockez la nouvelle valeur avec le nom du champ modifié
   console.log('Nouvelle valeur de', fieldName, ':', newValue);
-
+  const now = new Date();
   // Désactiver les autres champs si la condition est remplie
   if (fieldName === 'maintenance_status' && ['under maintenance', 'Damaged'].includes(newValue)) {
     this.disableReservationState = true;
@@ -182,9 +237,10 @@ onFieldChange(newValue: any, fieldName: string) {
         equipmentData.roomData.occupied="Not occupied";
         equipmentData.roomData.free="free";
         equipmentData.roomData.reservation_State="Not yet";
+        
         // Accédez à la propriété occupied de chaque élément
         const occupiedValue = equipmentData.roomData.occupied;
-        console.log('Occupied value:', occupiedValue);
+        
       }
     });
    
@@ -254,13 +310,13 @@ performAction(room: any) {
               // Supprimer la réservation
               this.reservationService.deleteReservation(reservation.id).subscribe(
                 () => {
-                  
+                 
                   console.log('La réservation associée à la salle a été supprimée avec succès.');
-
+this.sendEmail();
                   // Mettez ici le code pour gérer l'action pour l'équipement spécifique
                   console.log("Action performed for salle:", room);
                 }
-              );
+              );  
             }
           });
         }
