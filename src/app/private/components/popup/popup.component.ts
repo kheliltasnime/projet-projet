@@ -27,6 +27,7 @@ export class PopupComponent implements OnInit {
     departDate:new Date(), 
     departHour:'',
     returnHour:'',
+    reservationPercentage:0
     
   };
   

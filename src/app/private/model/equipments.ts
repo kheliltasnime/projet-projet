@@ -24,7 +24,7 @@ export interface Equipments{
   departHour: string; 
   departDate:Date;
   returnHour:string;
-  
+  reservationPercentage:number;
 
 
 

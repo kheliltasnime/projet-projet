@@ -7,6 +7,8 @@ import { MatDialog } from '@angular/material/dialog';
 import * as emailjs from 'emailjs-com';
 import { Reservation } from 'src/app/private/model/reservation';
 import { EmailService } from 'src/app/private/services/email.service';
+
+import { NotifService,AppNotification } from 'src/app/private/services/notif.service';
 @Component({
   selector: 'app-listreserv',
   templateUrl: './listreserv.component.html',
@@ -23,7 +25,8 @@ data:any[]=[];
  email = "kheliltasnime@gmail.com";
   constructor(public reservationService: ReservationService,
     private router: Router,private fb:FormBuilder,
-    public emailService:EmailService
+    public emailService:EmailService,
+    private NotifService: NotifService
    ) {}
 
   ngOnInit() {
@@ -61,7 +64,7 @@ data:any[]=[];
 }*/
 
 
-
+notifications: AppNotification[] = [];
 
 sendEmail() {
   const to: string[] = ['kheliltassnime@gmail.com']; // Adresse e-mail du destinataire
@@ -72,6 +75,26 @@ sendEmail() {
   this.emailService.sendEmail(to, cc, subject, body).subscribe(
     response => {
       console.log('Email sent successfully', response);
+      const newNotification: AppNotification = {
+        date_envoi: new Date().toISOString().split('T')[0], // Date au format YYYY-MM-DD
+        heure: new Date().toLocaleTimeString(), // Heure actuelle
+        type: 'Email',
+        titre: subject,
+        message: body
+      };
+      this.NotifService.addNotification(newNotification).subscribe(
+        notifResponse => {
+          console.log('Notification stored successfully', notifResponse);
+          this.notifications.push(notifResponse); // Ajouter la nouvelle notification à la liste
+        },
+        notifError => {
+          console.error('Error storing notification', notifError);
+        }
+      );
+    
+
+
+
     },
     error => {
       console.error('Error sending email', error);

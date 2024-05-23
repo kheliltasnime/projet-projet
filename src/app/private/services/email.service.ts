@@ -25,10 +25,6 @@ export class EmailService {
     return this.http.post(this.apiUrl, {}, { params ,responseType:'text'});
   }
 
-  
-
-
-
 
 
 }

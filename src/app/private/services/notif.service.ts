@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 export interface AppNotification {
-  id: number;
+  id?: number;
   date_envoi: string;
   heure: string;
   type: string;
@@ -20,5 +20,10 @@ export class NotifService {
 
   getNotifications(): Observable<AppNotification[]> {
     return this.http.get<AppNotification[]>(this.apiUrl);
+  }
+
+   // Nouvelle méthode pour enregistrer une notification
+   addNotification(notification: AppNotification): Observable<AppNotification> {
+    return this.http.post<AppNotification>(this.apiUrl, notification);
   }
 }
